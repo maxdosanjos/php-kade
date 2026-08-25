@@ -9,47 +9,50 @@ require_once(dirname(dirname(__FILE__))."/shared/class/controller/CustumerRegCtr
 $_ufList 		  = $ctrlCustReg->getListUf();
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/cad_cliente_ext.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Address.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/CustumerBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){CustumerBean.getInstance().initBean();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Address.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/CustumerBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){CustumerBean.getInstance().initBean();});</script>
 <div class="logo_back"></div>
 <div id="div_body_cad_clie" class="div_body">
 	<div id="div_text_cad_cli" class="ui-state-highlight ui-corner-all">
 		<span id="span_icon_explc" class="ui-icon ui-icon-info"></span>
 		<div id="p_text_out">			
-			<p><span id="span_dest"> Caro Transportador,</span> para começar a utilizar a ferramenta Kade Caminhões é muito simples:</p>
+			<p><span id="span_dest"> Caro Transportador,</span> para comeÃ§ar a utilizar a ferramenta Kade CaminhÃµes Ã© muito simples:</p>
 			
 			<ul>
 				<li> Cadastre-se abaixo;</li>
-				<li>Você terá um período de 30 dias gratuitos para conhecer e testar a ferramenta;</li>
-				<li>Caso não tenha demonstrado interesse durante o período gratuito, basta cancelar seu cadastro totalmente sem custo antes dos 30 dias.</li>
+				<li>VocÃª terÃ¡ um perÃ­odo de 30 dias gratuitos para conhecer e testar a ferramenta;</li>
+				<li>Caso nÃ£o tenha demonstrado interesse durante o perÃ­odo gratuito, basta cancelar seu cadastro totalmente sem custo antes dos 30 dias.</li>
 			</ul>
 			
-			<p>Após os 30 dias de gratuidade e você tendo interesse em assinar a ferramenta, será gerado mensalmente um boleto no valor da mensalidade padrão de R$ 70,00 (Setenta Reais) com vencimento para posteriores 30 dias.</p>
+			<p>ApÃ³s os 30 dias de gratuidade e vocÃª tendo interesse em assinar a ferramenta, serÃ¡ gerado mensalmente um boleto no valor da mensalidade padrÃ£o de R$ 70,00 (Setenta Reais) com vencimento para posteriores 30 dias.</p>
 			<br/>
-			<p><span id="span_dest">Pronto!! Seja bem-vindo ao Kade Caminhões!</span></p>
+			<p><span id="span_dest">Pronto!! Seja bem-vindo ao Kade CaminhÃµes!</span></p>
 			<p><span id="span_dest">Teremos prazer em ajuda-lo, contate-nos:</span></p>
 			<address>
-				<p><span id="span_dest">E-mail: <a id="span_cli_mail" href="mailto:contato@kadecaminhoes.com.br?Subject=Dúvidas" target="_top">contato@kadecaminhoes.com.br</a></span></p>
+				<p><span id="span_dest">E-mail: <a id="span_cli_mail" href="mailto:contato@kadecaminhoes.com.br?Subject=DÃºvidas" target="_top">contato@kadecaminhoes.com.br</a></span></p>
 				<p><span id="span_dest">Skype: <a id="span_cli_skype" href="skype:Kadecaminhoes?chat">Kadecaminhoes</a></span></p>
 			</address>
 		</div>
 	</div>
 	
 	<form id="custumer_form" method="post" target="custumer_iframe" action="../CustumerRegCtrl.ctrlExt/save">
+		<!-- Anti-bot hidden fields: honeypot and form timestamp -->
+		<input type="hidden" id="hp_name" name="hp_name" value="" />
+		<input type="hidden" id="form_ts" name="form_ts" value="<?php echo time(); ?>" />
 		<div id="tabs">
 			<ul>
 		    	<li><a href="#tabs-1" alt="Cadastre-se" title="Cadastre-se">Cadastre-se</a></li>
 		    </ul>
 		  	<div id="tabs-1">
 				<div class="div_input">
-		    		<label for="person_pf" id="person_pf_label" alt="Pessoa Física" title="Pessoa Física">Pessoa Física</label>
-		    		<input type="radio" name="type_person" value="PF" id="person_pf" checked="checked" alt="Pessoa Física" title="Pessoa Física"/>
-		    		<label for="person_pj" id="person_pj_label" alt="Pessoa Jurídica" title="Pessoa Jurídica">Pessoa Jurídica</label>
-		    		<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa Jurídica" title="Pessoa Jurídica"/>
+		    		<label for="person_pf" id="person_pf_label" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica">Pessoa FÃ­sica</label>
+		    		<input type="radio" name="type_person" value="PF" id="person_pf" checked="checked" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica"/>
+		    		<label for="person_pj" id="person_pj_label" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica">Pessoa JurÃ­dica</label>
+		    		<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica"/>
 		    	</div>
 				<div id="div_fields_pf" class="div_input" >
 					<div id="div_custumer_cpf" class="div_input">
@@ -67,13 +70,13 @@ $_ufList 		  = $ctrlCustReg->getListUf();
 						<input type="text" id="custumer_cnpj" name="custumer_cnpj" class="mask.cnpj required input_clear input_per" size="14" maxlength="14" value="" alt="CNPJ" title="CNPJ"/>
 					</div>
 					<div class="div_input">
-			    		<label for="custumer_rsoc"  class="label_input" alt="Razão Social" title="Razão Social">Razão Social: </label>
-			    		<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class="required input_clear input_per" value="" alt="Razão Social" title="Razão Social"/>
+			    		<label for="custumer_rsoc"  class="label_input" alt="RazÃ£o Social" title="RazÃ£o Social">RazÃ£o Social: </label>
+			    		<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class="required input_clear input_per" value="" alt="RazÃ£o Social" title="RazÃ£o Social"/>
 			    	</div>
 					<div class="div_input">
-			    		<label for="custumer_ie"  class="label_input" alt="Inscrição Estadual" title="Inscrição Estadual">I.E.: </label>
-			    		<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric required input_clear input_per" value="" alt="Inscrição Estadual" title="Inscrição Estadual"/>
-						<label id="custumer_ie_isento_label" alt="Inscrição Estadual = Isento" title="Inscrição Estadual = Isento">
+			    		<label for="custumer_ie"  class="label_input" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual">I.E.: </label>
+			    		<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric required input_clear input_per" value="" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual"/>
+						<label id="custumer_ie_isento_label" alt="InscriÃ§Ã£o Estadual = Isento" title="InscriÃ§Ã£o Estadual = Isento">
 							<input type="checkbox" id="custumer_ie_isento" name="custumer_ie_isento" value="on">Isento
 						</label>
 			    	</div>
@@ -100,7 +103,7 @@ $_ufList 		  = $ctrlCustReg->getListUf();
 		    	</div>   					
 		    	<br style="clear: both"/>
 		    	<fieldset id="fieldset_end">
-		    		<legend alt="Endereço" title="Endereço">Endereço</legend>
+		    		<legend alt="EndereÃ§o" title="EndereÃ§o">EndereÃ§o</legend>
 			    	<div class="div_input">
 			    		<label for="custumer_zipcode" id="custumer_zipcode_label"  class="label_input" alt="CEP" title="CEP">CEP: </label>
 			    		<input type="text" id="custumer_zipcode" name="custumer_zipcode" size="14" maxlength="10" class="mask.cep required input_clear" value="" alt="CEP" title="CEP"/>
@@ -114,8 +117,8 @@ $_ufList 		  = $ctrlCustReg->getListUf();
 			    		<input type="text" id="custumer_neighborhood" name="custumer_neighborhood" class="input_clear"  alt="Bairro" title="Bairro"/>
 					</div>	
 			    	<div class="div_input">	
-			    		<label for="custumer_address_number" id="custumer_address_number_label"  class="label_input" alt="Número" title="Número">Número: </label>
-			    		<input type="text" id="custumer_address_number" name="custumer_address_number" size="10" maxlength="12" class="required input_clear"  value="" alt="Número" title="Número"/>		    		
+			    		<label for="custumer_address_number" id="custumer_address_number_label"  class="label_input" alt="NÃºmero" title="NÃºmero">NÃºmero: </label>
+			    		<input type="text" id="custumer_address_number" name="custumer_address_number" size="10" maxlength="12" class="required input_clear"  value="" alt="NÃºmero" title="NÃºmero"/>		    		
 			    	</div>
 					<div class="div_input">						
 						<label for="custumer_complement"  class="label_input" alt="Complemento" title="Complemento">Complemento: </label>
@@ -138,18 +141,18 @@ $_ufList 		  = $ctrlCustReg->getListUf();
 		    	</fieldset>
 				
 				<div>
-		        	<span id="span_text_captcha" alt="Queremos garantir que uma pessoa real está criando um registro." title="Queremos garantir que uma pessoa real está criando um registro.">Queremos garantir que uma pessoa real está criando um registro.</span>
+		        	<span id="span_text_captcha" alt="Queremos garantir que uma pessoa real estÃ¡ criando um registro." title="Queremos garantir que uma pessoa real estÃ¡ criando um registro.">Queremos garantir que uma pessoa real estÃ¡ criando um registro.</span>
 		        </div>
 		    	<div class="div_input">
-		    		<img id="img_captcha" src="../CustumerRegCtrl.ctrlExt/getCaptcha" alt="Código" title="Código"/>
-		    		<input type="text" id="custumer_captcha" name="custumer_captcha" size="11" maxlength="9" class="required input_clear" value="" autocomplete="false" alt="Código" title="Código"/>	    					    	
-					<span id="span_exp_cap" alt="Há diferença letras maiúsculas e minúsculas" title="Há diferença letras maiúsculas e minúsculas">
-						***Há diferença letras maiúsculas e minúsculas<br/> Se os caracteres da imagem estiverem ilegíveis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a>
+		    		<img id="img_captcha" src="../CustumerRegCtrl.ctrlExt/getCaptcha" alt="CÃ³digo" title="CÃ³digo"/>
+		    		<input type="text" id="custumer_captcha" name="custumer_captcha" size="11" maxlength="9" class="required input_clear" value="" autocomplete="false" alt="CÃ³digo" title="CÃ³digo"/>	    					    	
+					<span id="span_exp_cap" alt="HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas" title="HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas">
+						***HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas<br/> Se os caracteres da imagem estiverem ilegÃ­veis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a>
 					</span>
 		    	</div>
 				<br style="clear: both"/>
 				<br/>
-				<span id="span_conc"> Eu concordo com os <a href="/<?=ViewExtCtrl::TERMS_USE;?>/" target="_blank">Termos de uso da Kade Caminhões</a> </span>			
+				<span id="span_conc"> Eu concordo com os <a href="/<?=ViewExtCtrl::TERMS_USE;?>/" target="_blank">Termos de uso da Kade CaminhÃµes</a> </span>			
 		    	<div id="buttonBar" class="">
 					<span id="button_new" class="btn_default" title="Novo registro" alt="Novo registro">
 						<div class="div_btn_with_image"></div>

@@ -2,7 +2,7 @@
 	class Util{
 		public static function bigIntval($value) 
 		{
-			  $value = trim($value);
+			  $value = trim((string)$value);
 			  if (ctype_digit($value)) {
 				return $value;
 			  }

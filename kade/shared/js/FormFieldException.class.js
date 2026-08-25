@@ -1,1 +1,17 @@
-var FormFieldException=function(e,f,b){var c=f;var a=b;var d=e;this.getMessage=function(){return d};this.getFieldObj=function(){return c};this.getFieldId=function(){return a}};
+var FormFieldException = function(pMessage,pFieldObj,pFieldId){
+	var fieldObj = pFieldObj;
+	var fieldId = pFieldId;
+	var message = pMessage;
+	
+	this.getMessage = function(){
+		return message;
+	}
+	
+	this.getFieldObj = function(){
+		return fieldObj;
+	}
+	
+	this.getFieldId = function(){
+		return fieldId;
+	}
+}

@@ -1,1 +1,60 @@
-var Address=function(){var a=undefined;this.eventCEP=function(c,e,d){var b=System.CONTEXT+"AddressRegCtrl.ctrlExt/searchCEP";e.focus(function(){var f=$(this).val().replace(/^\s+|\s+$/g,"").replace("-","");if(f.length!=8){return}}).change(function(){var f=$(this).val().replace(/^\s+|\s+$/g,"").replace("-","");if(f.length!=8){return}if(a!=undefined&&a.data.zipcode==f){d(a);return}if(f!=""){c()}System.showWorkingDialog("Aguarde, verificando CEP ...","AtenÁ„o");if(f!=""){$.ajax({type:"POST",dataType:"json",url:b,data:({zipcode:$(this).val()}),error:function(i,g,h){System.hideWorkingDialog();System.defaultErrorHandlerJQueryAjax(i,g,h)},success:function(g){System.hideWorkingDialog();if(g.result==1){a=g}d(g)}})}})}};Address.instance=null;Address.getInstance=function(){if(Address.intance==null){Address.instance=new Address()}return Address.instance};
+var Address = function() {
+	var objAfterEdit = undefined;
+	
+	this.eventCEP = function(funcClear,$input,callback){
+		var url = System.CONTEXT+"AddressRegCtrl.ctrlExt/searchCEP";
+		
+		$input.focus(function(){
+			var CEP = $(this).val().replace(/^\s+|\s+$/g, "").replace("-", "");
+			
+			if(CEP.length != 8){
+				return;
+			}	
+		}).change(function(){			
+			var CEP = $(this).val().replace(/^\s+|\s+$/g, "").replace("-", "");
+			
+			if(CEP.length != 8){
+				return;
+			}	
+		
+			// verificando para n√£o carregar o mesmo CEP mais de uma vez				
+			if(objAfterEdit!=undefined && objAfterEdit.data.zipcode == CEP){
+				callback(objAfterEdit);
+				return;
+			}					
+			
+			
+			if(CEP !="") funcClear();
+			
+			System.showWorkingDialog("Aguarde, verificando CEP ...", "Aten√ß√£o");
+			if (CEP != "") 
+			{				
+				$.ajax({
+							type 	 : "POST",
+							dataType : "json",
+							url 	 : url,
+							data 	 : ({
+								zipcode : $(this).val()
+							}),
+							error:function (xhr, ajaxOptions, thrownError){
+								System.hideWorkingDialog();
+								System.defaultErrorHandlerJQueryAjax(xhr, ajaxOptions, thrownError);
+					        },
+							success : function(obj) {
+								System.hideWorkingDialog();
+								if(obj.result==1)
+									objAfterEdit = obj;
+								callback(obj);
+							}
+						});
+			};
+			
+		});
+	};
+};
+Address.instance = null;
+Address.getInstance = function() {
+	if (Address.intance == null)
+		Address.instance = new Address();
+	return Address.instance;
+};

@@ -27,17 +27,17 @@
 	<form id="custumer_form" method="post" target="custumer_iframe" action="../CustumerRegCtrl.ctrlExt/saveInter">
 		<div id="tabs">
 			<ul>
-				<li><a href="#tabs-1" alt="Dados de Usuário" title="Dados de Usuário">Dados de Usuário</a></li>
+				<li><a href="#tabs-1" alt="Dados de UsuÃ¡rio" title="Dados de UsuÃ¡rio">Dados de UsuÃ¡rio</a></li>
 				<? if($editUserList){?>
-				<li><a href="#tabs-2" alt="Observações" title="Observações">Observações</a></li>
+				<li><a href="#tabs-2" alt="ObservaÃ§Ãµes" title="ObservaÃ§Ãµes">ObservaÃ§Ãµes</a></li>
 				<?php } ?>
 			</ul>
 			<div id="tabs-1">
 				<div class="div_input" style="<?=($user!=null)?"display:none;":""?>">
-					<label for="person_pf" id="person_pf_label" alt="Pessoa Física" title="Pessoa Física">Pessoa Física</label>
-					<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa Física" title="Pessoa Física" <?=$checkedPF?>/>
-					<label for="person_pj" id="person_pj_label" alt="Pessoa Jurídica" title="Pessoa Jurídica">Pessoa Jurídica</label>
-					<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa Jurídica" title="Pessoa Jurídica" <?=$checkedPJ?>/>
+					<label for="person_pf" id="person_pf_label" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica">Pessoa FÃ­sica</label>
+					<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica" <?=$checkedPF?>/>
+					<label for="person_pj" id="person_pj_label" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica">Pessoa JurÃ­dica</label>
+					<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica" <?=$checkedPJ?>/>
 				</div>
 				<div id="div_fields_pf" class="div_input" >
 					<div id="div_custumer_cpf" class="div_input">
@@ -55,13 +55,13 @@
 						<input type="text" id="custumer_cnpj" name="custumer_cnpj" class="mask.cnpj required input_per <?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly":"";?>" size="14" maxlength="14" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?$user->getPerson()->getCnpj():"";?>" alt="CNPJ" title="CNPJ" <?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly='true'":"";?> />
 					</div>
 					<div class="div_input">
-						<label for="custumer_rsoc"  class="label_input" alt="Razão Social" title="Razão Social">Razão Social: </label>
-						<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class="required input_per" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?$user->getPerson()->getName():"";?>" alt="Razão Social" title="Razão Social"/>
+						<label for="custumer_rsoc"  class="label_input" alt="RazÃ£o Social" title="RazÃ£o Social">RazÃ£o Social: </label>
+						<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class="required input_per" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?$user->getPerson()->getName():"";?>" alt="RazÃ£o Social" title="RazÃ£o Social"/>
 					</div>
 					<div class="div_input">
-						<label for="custumer_ie"  class="label_input" alt="Inscrição Estadual" title="Inscrição Estadual">I.E.: </label>
-						<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric required input_per" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ && $user->getPerson()->getIe() != PersonEntity::ISENTO)?$user->getPerson()->getIe():""?>" alt="Inscrição Estadual" title="Inscrição Estadual"/>
-						<label id="custumer_ie_isento_label" alt="Inscrição Estadual = Isento" title="Inscrição Estadual = Isento">
+						<label for="custumer_ie"  class="label_input" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual">I.E.: </label>
+						<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric required input_per" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ && $user->getPerson()->getIe() != PersonEntity::ISENTO)?$user->getPerson()->getIe():""?>" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual"/>
+						<label id="custumer_ie_isento_label" alt="InscriÃ§Ã£o Estadual = Isento" title="InscriÃ§Ã£o Estadual = Isento">
 							<input type="checkbox" id="custumer_ie_isento" name="custumer_ie_isento" value="on" <?=($user!=null && $user->getPerson()->getType() == Person::PJ && $user->getPerson()->getIe() == PersonEntity::ISENTO)?"checked='true'":""?>/>Isento
 						</label>
 					</div>
@@ -93,7 +93,7 @@
 				</div>   					
 				<br style="clear: both"/>
 				<fieldset id="fieldset_end">
-					<legend alt="Endereço" title="Endereço">Endereço</legend>
+					<legend alt="EndereÃ§o" title="EndereÃ§o">EndereÃ§o</legend>
 					<div class="div_input">
 						<label for="custumer_zipcode" id="custumer_zipcode_label"  class="label_input" alt="CEP" title="CEP">CEP: </label>
 						<input type="text" id="custumer_zipcode" name="custumer_zipcode" size="14" maxlength="10" class="mask.cep required " value="<?=($user!=null)?$user->getPerson()->getAddress()->getCep():"";?>" alt="CEP" title="CEP"/>
@@ -107,8 +107,8 @@
 						<input type="text" id="custumer_neighborhood" name="custumer_neighborhood" class="" value="<?=($user!=null)?$user->getPerson()->getAddress()->getNeighborhood():"";?>" alt="Bairro" title="Bairro"/>
 					</div>	
 					<div class="div_input">	
-						<label for="custumer_address_number" id="custumer_address_number_label"  class="label_input" alt="Número" title="Número">Número: </label>
-						<input type="text" id="custumer_address_number" name="custumer_address_number" size="10" maxlength="12" class="required "  value="<?=($user!=null)?$user->getPerson()->getAddress()->getNumber():"";?>" alt="Número" title="Número"/>		    		
+						<label for="custumer_address_number" id="custumer_address_number_label"  class="label_input" alt="NÃºmero" title="NÃºmero">NÃºmero: </label>
+						<input type="text" id="custumer_address_number" name="custumer_address_number" size="10" maxlength="12" class="required "  value="<?=($user!=null)?$user->getPerson()->getAddress()->getNumber():"";?>" alt="NÃºmero" title="NÃºmero"/>		    		
 					</div>
 					<div class="div_input">						
 						<label for="custumer_complement"  class="label_input" alt="Complemento" title="Complemento">Complemento: </label>
@@ -142,13 +142,13 @@
 				<br style="clear: both"/>
 				<? } else {?>
 				<div>
-					<span id="span_text_captcha" alt="Queremos garantir que uma pessoa real está criando um registro." title="Queremos garantir que uma pessoa real está criando um registro.">Queremos garantir que uma pessoa real está editando seu registro.</span>
+					<span id="span_text_captcha" alt="Queremos garantir que uma pessoa real estÃ¡ criando um registro." title="Queremos garantir que uma pessoa real estÃ¡ criando um registro.">Queremos garantir que uma pessoa real estÃ¡ editando seu registro.</span>
 				</div>
 				<div class="div_input">
-					<img id="img_captcha" src="../CustumerRegCtrl.ctrlExt/getCaptcha" alt="Código" title="Código"/>
-					<input type="text" id="custumer_captcha" name="custumer_captcha" size="11" maxlength="9" class="required " value="" autocomplete="false" alt="Código" title="Código"/>	    								
-					<span id="span_exp_cap" alt="Há diferença letras maiúsculas e minúsculas" title="Há diferença letras maiúsculas e minúsculas">
-						***Há diferença letras maiúsculas e minúsculas <br/> Se os caracteres da imagem estiverem ilegíveis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a>
+					<img id="img_captcha" src="../CustumerRegCtrl.ctrlExt/getCaptcha" alt="CÃ³digo" title="CÃ³digo"/>
+					<input type="text" id="custumer_captcha" name="custumer_captcha" size="11" maxlength="9" class="required " value="" autocomplete="false" alt="CÃ³digo" title="CÃ³digo"/>	    								
+					<span id="span_exp_cap" alt="HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas" title="HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas">
+						***HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas <br/> Se os caracteres da imagem estiverem ilegÃ­veis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a>
 					</span>
 				</div>
 				<?php } ?>

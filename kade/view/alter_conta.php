@@ -25,16 +25,16 @@ $paymentMethodList = $ctrlAcctReg->getPaymentMethodList();
 ?>
 
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/alter_conta.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/AccountBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){AccountBean.getInstance().initBean();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/AccountBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){AccountBean.getInstance().initBean();});</script>
 <div id="div_body_alter_conta" class="div_body">
 	<form id="conta_form" method="post" target="conta_iframe" action="../AccountRegCtrl.ctrlExt/saveInter">
 		<div id="tabs">
 			<ul>
-				<li><a href="#tabs-1" alt="Dados de Usuário" title="Dados de Usuário">Dados da Conta</a></li>
+				<li><a href="#tabs-1" alt="Dados de UsuÃ¡rio" title="Dados de UsuÃ¡rio">Dados da Conta</a></li>
 			</ul>
 			<div id="tabs-1">
 				<div id="div_form_conta">
@@ -43,7 +43,7 @@ $paymentMethodList = $ctrlAcctReg->getPaymentMethodList();
 						<input type="text" id="account_id" name="account_id" size="20" maxlength="10" class="input_clear mask.numeric readonly" readonly="true" value="<?=($account->getId() > 0)?$account->getId():""?>" />
 					</div>	
 					<div class="div_input">
-						<label for="id" class="label_input">Cód.Cliente</label>
+						<label for="id" class="label_input">CÃ³d.Cliente</label>
 						<input type="text" id="account_client_id" name="account_client_id" size="7" maxlength="10" <?=($account->getId() > 0)?"readonly='true'":""?> class="input_clear mask.numeric client_id <?=($account->getId() > 0)?"readonly":""?>" value="<?=($person!=null && $person->getId() > 0)?$person->getId():""?>" />
 						<span id="btn_match_client" alt="Pesquisar por Clientes"></span>
 						<span id="span_account_client_name" class="client_name"><?=($person!=null && $person->getId() > 0)?$person->getName():""?></span>
@@ -51,7 +51,7 @@ $paymentMethodList = $ctrlAcctReg->getPaymentMethodList();
 					</div>		
 					<?if($account->getId() > 0){?>
 					<div class="div_input">
-						<label for="id" class="label_input">Dt.Hr Criação</label>
+						<label for="id" class="label_input">Dt.Hr CriaÃ§Ã£o</label>
 						<input type="text" id="account_date_hr_proc" name="account_date_hr_proc" size="20" maxlength="20" class="input_clear readonly" readonly="true" value="<?=$account->getDtHrProc()->format("d/m/Y H:i")?>" />
 					</div>	
 					<div class="div_input">
@@ -65,7 +65,7 @@ $paymentMethodList = $ctrlAcctReg->getPaymentMethodList();
 					<?php } else {?>
 					<br style="clear: both"/>
 					<fieldset id="fieldset_options_parc">
-						<legend>Opções para Gerar Parcelas</legend>
+						<legend>OpÃ§Ãµes para Gerar Parcelas</legend>
 						<div class="div_input">
 							<label for="account_validate_month" class="label_input">Total de parcelas</label>
 							<input type="text" id="account_validate_month" name="account_validate_month" size="10" maxlength="10" class="input_clear required mask.numeric" value="12"/>

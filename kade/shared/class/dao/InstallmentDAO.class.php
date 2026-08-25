@@ -26,7 +26,7 @@ class InstallmentDAO {
 		} else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		try {
 			$fieldsPayment = "";
 			if($obj->getStatus() == Installment::PAID){
@@ -67,7 +67,7 @@ class InstallmentDAO {
 		} else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		try {
 				
 						//Criar Parcelas
@@ -132,7 +132,7 @@ class InstallmentDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 		$_installs = array ();
 		$result = $db->query ( $sql );
@@ -188,7 +188,7 @@ class InstallmentDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 		$result = $db->query ( $sql );
 		if ($dbConfig instanceof DBConfig)

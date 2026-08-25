@@ -58,16 +58,16 @@ if($personParam!=null)
 
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/view_clientes_int.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Address.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/CustumerBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ViewInt.getInstance().initQuery();CustumerBean.getInstance().initQueryOpen();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Address.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/CustumerBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();CustumerBean.getInstance().initQueryOpen();});</script>
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
 <?	} ?>
 <div id="div_body_view_cli" class="div_body">
 	<div id="div_inter_esq">
@@ -85,11 +85,11 @@ if($personParam!=null)
 							<input type="radio" name="type_person" value="" id="person_all" alt="Todos" title="Todos" <?=$checkedAll?>/>
 							<label for="person_all" id="person_all_label" class="label_radio_type" alt="Todos" title="Todos">Todos</label>
 							
-							<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa Física" title="Pessoa Física" <?=$checkedPF?>/>
-							<label for="person_pf" id="person_pf_label" alt="Pessoa Física" class="label_radio_type" title="Pessoa Física">Física</label>
+							<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica" <?=$checkedPF?>/>
+							<label for="person_pf" id="person_pf_label" alt="Pessoa FÃ­sica" class="label_radio_type" title="Pessoa FÃ­sica">FÃ­sica</label>
 							
-							<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa Jurídica" title="Pessoa Jurídica" <?=$checkedPJ?>/>
-							<label for="person_pj" id="person_pj_label" alt="Pessoa Jurídica" class="label_radio_type" title="Pessoa Jurídica">Jurídica</label>
+							<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica" <?=$checkedPJ?>/>
+							<label for="person_pj" id="person_pj_label" alt="Pessoa JurÃ­dica" class="label_radio_type" title="Pessoa JurÃ­dica">JurÃ­dica</label>
 							
 						</div>
 						<div id="div_fields_pf" class="div_input" style="<?=$cssPF?>">
@@ -109,13 +109,13 @@ if($personParam!=null)
 								<input type="text" id="custumer_cnpj" name="custumer_cnpj" class="mask.cnpj  input_per input_clear" size="14" maxlength="14" value="<?=($user!=null && $personParam->getType() == Person::PJ)?$personParam->getCnpj():"";?>" alt="CNPJ" title="CNPJ"/>
 							</div>
 							<div class="div_input">
-								<label for="custumer_rsoc"  class="label_input" alt="Razão Social" title="Razão Social">Razão Social: </label>
-								<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class=" input_per input_clear" value="<?=($personParam!=null && $personParam->getType() == Person::PJ)?$personParam->getName():"";?>" alt="Razão Social" title="Razão Social"/>
+								<label for="custumer_rsoc"  class="label_input" alt="RazÃ£o Social" title="RazÃ£o Social">RazÃ£o Social: </label>
+								<input type="text" id="custumer_rsoc" name="custumer_rsoc" size="40" maxlength="120" class=" input_per input_clear" value="<?=($personParam!=null && $personParam->getType() == Person::PJ)?$personParam->getName():"";?>" alt="RazÃ£o Social" title="RazÃ£o Social"/>
 							</div>
 							<div class="div_input">
-								<label for="custumer_ie"  class="label_input" alt="Inscrição Estadual" title="Inscrição Estadual">I.E.: </label>
-								<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric  input_per " value="<?=($personParam!=null && $personParam->getType() == Person::PJ && $personParam->getIe() != PersonEntity::ISENTO)?$personParam->getIe():""?>" alt="Inscrição Estadual" title="Inscrição Estadual"/>
-								<label id="custumer_ie_isento_label" alt="Inscrição Estadual = Isento" title="Inscrição Estadual = Isento">
+								<label for="custumer_ie"  class="label_input" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual">I.E.: </label>
+								<input type="text" id="custumer_ie" name="custumer_ie" size="12" maxlength="18" class="mask.numeric  input_per " value="<?=($personParam!=null && $personParam->getType() == Person::PJ && $personParam->getIe() != PersonEntity::ISENTO)?$personParam->getIe():""?>" alt="InscriÃ§Ã£o Estadual" title="InscriÃ§Ã£o Estadual"/>
+								<label id="custumer_ie_isento_label" alt="InscriÃ§Ã£o Estadual = Isento" title="InscriÃ§Ã£o Estadual = Isento">
 									<input type="checkbox" id="custumer_ie_isento" name="custumer_ie_isento" value="on" <?=($personParam!=null && $personParam->getType() == Person::PJ && $personParam->getIe() == PersonEntity::ISENTO)?"checked='true'":""?>/>Isento
 								</label>
 							</div>
@@ -133,7 +133,7 @@ if($personParam!=null)
 						<!-- <div class="div_input">
 							<label for="custumer_dt_init" title="Data de Cadastro"  alt="Data de Cadastro"  class="label_input">Dt.Cadastro</label>
 							<input type="text" title="Data de Cadastro"  alt="Data de Cadastro" id="custumer_dt_init" name="custumer_dt_init" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlCustQry->getDtHrInit()->format("d.m.Y")?>"/>
-							 até 
+							 atÃ© 
 							<input type="text" title="Data de Cadastro"  alt="Data de Cadastro" id="custumer_dt_end" name="custumer_dt_end" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlCustQry->getDtHrEnd()->format("d.m.Y")?>"/>
 						</div>  -->
 						<div class="div_input">
@@ -205,14 +205,14 @@ if($personParam!=null)
 			<table id="table_query_open" class="table table-bordered table-condensed">
 				<thead class="table_head">
 					<tr>
-						<th class="column-order td_id" lang="cli.user_person_id" title="Clique para alternar a ordenação dos registros">Registro <span class="img_order"><?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></span></th>
-						<th class="column-order td_id" lang="per.type" title="Clique para alternar a ordenação dos registros">Tipo <span class="img_order"><?=$ctrlCustQry->getImgOrder('per.type');?></span></th>
-						<th class="column-order td_dthr" lang="usr.date_cad" title="Clique para alternar a ordenação dos registros">Criado em <span class="img_order"><?=$ctrlCustQry->getImgOrder('usr.date_cad');?></span></th>
-						<th class="column-order td_tcustumer" lang="per.name" title="Clique para alternar a ordenação dos registros">Nome/Razão Social <span class="img_order"><?=$ctrlCustQry->getImgOrder('per.name');?></span></th>
+						<th class="column-order td_id" lang="cli.user_person_id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Registro <span class="img_order"><?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></span></th>
+						<th class="column-order td_id" lang="per.type" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Tipo <span class="img_order"><?=$ctrlCustQry->getImgOrder('per.type');?></span></th>
+						<th class="column-order td_dthr" lang="usr.date_cad" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Criado em <span class="img_order"><?=$ctrlCustQry->getImgOrder('usr.date_cad');?></span></th>
+						<th class="column-order td_tcustumer" lang="per.name" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Nome/RazÃ£o Social <span class="img_order"><?=$ctrlCustQry->getImgOrder('per.name');?></span></th>
 						<th class="td_cep">CPF/CNPJ</th>
-						<th class="column-order td_city" lang="addr.city" title="Clique para alternar a ordenação dos registros">Cidade <span class="img_order"><?=$ctrlCustQry->getImgOrder('addr.city');?></span></th>
-						<th class="column-order td_uf" lang="addr.state" title="Clique para alternar a ordenação dos registros">UF <span class="img_order"><?=$ctrlCustQry->getImgOrder('addr.state');?></span></th>
-						<th class="column-order td_uf" lang="usr.status" title="Clique para alternar a ordenação dos registros">Status <span class="img_order"><?=$ctrlCustQry->getImgOrder('usr.status');?></span></th>
+						<th class="column-order td_city" lang="addr.city" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Cidade <span class="img_order"><?=$ctrlCustQry->getImgOrder('addr.city');?></span></th>
+						<th class="column-order td_uf" lang="addr.state" title="Clique para alternar a ordenaÃ§Ã£o dos registros">UF <span class="img_order"><?=$ctrlCustQry->getImgOrder('addr.state');?></span></th>
+						<th class="column-order td_uf" lang="usr.status" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Status <span class="img_order"><?=$ctrlCustQry->getImgOrder('usr.status');?></span></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">
@@ -243,22 +243,22 @@ if($personParam!=null)
 			</table>
 			<div id="table_foot">
 				<div class="details_pag">
-					Registro(s) por Página: <?=$pagination->getEndLimit();?>
+					Registro(s) por PÃ¡gina: <?=$pagination->getEndLimit();?>
 					<input type="hidden" id="param_regpag" class="xtextfield numeric formfield" name="param_regpag" value="<?=$pagination->getEndLimit();?>" size="3" readonly="true" /><br/>
-					Número de Resultados: <span title="De - Até"><?=$pagination->showDetailsPag();?></span> 
+					NÃºmero de Resultados: <span title="De - AtÃ©"><?=$pagination->showDetailsPag();?></span> 
 										  <span title="Total de Registros">(<?=$pagination->getTotalReg();?>)</span>
 				</div>
 				<div class="nav_pag"> 
 					<div class="nav_pag_left">
 					<? if($pagination->getPagCurrent()!=1) { ?>		        
-						<a href="#" class="nav_first" title="Ir para primeira página" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
-						<a href="#" class="nav_prev" title="Ir para página anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
+						<a href="#" class="nav_first" title="Ir para primeira pÃ¡gina" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
+						<a href="#" class="nav_prev" title="Ir para pÃ¡gina anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
 					<? } ?>
 					</div>
 					<div class="nav_pag_right">
 					<? if($pagination->getPagCurrent()!= $pagination->getTotalPag() && $pagination->getTotalReg() > 0) { ?> 
-						<a href="#" class="nav_next" title="Ir para próxima página" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
-						<a href="#" class="nav_end" title="Ir para última página"  lang="<?=$pagination->getTotalPag();?>"></a>
+						<a href="#" class="nav_next" title="Ir para prÃ³xima pÃ¡gina" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
+						<a href="#" class="nav_end" title="Ir para Ãºltima pÃ¡gina"  lang="<?=$pagination->getTotalPag();?>"></a>
 					 <?} ?>
 					</div>
 					 <div class="pags_number">

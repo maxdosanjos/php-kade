@@ -14,20 +14,20 @@
 		$ctrlLogQry->confirmUser();?>
 		<h1 id="h1_success">
 			<div id="span_message_icon" class="img_msg_success"></div>
-			ConfirmaÁ„o realizada com sucesso!!!
+			Confirma√ß√£o realizada com sucesso!!!
 		</h1>
 		<p id="p_success">
-			Obrigado por confirmar seus dados. Seu usu·rio est· validado! Basta realizar <a href="/<?=ViewExtCtrl::LOGIN."/"?>">seu login</a> para usufruir de nossos serviÁos.
+			Obrigado por confirmar seus dados. Seu usu√°rio est√° validado! Basta realizar <a href="/<?=ViewExtCtrl::LOGIN."/"?>">seu login</a> para usufruir de nossos servi√ßos.
 		</p>
 		
 	<?} catch ( Exception $e ) {?>
 		
 		<h1 id="h1_error">
 			<div id="span_message_icon" class="img_msg_error"></div>
-			URL inv·lida para confirmaÁ„o!!!
+			URL inv√°lida para confirma√ß√£o!!!
 		</h1>
 		<p id="p_error">
-			A url informada j· foi utilizada ou est· inv·lida. Ser· necess·rio <a href="/<?=ViewExtCtrl::NEW_PASSWRD."/"?>">clicar aqui</a> para solicitar novamente uma nova confirmaÁ„o.
+			A url informada j√° foi utilizada ou est√° inv√°lida. Ser√° necess√°rio <a href="/<?=ViewExtCtrl::NEW_PASSWRD."/"?>">clicar aqui</a> para solicitar novamente uma nova confirma√ß√£o.
 		</p>
 	<?}?>
 	</div>

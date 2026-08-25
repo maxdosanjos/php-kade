@@ -79,7 +79,7 @@ class Installment {
 		return $this->status;
 	}
 	public static function listStatus(){
- 		$_list = array(Installment::PAID=>"Pago",Installment::UNPAID=>"Não pago",Installment::CANCEL=>"Cancelado");
+ 		$_list = array(Installment::PAID=>"Pago",Installment::UNPAID=>"NÃ£o pago",Installment::CANCEL=>"Cancelado");
  		return $_list; 
  	}
 	public function getDescStatus(){

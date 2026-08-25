@@ -15,7 +15,7 @@ class MapsExtCtrl extends AbstractCtrl {
 	private $limitReg = 14;
 	public function __construct() {
 		parent::__construct ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		/* Expirando msgs */
 		$this->onExpiredRegisters ();
@@ -62,7 +62,7 @@ class MapsExtCtrl extends AbstractCtrl {
 					throw new Exception ( "Erro no upload" );
 				}
 			} else {
-				throw new Exception ( "Arquivo inválido! Somente imagem de extensão JPG e tamanho máximo 1 MB" );
+				throw new Exception ( "Arquivo invÃ¡lido! Somente imagem de extensÃ£o JPG e tamanho mÃ¡ximo 1 MB" );
 			}
 		} catch ( Exception $e ) {			
 			$this->message->setType ( Message::ERR );
@@ -70,7 +70,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		}
 		
 		$output ["result"] = $this->message->getType ();
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 		$output ["validationException"] = $_validationException;
 		
 		
@@ -104,6 +104,7 @@ class MapsExtCtrl extends AbstractCtrl {
 	}
 	private function expiredRegisters(DateTimeCustom $dtInit) {
 		$inTransaction = false;
+		$db = null;
 		try {
 			$vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
 			
@@ -130,7 +131,7 @@ class MapsExtCtrl extends AbstractCtrl {
 				$db = null;
 				
 				$this->message->setType ( Message::SUCCESS );
-				$this->message->setDesc ( 'Atualização realizada com sucesso' );
+				$this->message->setDesc ( 'AtualizaÃ§Ã£o realizada com sucesso' );
 			}
 		} catch ( PDOException $e ) {
 			if ($db != null && $inTransaction)
@@ -147,7 +148,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		}
 		
 		/*
-		 * $output = array(); $output ["result"] = $this->message->getType (); $output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () )); header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
+		 * $output = array(); $output ["result"] = $this->message->getType (); $output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () )); header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
 		 */
 	}
 	public static function includeTableMaps(MapsExtCtrl $ctrlMapsExt) {
@@ -169,7 +170,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		$this->_mapsExt = array ();
 		$this->isGrpByUf = false;
 		$this->mapsExtDAO = MapsExtDAO::getInstance ();
-		$this->isAjax = $_POST ["is_ajax"];
+		$this->isAjax = $_POST ["is_ajax"] ?? false;
 		
 		try {
 			$address = new Address ();
@@ -194,7 +195,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		$this->_mapsExt = array ();
 		$this->isGrpByUf = true;
 		$this->mapsExtDAO = MapsExtDAO::getInstance ();
-		$this->isAjax = $_POST ["is_ajax"];
+		$this->isAjax = $_POST ["is_ajax"] ?? false;
 		
 		try {
 			$db = DataBase::getInstance ( $this->getDbConfig () );

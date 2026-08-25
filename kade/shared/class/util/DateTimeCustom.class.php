@@ -1,6 +1,6 @@
 <?php
 /**
- * Extendida a classe devido ao problema de serializar a classe a versão atual do PHP no WEbMax
+ * Extendida a classe devido ao problema de serializar a classe a versÃ£o atual do PHP no WEbMax
  */
 class DateTimeCustom extends DateTime {
     private $_str;
@@ -29,16 +29,16 @@ class DateTimeCustom extends DateTime {
 	    return $dates;
 	}
    
-    public function __sleep(){
+    public function __sleep(): array {
         $this->_str = $this->format($this->defaultFormat);
         return array('_str');
     }
    
-    public function __wakeup() {
+    public function __wakeup(): void {
         $this->__construct($this->_str);
     }
     
-    public function __toString(){
+    public function __toString(): string {
     	return $this->format($this->defaultFormat);
     }
     public function __construct($time = "now"){
@@ -141,17 +141,17 @@ class DateTimeCustom extends DateTime {
      * @param $finalDate Primeira data
      * @param $initialDate Segunda data
      * @param $displayEmptyScales Exibe escalas vazias
-     * @param $format Formato da saída {H:m:s,Hhmmss}
-     * @return String diferença formatada
+     * @param $format Formato da saÃ­da {H:m:s,Hhmmss}
+     * @return String diferenÃ§a formatada
      */
-    public function add($finalDate, $initialDate, $displayEmptyScales=false,$format="Hhmmss"){
+    public function addDateTimes($finalDate, $initialDate, $displayEmptyScales=false,$format="Hhmmss"){
     	$result = $this->sum($finalDate,$initialDate);
     	$addHours = abs($result["Hours"]);
     	$addMinutes = abs($result["Minutes"]);
     	$addSeconds = abs($result["Seconds"]);
     	$output = "";
     	
-    	// formatando a saída
+    	// formatando a saÃ­da
     	if($format == "Hhmmss"){
     		if($displayEmptyScales){
 	    		$output .= $addHours."h";
@@ -176,7 +176,7 @@ class DateTimeCustom extends DateTime {
     
 	/**
 	 * @date 14/02/2013
-	 * Os próximos dois métodos foram portados da transação HELPDESK.
+	 * Os prÃ³ximos dois mÃ©todos foram portados da transaÃ§Ã£o HELPDESK.
 	 */
     public function diffDT(Date $date1, Time $time1, Date $date2, Time $time2){
     	$timestamp1     = mktime($time1->getHour(),$time1->getMinute(),$time1->getSecond(),$date1->getMonth(),$date1->getDay(),$date1->getYear());
@@ -191,7 +191,7 @@ class DateTimeCustom extends DateTime {
         $signal = false;
         if($diff < 0) $signal = true;
 
-        // Deixando o número positivo
+        // Deixando o nÃºmero positivo
         $diff = abs($diff);
 
 		// MAIOR QUE 60 MINUTOS
@@ -214,7 +214,7 @@ class DateTimeCustom extends DateTime {
                 }else{
                     $days = floor((($diff/60)/60)/24);
                     if($signal == true) $string = "Daqui a :days: dia(s)";
-                    else $string = ":days: dia(s) atrás";
+                    else $string = ":days: dia(s) atrÃ¡s";
                     
                     $string = str_replace(":days:", $days, $string);
                 }
@@ -223,7 +223,7 @@ class DateTimeCustom extends DateTime {
                 $min  = floor(($diff - ($hour*3600))/60);
                 
                 if ($signal == true) $string = "Daqui a :hour:h:min:m";
-                else $string = ":hour:h:min:m atrás";
+                else $string = ":hour:h:min:m atrÃ¡s";
                 
                 $string = str_replace(":hour:", $hour, $string);
                 $string = str_replace(":min:", $min, $string);
@@ -236,21 +236,21 @@ class DateTimeCustom extends DateTime {
     }
 
     /**
-     * Formata a diferença entre duas datas
+     * Formata a diferenÃ§a entre duas datas
      * @param $finalDate Primeira data
      * @param $initialDate Segunda data
      * @param $displayEmptyScales Exibe escalas vazias
-     * @param $format Formato da saída {H:m:s,Hhmmss}
-     * @return String diferença formatada
+     * @param $format Formato da saÃ­da {H:m:s,Hhmmss}
+     * @return String diferenÃ§a formatada
      */
-    public function diff(DateTime $finalDate, DateTime $initialDate, $displayEmptyScales=false,$format="Hhmmss"){
+    public function diffDateTimes(DateTime $finalDate, DateTime $initialDate, $displayEmptyScales=false,$format="Hhmmss"){
     	$result = $this->subtract($finalDate,$initialDate);
     	$diffHours = abs($result["Hours"]);
     	$diffMinutes = abs($result["Minutes"]);
     	$diffSeconds = abs($result["Seconds"]);
     	$output = "";
     	
-    	// formatando a saída
+    	// formatando a saÃ­da
     	if($format == "Hhmmss"){
     		if($displayEmptyScales){
 	    		$output .= $diffHours."h";
@@ -284,7 +284,7 @@ class DateTimeCustom extends DateTime {
     	$hour2sec = 3600; 
     	$minute2sec = 60; 
     	
-    	// extraindo informações
+    	// extraindo informaÃ§Ãµes
     	$days = floor($seconds / $day2sec);
     	$seconds -= $days * $day2sec;
     	

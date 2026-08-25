@@ -52,7 +52,7 @@ class VehicleTravelingUser {
 	}
 	
 	public static function listStatus(){
- 		$_list = array(VehicleTravelingUser::ONLY_VIEW=>"Somente visualizado",VehicleTravelingUser::UTILIZED=>"InformaÁ„o utilizada");
+ 		$_list = array(VehicleTravelingUser::ONLY_VIEW=>"Somente visualizado",VehicleTravelingUser::UTILIZED=>"Informa√ß√£o utilizada");
  		return $_list; 
  	}
 	public function getDescStatus(){

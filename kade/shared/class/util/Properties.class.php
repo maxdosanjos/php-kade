@@ -1,8 +1,8 @@
 <?php
 /**
  * Properties
-* Classe com as configurações gerais do sistema
-* Este arquivo não possui nenhuma dependência, é só importar e usar
+* Classe com as configuraÃ§Ãµes gerais do sistema
+* Este arquivo nÃ£o possui nenhuma dependÃªncia, Ã© sÃ³ importar e usar
 */
 class Properties {
 	const PRD = "PRD";
@@ -11,7 +11,7 @@ class Properties {
 			"INSTANCE" => Properties::DEV,
 			//DataBase DEV
 			"dbkade_dev.user" => "root",
-			"dbkade_dev.password" => "manager",
+			"dbkade_dev.password" => "",
 			"dbkade_dev.host" => "localhost",
 			"dbkade_dev.database" => "kadecaminh",
 			"dbkade_dev.port" => 3306,
@@ -72,7 +72,7 @@ class Properties {
 	
 	/**
 	 * Retorna um conjunto de valores levando
-	 * em consideração o prefixo da chave
+	 * em consideraÃ§Ã£o o prefixo da chave
 	 */
 	public static function getGroup($prefix, $preservePrefix = false) {
 		$output = array ();
@@ -81,7 +81,7 @@ class Properties {
 				if ($preservePrefix) {
 					$output [$key] = $value;
 				} else {
-					// pegando o texto logo após o ponto
+					// pegando o texto logo apÃ³s o ponto
 					if (strpos ( $key, '.' ) !== false) {
 						$tmp = explode ( '.', $key );
 						if (sizeof ( $tmp ) == 2) {
@@ -95,10 +95,11 @@ class Properties {
 	}
 	
 	public static function constructor(){
-		if($_SERVER["HTTP_HOST"] == "localhost"){
-			Properties::set("INSTANCE",DEV);
+		$host = $_SERVER["HTTP_HOST"] ?? "localhost";
+		if ($host === "localhost" || $host === "kade.test") {
+			Properties::set("INSTANCE", self::DEV);
 		}else{
-			Properties::set("INSTANCE",PRD);
+			Properties::set("INSTANCE", self::PRD);
 		}
 	}
 }

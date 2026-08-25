@@ -22,7 +22,7 @@ class Address {
 	}
 
 	public function setCep($cep){
-		$cep = trim($cep);
+		$cep = trim((string)$cep);
 		$cep = preg_replace("/[\-\.]/i","",$cep);
 		$maxlength = 8;
 		if(strlen($cep) > $maxlength){
@@ -37,7 +37,7 @@ class Address {
 
 	public function setStreet($street){
 		$maxlength = 255;
-		$street = trim($street);
+		$street = trim((string)$street);
 		if(strlen($street) > $maxlength){
 			$street = substr($street,0,$maxlength);
 		}
@@ -47,8 +47,8 @@ class Address {
 		$i = 0;
 		$length = sizeof($_arr);
 		while ($i < $length) {
-			if(strlen($_arr[$i]) > 2)
-				$_arr[$i] = ucwords($_arr[$i]);
+					if(strlen($_arr[$i]) > 2)
+						$_arr[$i] = ucwords($_arr[$i]);
 			$i++;
 		}	
 		
@@ -61,7 +61,7 @@ class Address {
 
 	public function setNumber($number){
 		$maxlength = 5;
-		$number = trim($number);
+		$number = trim((string)$number);
 		if(strlen($number) > $maxlength){
 			$number = substr($number,0,$maxlength);
 		}
@@ -73,9 +73,9 @@ class Address {
 	}
 
 	public function setComplement($complement){
-		$complement = trim($complement);
+		$complement = trim((string)$complement);
 		$maxlength = 255;
-		$complement = trim($complement);
+		$complement = trim((string)$complement);
 		if(strlen($complement) > $maxlength){
 			$complement = substr($complement,0,$maxlength);
 		}
@@ -98,9 +98,9 @@ class Address {
 	}
 
 	public function setNeighborhood($neighborhood){
-		$neighborhood = trim($neighborhood);
+			$neighborhood = trim((string)$neighborhood);
 		$maxlength = 72;
-		$neighborhood = trim($neighborhood);
+			$neighborhood = trim((string)$neighborhood);
 		if(strlen($neighborhood) > $maxlength){
 			$neighborhood = substr($neighborhood,0,$maxlength);
 		}
@@ -123,9 +123,9 @@ class Address {
 	}
 
 	public function setCity($city){
-		$city = trim($city);
+			$city = trim((string)$city);
 		$maxlength = 60;
-		$city = trim($city);
+			$city = trim((string)$city);
 		if(strlen($city) > $maxlength){
 			$city = substr($city,0,$maxlength);
 		}
@@ -148,9 +148,9 @@ class Address {
 	}
 
 	public function setState($state){
-		$state = trim($state);
+			$state = trim((string)$state);
 		$maxlength = 2;
-		$state = strtoupper(trim($state));
+			$state = strtoupper(trim((string)$state));
 		if(strlen($state) > $maxlength){
 			$state = substr($state,0,$maxlength);
 		}
@@ -161,9 +161,9 @@ class Address {
 		return $this->state;
 	}
 	public function setStateNm($stateNm){
-		$stateNm = trim($stateNm);
+			$stateNm = trim((string)$stateNm);
 		$maxlength = 72;
-		$stateNm = trim($stateNm);
+			$stateNm = trim((string)$stateNm);
 		if(strlen($stateNm) > $maxlength){
 			$stateNm = substr($stateNm,0,$maxlength);
 		}

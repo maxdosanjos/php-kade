@@ -39,7 +39,7 @@ class AddressDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conex„o Inv·lida" );
+			throw new PDOException ( "Conex√£o Inv√°lida" );
 			
 			// echo $sql;
 		
@@ -51,7 +51,7 @@ class AddressDAO {
 		$obj->setId ( $id );
 		
 		if($out == 0)
-			throw new PDOException("Erro ao criar EndereÁo!");
+			throw new PDOException("Erro ao criar Endere√ßo!");
 	}
 	public function update($dbConfig, Address $obj) {
 		$sql = "UPDATE  `address` 
@@ -69,7 +69,7 @@ class AddressDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conex„o Inv·lida" );
+			throw new PDOException ( "Conex√£o Inv√°lida" );
 			
 			// echo $sql;
 		
@@ -101,7 +101,7 @@ class AddressDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conex„o inv·lida" );
+			throw new PDOException ( "Conex√£o inv√°lida" );
 		
 		$result = $db->query ( $sql );
 		
@@ -124,31 +124,65 @@ class AddressDAO {
 		return $address;
 	}
 	public function getAddressByZipCode($dbConfig, Address $address) {
-		$sql = "call procurar_cep(" . $address->getCep () . ");";
+		// Normalize CEP to digits only
+		$rawCep = (string) $address->getCep();
+		$cepDigits = preg_replace('/\D/', '', $rawCep);
+		if (strlen($cepDigits) != 8) {
+			throw new PDOException("CEP inv√°lido");
+		}
+		// Try local DB lookup first (stored procedure 'procurar_cep')
+		$sql = "CALL procurar_cep('" . $cepDigits . "');";
+		$db = null;
+		// Attempt DB lookup inside try/catch so connection failures fall back to external API		try {
+			if ($dbConfig instanceof DBConfig)
+				$db = DataBase::getInstance ( $dbConfig );
+			else if ($dbConfig instanceof DataBase)
+				$db = $dbConfig;
+			else
+				throw new PDOException ( "Conex√£o inv√°lida" );
 		
-		if ($dbConfig instanceof DBConfig)
-			$db = DataBase::getInstance ( $dbConfig );
-		else if ($dbConfig instanceof DataBase)
-			$db = $dbConfig;
-		else
-			throw new PDOException ( "Conex„o inv·lida" );
+			$result = @$db->query ( $sql );
+			if ($result && ($objDAO = $result->fetchObject())) {
+				$address->setCep($cepDigits);
+				$address->setState ( isset($objDAO->uf) ? $objDAO->uf : '' );
+				$address->setStateNm ( isset($objDAO->uf_name) ? $objDAO->uf_name : '' );
+				$address->setCity ( isset($objDAO->cidade) ? $objDAO->cidade : '' );
+				$address->setNeighborhood ( isset($objDAO->bairro) ? $objDAO->bairro : '' );
+				$address->setStreet ( isset($objDAO->logradouro) ? $objDAO->logradouro : '' );
+				if ($dbConfig instanceof DBConfig)
+					$db = null;
+				return;
+			}
+		} catch (Exception $e) {
+			// Log DB lookup failures and continue to fallback (do not propagate exception)
+			error_log("AddressDAO.getAddressByZipCode DB lookup failed: " . $e->getMessage());
+			if ($dbConfig instanceof DBConfig)
+				$db = null;
+		}
 		
-		$result = $db->query ( $sql );
+		// Fallback: query ViaCEP public API (https://viacep.com.br)
+		$viacepUrl = "https://viacep.com.br/ws/" . $cepDigits . "/json/";
+		$ctx = stream_context_create(array('http' => array('timeout' => 5)));
+		$json = @file_get_contents($viacepUrl, false, $ctx);
+		if ($json !== false) {
+			$data = json_decode($json);
+			if ($data && !isset($data->erro)) {
+				$address->setCep($cepDigits);
+				$address->setStreet(isset($data->logradouro) ? $data->logradouro : '');
+				$address->setNeighborhood(isset($data->bairro) ? $data->bairro : '');
+				$address->setCity(isset($data->localidade) ? $data->localidade : '');
+				$address->setState(isset($data->uf) ? $data->uf : '');
+				$address->setStateNm('');
+				if ($dbConfig instanceof DBConfig)
+					$db = null;
+				return;
+			}
+		}
 		
 		if ($dbConfig instanceof DBConfig)
 			$db = null;
 		
-		$_arr = array ();
-		
-		if ($objDAO = $result->fetchObject ()) {
-			$address->setState ( $objDAO->uf );
-			$address->setStateNm ( $objDAO->uf_name );
-			$address->setCity ( $objDAO->cidade );
-			$address->setNeighborhood ( $objDAO->bairro );
-			$address->setStreet ( $objDAO->logradouro );
-		} else {
-			throw new PDOException ( "CEP n„o encontrado" );
-		}
+		throw new PDOException ( "CEP n√£o encontrado" );
 	}
 	public function loadDBConfigCep() {
 		if (Properties::get ( "INSTANCE" ) == "PRD") {
@@ -158,7 +192,14 @@ class AddressDAO {
 		}
 		
 		if (! is_array ( $data ) || sizeof ( $data ) == 0) {
-			throw new PDOException ( "Conex„o inv·lida" );
+			throw new PDOException ( "Conex√£o inv√°lida" );
+		}
+		// Validate required keys exist before attempting to build DBConfig
+		$requiredKeys = array('user','password','host','port','database');
+		foreach ($requiredKeys as $rk) {
+			if (!isset($data[$rk]) || $data[$rk] === '') {
+				throw new PDOException("Conex√£o CEP n√£o configurada (missing {$rk})");
+			}
 		}
 		
 		$dbConfigCep = new DBConfig ();
@@ -168,7 +209,8 @@ class AddressDAO {
 		$dbConfigCep->setPort ( $data ["port"] );
 		$dbConfigCep->setDatabase ( $data ["database"] );
 		
-		switch ($data ["DBMS"]) {
+		$dbms = isset($data['DBMS']) ? strtolower($data['DBMS']) : 'mysql';
+		switch ($dbms) {
 			case "mssql" :
 			case "sqlserver" :
 				$dbConfigCep->setSGBD ( DBConfig::MSSQL );
@@ -187,30 +229,30 @@ class AddressDAO {
 	
 		$_result["AC"] = "Acre";
 		$_result["AL"] = "Alagoas";
-		$_result["AP"] = "Amap·";
+		$_result["AP"] = "Amap√°";
 		$_result["AM"] = "Amazonas";
 		$_result["BA"] = "Bahia";
-		$_result["CE"] = "Cear·";
+		$_result["CE"] = "Cear√°";
 		$_result["DF"] = "Distrito Federal";
-		$_result["ES"] = "EspÌrito Santo";
-		$_result["GO"] = "Goi·s";
-		$_result["MA"] = "Maranh„o";
+		$_result["ES"] = "Esp√≠rito Santo";
+		$_result["GO"] = "Goi√°s";
+		$_result["MA"] = "Maranh√£o";
 		$_result["MT"] = "Mato Grosso";
 		$_result["MS"] = "Mato Grosso do Sul";
 		$_result["MG"] = "Minas Gerais";
-		$_result["PR"] = "Paran·";
-		$_result["PB"] = "ParaÌba";
-		$_result["PA"] = "Par·";
+		$_result["PR"] = "Paran√°";
+		$_result["PB"] = "Para√≠ba";
+		$_result["PA"] = "Par√°";
 		$_result["PE"] = "Pernambuco";
-		$_result["PI"] = "PiauÌ";
+		$_result["PI"] = "Piau√≠";
 		$_result["RN"] = "Rio Grande do Norte";
 		$_result["RS"] = "Rio Grande do Sul";
 		$_result["RJ"] = "Rio de Janeiro";
-		$_result["RO"] = "RondÙnia";
+		$_result["RO"] = "Rond√¥nia";
 		$_result["RR"] = "Roraima";
 		$_result["SC"] = "Santa Catarina";
 		$_result["SE"] = "Sergipe";
-		$_result["SP"] = "S„o Paulo";
+		$_result["SP"] = "S√£o Paulo";
 		$_result["TO"] = "Tocantins";
 	
 		return $_result;

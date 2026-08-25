@@ -41,13 +41,13 @@
 				$cotaArray[] = $raw;
 			}
 			
-			// extraindo domÌnio
+			// extraindo dom√≠nio
 			$domain = $this->getDomain($from);
 			if($domain == ""){
-				throw new Exception($from->getEmail()." n„o pertence a um domÌnio autorizado para envio");
+				throw new Exception($from->getEmail()." n√£o pertence a um dom√≠nio autorizado para envio");
 			}
 			
-			// carregando email enviados atÈ agora no dia de hoje
+			// carregando email enviados at√© agora no dia de hoje
 			$sql = "SELECT ec.`email`, SUM(el.`delivery_attempts`) AS `total`, ec.`cota_diaria`
 					  FROM `email_config` AS ec
 				 LEFT JOIN `email_log` AS el ON ec.`email` = el.`email` AND el.`date` = '".date("Y-m-d")."' 
@@ -55,20 +55,20 @@
 			$query = $db->query($sql);		
 			$emailArray = array();
 			while($raw = $query->fetchObject()){
-				// sÛ considera e-mails que tem cota
+				// s√≥ considera e-mails que tem cota
 				if(intval($raw->total) < $raw->cota_diaria){
 					$emailArray[] = $raw;
 				}
 			}*/
 		}
 		public function sendPHPMail(EmailAddress $from, array $recipients, $subject, $body, $bodyContentType = "text/html",$attachmentFileList = array(),$embeddedImageList=array(), $withCCO = false){
-			// verificando se tem cotas disponÌveis para o envio
+			// verificando se tem cotas dispon√≠veis para o envio
 			/*$emailArray = $this->getAvailableEmailList($from);
 			if(sizeof($emailArray) <= 0){
-				throw new Exception("N„o h· cotas disponÌveis para envio de e-mails");
+				throw new Exception("N√£o h√° cotas dispon√≠veis para envio de e-mails");
 			}*/
 			
-			// pegando o primeiro e-mail da lista e carregando configuraÁ„o
+			// pegando o primeiro e-mail da lista e carregando configura√ß√£o
 			$data = Properties::getGroup("smtp_kadecaminhoes");
 			
 			$this->setPHPMail(new PHPMailer());
@@ -113,21 +113,21 @@
 					continue;
 				}
 				switch($emailAddress->getType()){
-				case "TO": // destinat·rio
+				case "TO": // destinat√°rio
 				default:
 					$this->getPHPMail()->AddAddress($emailAddress->getEmail(),$emailAddress->getName());
 					$toCounter++;				
 					break;
-				case "CC": // cÛpia
+				case "CC": // c√≥pia
 					$this->getPHPMail()->AddCC($emailAddress->getEmail(),$emailAddress->getName());
 					break;
-				case "BCC": // cÛpia oculta
+				case "BCC": // c√≥pia oculta
 					$this->getPHPMail()->AddBCC($emailAddress->getEmail(),$emailAddress->getName());
 					break;
 				case "RPL": // email de resposta
 					$this->getPHPMail()->AddReplyTo($emailAddress->getEmail(),$emailAddress->getName());
 					break;
-				case "CNF": // confirmaÁ„o de leitura
+				case "CNF": // confirma√ß√£o de leitura
 					$this->ConfirmReadingTo = $emailAddress->getEmail();
 					break;
 				}
@@ -135,9 +135,9 @@
 				$recipientsStringArray[] = "[".$emailAddress->getType()."] ".$emailAddress->getEmail();
 			}
 			
-			// verificando se o email tem ao menos um destinat·rio
+			// verificando se o email tem ao menos um destinat√°rio
 			if($toCounter == 0){
-				throw new Exception("Nenhum destinat·rio informado.");
+				throw new Exception("Nenhum destinat√°rio informado.");
 			}
 			
 			// anexos
@@ -150,10 +150,10 @@
 			}
 			
 			// corpo
-			$bodyFooter = "<br/><hr/>[Kade Caminhıes] ".date("d/m/Y H:i")." - Por: ".$_SESSION["nome"]." / E-mail: ".$this->getPHPMail()->Username;
+			$bodyFooter = "<br/><hr/>[Kade Caminh√µes] ".date("d/m/Y H:i")." - Por: ".$_SESSION["nome"]." / E-mail: ".$this->getPHPMail()->Username;
 			if($bodyContentType != "text/html"){
 				$bodyFooter  = "\n---------------------------------------------------\n";
-				$bodyFooter .= "[Kade Caminhıes] ".date("d/m/Y H:i")." - Por: ".$_SESSION["nome"]." / E-mail: ".$this->getPHPMail()->Username;
+				$bodyFooter .= "[Kade Caminh√µes] ".date("d/m/Y H:i")." - Por: ".$_SESSION["nome"]." / E-mail: ".$this->getPHPMail()->Username;
 			}
 			
 			// imagens incorporadas

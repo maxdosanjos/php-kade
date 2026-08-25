@@ -10,14 +10,14 @@ $size = sizeof( $_vechicleTypes );
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/quem_somos_ext.css?f=1"/>
 <div class="logo_back"></div>		
 <div id="div_body_quem" class="div_body">
-	<h1 id="sumario">TÛpicos</h1>
+	<h1 id="sumario">T√≥picos</h1>
 	<ul id="ul_links">
 		<li><a href="#quem_somos">Quem somos</a></li>
-		<li><a href="#beneficios_clientes">BenefÌcios dos clientes Kade Caminhıes</a></li>
-		<li><a href="#beneficio_motoristas">BenefÌcios aos motoristas autÙnomos</a></li>
-		<li><a href="#usuarios">Usu·rios da Kade Caminhıes</a></li>
-		<li><a href="#missao">Miss„o</a></li>
-		<li><a href="#visao">Vis„o</a></li>
+		<li><a href="#beneficios_clientes">Benef√≠cios dos clientes Kade Caminh√µes</a></li>
+		<li><a href="#beneficio_motoristas">Benef√≠cios aos motoristas aut√¥nomos</a></li>
+		<li><a href="#usuarios">Usu√°rios da Kade Caminh√µes</a></li>
+		<li><a href="#missao">Miss√£o</a></li>
+		<li><a href="#visao">Vis√£o</a></li>
 		<li><a href="#valores">Valores</a></li>
 		<li><a href="#como_funciona">Como funciona</a></li>
 		<li><a href="/<?=ViewExtCtrl::TERMS_USE;?>/" target="_blank">Termo de Uso</a></li>
@@ -25,74 +25,74 @@ $size = sizeof( $_vechicleTypes );
 
 	<h1 id="quem_somos">Quem somos:</h1>
 	<p>
-		O <span id="span_logo">KADE CAMINH’ES</span> È uma empresa fundada
-		atravÈs de diversas pesquisas com os profissionais do setor de
-		transporte rodovi·rio, ofertando de forma simples e eficiente,
-		melhorias para o sistema logÌstico no Brasil. Seu software traz
-		informaÁıes online de veÌculos de cargas disponÌveis em todo o
-		territÛrio nacional, esta informaÁ„o È repassada em tempo real aos
-		embarcadores, agilizando o processo de contrataÁ„o nas mais diversas
-		operaÁıes de transportes, alÈm de ser uma forma inteligente para os
-		motoristas autÙnomos aumentarem sua oferta de cargas.
+		O <span id="span_logo">KADE CAMINH√ïES</span> √© uma empresa fundada
+		atrav√©s de diversas pesquisas com os profissionais do setor de
+		transporte rodovi√°rio, ofertando de forma simples e eficiente,
+		melhorias para o sistema log√≠stico no Brasil. Seu software traz
+		informa√ß√µes online de ve√≠culos de cargas dispon√≠veis em todo o
+		territ√≥rio nacional, esta informa√ß√£o √© repassada em tempo real aos
+		embarcadores, agilizando o processo de contrata√ß√£o nas mais diversas
+		opera√ß√µes de transportes, al√©m de ser uma forma inteligente para os
+		motoristas aut√¥nomos aumentarem sua oferta de cargas.
 
 	</p>
-	<h1 id="beneficios_clientes">BenefÌcios dos clientes Kade Caminhıes:</h1>
+	<h1 id="beneficios_clientes">Benef√≠cios dos clientes Kade Caminh√µes:</h1>
 	<ul class="ul_text">
-		<li>Maior opÁ„o de veÌculos a disposiÁ„o das transportadoras;</li>
-		<li>Contatos assertivos, feitos direto com motoristas ‡ procura de
+		<li>Maior op√ß√£o de ve√≠culos a disposi√ß√£o das transportadoras;</li>
+		<li>Contatos assertivos, feitos direto com motoristas √† procura de
 			fretes;</li>
-		<li>ReduÁ„o no tempo e custos com deslocamento em busca de caminhıes
+		<li>Redu√ß√£o no tempo e custos com deslocamento em busca de caminh√µes
 			vazios, aumentando a produtividade dos embarcadores;</li>
-		<li>ReduÁ„o de gastos com telefones, combustÌvel e manutenÁ„o de
+		<li>Redu√ß√£o de gastos com telefones, combust√≠vel e manuten√ß√£o de
 			frota;</li>
 		<li>Agilidade e maior rapidez nos embarques;</li>
 	</ul>
 
-	<h1 id="beneficio_motoristas">BenefÌcios aos motoristas autÙnomos:</h1>
+	<h1 id="beneficio_motoristas">Benef√≠cios aos motoristas aut√¥nomos:</h1>
 	<ul class="ul_text">
-		<li>Aumento consider·vel na oferta de cargas:</li>
-		<li>As cargas s„o oferecidas gratuitamente ao motorista;</li>
-		<li>ReduÁ„o do tempo com o caminh„o parado vazio;</li>
-		<li>Melhoria da eficiÍncia do veÌculo e aumento na renda do autÙnomo;</li>
-		<li>SeguranÁa e praticidade em locais poucos conhecidos;</li>
+		<li>Aumento consider√°vel na oferta de cargas:</li>
+		<li>As cargas s√£o oferecidas gratuitamente ao motorista;</li>
+		<li>Redu√ß√£o do tempo com o caminh√£o parado vazio;</li>
+		<li>Melhoria da efici√™ncia do ve√≠culo e aumento na renda do aut√¥nomo;</li>
+		<li>Seguran√ßa e praticidade em locais poucos conhecidos;</li>
 	</ul>
 
 
-	<h1 id="usuarios">Usu·rios da Kade Caminhıes:</h1>
+	<h1 id="usuarios">Usu√°rios da Kade Caminh√µes:</h1>
 	<ul class="ul_text">
 		<li>Transportadoras de cargas em geral;</li>
-		<li>Ind˙strias;</li>
-		<li>ComÈrcio;</li>
+		<li>Ind√∫strias;</li>
+		<li>Com√©rcio;</li>
 		<li>Atacados;</li>
 		<li>Agenciadores de cargas;</li>
 		<li>Etc.</li>
 	</ul>
 
-	<h1 id="missao">Miss„o:</h1>
-	<p>Ofertar em tempo real veÌculos disponÌveis para fretes, as empresas
+	<h1 id="missao">Miss√£o:</h1>
+	<p>Ofertar em tempo real ve√≠culos dispon√≠veis para fretes, as empresas
 		do setor de transportes e todas as demais que necessitam contratar
-		motoristas autÙnomos, facilitando no fechamento das cargas, com
-		rapidez, seguranÁa e tecnologia, atendendo em todo o territÛrio
+		motoristas aut√¥nomos, facilitando no fechamento das cargas, com
+		rapidez, seguran√ßa e tecnologia, atendendo em todo o territ√≥rio
 		nacional.</p>
-	<h1 id="visao">Vis„o:</h1>
-	<p>Ser uma empresa de atuaÁ„o nacional, reconhecida como facilitadora
-		nos processos de contrataÁ„o de cargas, contribuindo para o
-		crescimento e profissionalizaÁ„o do setor de transportes no Brasil.</p>
+	<h1 id="visao">Vis√£o:</h1>
+	<p>Ser uma empresa de atua√ß√£o nacional, reconhecida como facilitadora
+		nos processos de contrata√ß√£o de cargas, contribuindo para o
+		crescimento e profissionaliza√ß√£o do setor de transportes no Brasil.</p>
 
 	<h1 id="valores">Valores:</h1>
-	<p>…tica, agilidade, comprometimento e seguranÁa a todos os usu·rios da
-		Kade Caminhıes.</p>
+	<p>√âtica, agilidade, comprometimento e seguran√ßa a todos os usu√°rios da
+		Kade Caminh√µes.</p>
 	<h1 id="como_funciona">Como funciona:</h1>
 	<p>
-		Enviar um sms para o n˙mero <span class="number_tel">4396761700</span> com o CÛdigo que representa o tipo do seu caminh„o, separado por * (Asterisco), Observe os exemplos abaixo:
+		Enviar um sms para o n√∫mero <span class="number_tel">4396761700</span> com o C√≥digo que representa o tipo do seu caminh√£o, separado por * (Asterisco), Observe os exemplos abaixo:
 	</p>
 	<p>
-		ï <span class="number_tel">Exemplo:</span> VocÍ est· vazio na cidade de Paranagu·/PR com uma Carreta LS Graneleira (CÛdigo 6) envie um SMS com o cÛdigo que representa o tipo do seu caminh„o com o cep
-		da cidade onde est·, separado por *(asterisco), assim: <span class="number_tel">6*83203010</span>
+		‚Ä¢ <span class="number_tel">Exemplo:</span> Voc√™ est√° vazio na cidade de Paranagu√°/PR com uma Carreta LS Graneleira (C√≥digo 6) envie um SMS com o c√≥digo que representa o tipo do seu caminh√£o com o cep
+		da cidade onde est√°, separado por *(asterisco), assim: <span class="number_tel">6*83203010</span>
 	</p>
 	<p>
-		Pronto... agora nosso servidor envia a informaÁ„o para todas as transportadoras e embarcadores do Brasil, que vocÍ est· vazio e a procura de fretes, eles far„o o contato contigo para
-		lhe oferecer as suas cargas, ficando a seu critÈrio escolher e fechar com as melhores.
+		Pronto... agora nosso servidor envia a informa√ß√£o para todas as transportadoras e embarcadores do Brasil, que voc√™ est√° vazio e a procura de fretes, eles far√£o o contato contigo para
+		lhe oferecer as suas cargas, ficando a seu crit√©rio escolher e fechar com as melhores.
 	</p>
 	<!-- <div id="div_logo_sms"></div> -->
 	
@@ -100,7 +100,7 @@ $size = sizeof( $_vechicleTypes );
 		<thead>
 			<tr>
 				<th colspan="12">
-					Abaixo a tabela com os cÛdigos dos veÌculos que devem ser enviados com SMS
+					Abaixo a tabela com os c√≥digos dos ve√≠culos que devem ser enviados com SMS
 				</th>
 			</tr>
 		</thead>

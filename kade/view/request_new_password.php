@@ -7,14 +7,14 @@
 	$message   = $ctrlLogQry->getMessage();	
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/request_new_password.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/UserBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){UserBean.getInstance().initRequestPwd();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/UserBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){UserBean.getInstance().initRequestPwd();});</script>
 
 <?if($message!=null){?>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#button_sender").notify("<?=$message->getDesc()?>", "<?=$message->getType()?>");});</script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#button_sender").notify("<?=$message->getDesc()?>", "<?=$message->getType()?>");});</script>
 <?}?>
 <div class="logo_back"></div>
 <div id="div_body_request_new_password" class="div_body">
@@ -25,9 +25,9 @@
 		    </ul>
 		  	<div id="tabs-1">
 		  	<div class="div_input">
-	    		<label for="person_pf" id="person_pf_label">Pessoa Física</label>
+	    		<label for="person_pf" id="person_pf_label">Pessoa FÃ­sica</label>
 	    		<input type="radio" name="type_person" value="PF" id="person_pf" checked="checked" />
-	    		<label for="person_pj" id="person_pj_label">Pessoa Jurídica</label>
+	    		<label for="person_pj" id="person_pj_label">Pessoa JurÃ­dica</label>
 	    		<input type="radio" name="type_person" value="PJ" id="person_pj" />
 	    	</div>
 	    	<div id="div_fields_pf" class="div_input" >

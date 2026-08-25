@@ -20,15 +20,15 @@ $message    	  = $ctrlInstQry->getMessage();
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/busca_parc.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/InstallmentBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ViewInt.getInstance().initQuery();InstallmentBean.getInstance().initQuery();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/InstallmentBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();InstallmentBean.getInstance().initQuery();});</script>
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
 <?	} ?>
 <div id="div_body_busca_parc" class="div_body">
 	<div id="div_inter_esq">
@@ -60,19 +60,19 @@ $message    	  = $ctrlInstQry->getMessage();
 		</fieldset>		
 		<div id="div_result">
 			<div id="table_foot">
-				<div class="details_pag">Número de Resultados: <span title="Total de Registros">(<?=$length;?>)</span></div>
+				<div class="details_pag">NÃºmero de Resultados: <span title="Total de Registros">(<?=$length;?>)</span></div>
 			</div>
 			<table id="table_query_open" class="table table-bordered table-condensed">
 				<thead class="table_head">
 					<tr>
-						<th class="column-order td_id" lang="ins.account_id" title="Clique para alternar a ordenação dos registros">Registro <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.account_id');?></span></th>
-						<th class="column-order td_id" lang="ins.id" title="Clique para alternar a ordenação dos registros">Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.id');?></span></th>
-						<th class="column-order td_value" lang="ins.value" title="Clique para alternar a ordenação dos registros">Valor da Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.value');?></span></th>
-						<th class="column-order td_drhr" lang="ins.due_date" title="Clique para alternar a ordenação dos registros">Data Vencimento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.due_date');?></span></th>
-						<th class="column-order td_drhr" lang="ins.payment_date" title="Clique para alternar a ordenação dos registros">Data Pagamento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_date');?></span></th>
-						<th class="column-order td_value" lang="ins.payment_value" title="Clique para alternar a ordenação dos registros">Valor Pago <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_value');?></span></th>
+						<th class="column-order td_id" lang="ins.account_id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Registro <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.account_id');?></span></th>
+						<th class="column-order td_id" lang="ins.id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.id');?></span></th>
+						<th class="column-order td_value" lang="ins.value" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Valor da Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.value');?></span></th>
+						<th class="column-order td_drhr" lang="ins.due_date" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Data Vencimento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.due_date');?></span></th>
+						<th class="column-order td_drhr" lang="ins.payment_date" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Data Pagamento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_date');?></span></th>
+						<th class="column-order td_value" lang="ins.payment_value" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Valor Pago <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_value');?></span></th>
 						<th class="td_name">Forma de Pagamento</th>
-						<th class="column-order td_sts" lang="ins.status" title="Clique para alternar a ordenação dos registros">Status <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.status');?></span></th>
+						<th class="column-order td_sts" lang="ins.status" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Status <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.status');?></span></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">

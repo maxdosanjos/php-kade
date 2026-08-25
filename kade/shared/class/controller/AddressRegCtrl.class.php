@@ -9,7 +9,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 class AddressRegCtrl extends AbstractCtrl {	
 	public function __construct() {
 		parent::__construct ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		switch ($this->getAction ()) {
 			case "searchCEP" :
@@ -35,12 +35,12 @@ class AddressRegCtrl extends AbstractCtrl {
 			$db = DataBase::getInstance ( $dbConfigCep );
 			$addressDAO->getAddressByZipCode ( $db, $address );
 			
-			$_address ["address"] = iconv ( "ISO-8859-1", "UTF-8", $address->getStreet () );
+			$_address ["address"] = iconv ( "UTF-8", "UTF-8", $address->getStreet () );
 			$_address ["addressNumber"] = $address->getNumber ();
-			$_address ["city"] = iconv ( "ISO-8859-1", "UTF-8", $address->getCity () );
-			$_address ["neighborhood"] = iconv ( "ISO-8859-1", "UTF-8", $address->getNeighborhood () );
+			$_address ["city"] = iconv ( "UTF-8", "UTF-8", $address->getCity () );
+			$_address ["neighborhood"] = iconv ( "UTF-8", "UTF-8", $address->getNeighborhood () );
 			$_address ["UF"] = $address->getState ();
-			$_address ["UF_NM"] = iconv ( "ISO-8859-1", "UTF-8", $address->getStateNm () );
+			$_address ["UF_NM"] = iconv ( "UTF-8", "UTF-8", $address->getStateNm () );
 			$_address ["zipcode"] = $address->getCep ();
 			
 			$output ["result"] = 1;
@@ -57,7 +57,7 @@ class AddressRegCtrl extends AbstractCtrl {
 			 */
 			$db = null;
 			$dbConfigCep = null;
-			$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () ));
+			$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () ));
 		}
 		
 		header ( "Content-type: text/plain" );

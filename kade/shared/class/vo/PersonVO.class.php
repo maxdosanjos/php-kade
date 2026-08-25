@@ -82,7 +82,7 @@ class Person {
 	}
 	
 	public static function listType(){
- 		$_list = array(Person::PF=>"Pessoa Física",Person::PJ=>"Pessoa Jurídica", Person::NO=>"Pessoa");
+ 		$_list = array(Person::PF=>"Pessoa FÃ­sica",Person::PJ=>"Pessoa JurÃ­dica", Person::NO=>"Pessoa");
  		return $_list; 
  	}
 	public function getDescType(){

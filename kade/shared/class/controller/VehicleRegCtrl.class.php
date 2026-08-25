@@ -21,7 +21,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 	private $vehicleTravelingDAO = null;
 	public function __construct() {
 		parent::__construct ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		
 		switch ($this->getAction ()) {
@@ -48,7 +48,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$prop = Properties::getGroup("server_sms");		
 			
 			if($_SERVER["HTTP_X_REAL_IP"] !=$prop["http_x_real_ip"])
-				throw new Exception("IP inv·lido para tratamento de SMS");			
+				throw new Exception("IP inv√°lido para tratamento de SMS");			
 		
 			$_data["vehicle_phone"] = "(".substr($_GET["from"],1,2).") ".substr($_GET["from"],3,11);
 			
@@ -132,7 +132,9 @@ class VehicleRegCtrl extends AbstractCtrl {
 		$vehicleTraveling = new VehicleTraveling ();
 		$vehicleContact = new VehicleContact ();
 		
-		switch ($_data ["type_person"]) {
+		// Safely read incoming form keys to avoid undefined index warnings
+		$type_person = isset($_data["type_person"]) ? $_data["type_person"] : '';
+		switch ($type_person) {
 			case Person::PF :
 				$person = new PersonIndividual ();
 				$person->setName ( $_data ["vehicle_name"] );
@@ -149,21 +151,27 @@ class VehicleRegCtrl extends AbstractCtrl {
 				$person = new Person ();
 		}
 		
-		$vehicleType->setId ( $_data ["vehicle_type"] );
+		$vehicleType->setId ( isset($_data["vehicle_type"]) ? $_data["vehicle_type"] : null );
 		
-		$phone->setPhoneByMask ( $_data ["vehicle_phone"] );
+		$phone->setPhoneByMask ( isset($_data["vehicle_phone"]) ? $_data["vehicle_phone"] : '' );
 		$person->setPhone ( $phone );
 		
-		$address->setCep ( $_data ["vehicle_zipcode"] );
-		$address->setStreet ( $_data ["vehicle_address"] );
-		$address->setNeighborhood ( $_data ["vehicle_neighborhood"] );
-		$address->setNumber ( $_data ["vehicle_address_number"] );
-		$address->setComplement ( $_data ["vehicle_complement"] );
-		$address->setCity ( $_data ["vehicle_city"] );
-		$address->setState ( $_data ["vehicle_region"] );
+		$address->setCep ( isset($_data["vehicle_zipcode"]) ? $_data["vehicle_zipcode"] : '' );
+		$address->setStreet ( isset($_data["vehicle_address"]) ? $_data["vehicle_address"] : '' );
+		$address->setNeighborhood ( isset($_data["vehicle_neighborhood"]) ? $_data["vehicle_neighborhood"] : '' );
+		$address->setNumber ( isset($_data["vehicle_address_number"]) ? $_data["vehicle_address_number"] : '' );
+		$address->setComplement ( isset($_data["vehicle_complement"]) ? $_data["vehicle_complement"] : '' );
+		$address->setCity ( isset($_data["vehicle_city"]) ? $_data["vehicle_city"] : '' );
+		$address->setState ( isset($_data["vehicle_region"]) ? $_data["vehicle_region"] : '' );
 
-		$_ufs = $this->getListUf();		
-		$address->setStateNm ( $_ufs[$_data ["vehicle_region"]] );		
+		$_ufs = $this->getListUf();
+		$regionKey = isset($_data["vehicle_region"]) ? $_data["vehicle_region"] : '';
+		if ($regionKey !== '' && isset($_ufs[$regionKey])) {
+			$address->setStateNm ( $_ufs[$regionKey] );
+		} else {
+			$address->setStateNm ( '' );
+		}
+		
 		
 		/*if ($address->getCep () != "" && ($address->getCity () == "" || $address->getState () == "")) {
 			try {
@@ -228,25 +236,52 @@ class VehicleRegCtrl extends AbstractCtrl {
 		}
 	}
 	public function onSaveWeb() {
+		// capture unexpected output (warnings/notices) so JSON response is not corrupted
+		ob_start();
 		$output = array (
 				"result" => 0,
 				"message" => "",
 				"validationException" => array () 
 		);
 		$_validationException = array ();
+		$db = null; // initialize to avoid undefined variable in catch blocks
 		$inTransaction = false;
 			
 		try {			
+			// Anti-bot: honeypot and minimum form fill time (optional hidden inputs in form)
+			$hp = isset($_POST['hp_name']) ? trim($_POST['hp_name']) : '';
+			$form_ts_post = isset($_POST['form_ts']) ? intval($_POST['form_ts']) : 0;
+			if ($hp !== '') {
+				throw new ValidationException('Suspeita de bot detectada');
+			}
+			if ($form_ts_post > 0 && (time() - $form_ts_post) < 3) {
+				$excpTmp = new ValidationException ( "Dados incompletos!" );
+				$excpTmp->add ( "Form", "form_ts", "Envio r√°pido demais. Tente novamente." );
+				throw $excpTmp;
+			}
 			$vehicleTraveling = $this->getRequestBean ($_POST);
 			$this->validateBean ( $vehicleTraveling );
 			$excp = new ValidationException ( "Dados incompletos!" );
 			
-			//ValidaÁ„o Captcha
-			if ($_POST ["vehicle_captcha"] == "")
-				$excp->add ( "CÛdigo", "vehicle_captcha", "CÛdigo de seguranÁa vazio!" );
-			elseif ($_SESSION ["vehicle_captcha"] != $_POST ["vehicle_captcha"])
-				$excp->add ( "CÛdigo", "vehicle_captcha", "CÛdigo de seguranÁa inv·lido!" );			
-			// conclus„o
+			//Valida√ß√£o Captcha (safe checks to avoid undefined index warnings)
+			$vehicle_captcha_post = isset($_POST["vehicle_captcha"]) ? trim($_POST["vehicle_captcha"]) : '';
+			$vehicle_captcha_sess = isset($_SESSION["vehicle_captcha"]) ? $_SESSION["vehicle_captcha"] : '';
+			$vehicle_captcha_ts = isset($_SESSION["vehicle_captcha_ts"]) ? intval($_SESSION["vehicle_captcha_ts"]) : 0;
+			$captcha_valid = false;
+			if ($vehicle_captcha_post == "") {
+				$excp->add ( "C√≥digo", "vehicle_captcha", "C√≥digo de seguran√ßa vazio!" );
+			} else {
+				// Check timestamp (5 minutes validity)
+				if ($vehicle_captcha_ts <= 0 || (time() - $vehicle_captcha_ts) > 300) {
+					$excp->add ( "C√≥digo", "vehicle_captcha", "C√≥digo expirado! Gere um novo c√≥digo." );
+				} else if (mb_strtoupper($vehicle_captcha_sess, 'UTF-8') != mb_strtoupper($vehicle_captcha_post, 'UTF-8')) {
+					$excp->add ( "C√≥digo", "vehicle_captcha", "C√≥digo de seguran√ßa inv√°lido!" );
+				} else {
+					$captcha_valid = true;
+				}
+			}
+			
+			// conclus√£o
 			if ($excp->size () > 0) {
 				throw $excp;
 			}
@@ -281,23 +316,23 @@ class VehicleRegCtrl extends AbstractCtrl {
 				$newItem = array(
 	    			"name" => htmlentities("CPF"),
 	    			"id" => htmlentities("vehicle_cpf"),
-	    			"message" => htmlentities("CPF j· existente! Informe um outro"),
+	    			"message" => htmlentities("CPF j√° existente! Informe um outro"),
 	    		);
 	    		$_validationException[] = $newItem;
 				
 			
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			}else if(eregi('cnpj_UNIQUE', $e->getMessage()))
 			{
 				$newItem = array(
 	    			"name" => htmlentities("CNPJ"),
 	    			"id" => htmlentities("vehicle__cnpj"),
-	    			"message" => htmlentities("CNPJ j· existente! Informe um outro"),
+	    			"message" => htmlentities("CNPJ j√° existente! Informe um outro"),
 	    		);
 	    		$_validationException[] = $newItem;
 				
 			
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			}else{
 				$this->message->setDesc ( $e->getMessage () );
 			}
@@ -310,11 +345,20 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$this->message->setDesc ( $e->getMessage () );
 		}
 		
+		$buffer = ob_get_clean();
+		if (trim($buffer) !== '') {
+			// Unexpected output (warnings/notices) detected - log and return a safe JSON error
+			error_log("Unexpected output in onSaveWeb(): " . $buffer);
+			header ( "Content-type: application/json; charset=UTF-8" );
+			echo json_encode (array("result"=>0,"message"=>"O sistema est√° indispon√≠vel no momento."));
+			exit();
+		}
+		
 		$output ["result"] = $this->message->getType ();
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () ));
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc () ));
 		$output ["validationException"] = $_validationException;
 		
-		header ( "Content-type: text/plain" );
+		header ( "Content-type: application/json; charset=UTF-8" );
 		echo json_encode ( $output );
 		exit ();
 	}
@@ -331,11 +375,11 @@ class VehicleRegCtrl extends AbstractCtrl {
 			if ($person->getCNPJ () == "") {
 				$e->add ( "CNPJ", "vehicle_cnpj", "CNPJ vazio!" );
 			} else if (! Validation::isCNPJ ( $person->getCNPJ () )) {
-				$e->add ( "CNPJ", "vehicle_cnpj", "CNPJ inv·lido!" );
+				$e->add ( "CNPJ", "vehicle_cnpj", "CNPJ inv√°lido!" );
 			}
 			
 			if ($person->getName () == "") {
-				$e->add ( "Raz„o Social", "vehicle_rsoc", "Raz„o Social vazia!" );
+				$e->add ( "Raz√£o Social", "vehicle_rsoc", "Raz√£o Social vazia!" );
 			}
 			
 			if ($person->getContact () == "") {
@@ -345,7 +389,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			if ($person->getCPF () == "") {
 				$e->add ( "CPF", "vehicle_cpf", "CPF vazio!" );
 			} else if (! Validation::isCPF ( $person->getCPF () )) {
-				$e->add ( "CPF", "vehicle_cpf", "CPF inv·lido" );
+				$e->add ( "CPF", "vehicle_cpf", "CPF inv√°lido" );
 			}
 			
 			if ($person->getName () == "") {
@@ -354,7 +398,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 		}
 		
 		if ($vehicleType->getId () <= 0) {
-			$e->add ( "Tipo de VeÌculo", "vehicle_type", "Tipo de VeÌculo vazio!" );
+			$e->add ( "Tipo de Ve√≠culo", "vehicle_type", "Tipo de Ve√≠culo vazio!" );
 		}
 		
 		$_vechicleTypes = $this->getTypeVechicles();
@@ -366,7 +410,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			}
 		}
 		if(!$exist){
-			$e->add ( "Tipo de VeÌculo", "vehicle_type", "Tipo de VeÌculo ".$vehicleType->getId ()." inv·lido!" );
+			$e->add ( "Tipo de Ve√≠culo", "vehicle_type", "Tipo de Ve√≠culo ".$vehicleType->getId ()." inv√°lido!" );
 		}
 		
 		if ($phone->getPhone () == "") {
@@ -377,22 +421,26 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$e->add ( "CEP", "vehicle_zipcode", "CEP vazio!" );
 		}
 		
-		if(strlen($address->getCep ()) != 8){
-			$e->add ( "CEP", "vehicle_zipcode", "CEP ".$address->getCep ()." inv·lido");
+		$cepDigits = preg_replace('/\D/','', (string)$address->getCep());
+		if(strlen($cepDigits) != 8){
+			$e->add ( "CEP", "vehicle_zipcode", "CEP inv√°lido");
+		} else {
+			// normalize stored cep to digits-only for downstream lookup
+			$address->setCep($cepDigits);
 		}
 		
 		if($obj->getSource() != VehicleTraveling::SOURCE_SMS )
 		{				
 			
 			if ($address->getCity () == "") {
-				$e->add ( "Cidade", "vehicle_city", "Cidade inv·lida!" );
+				$e->add ( "Cidade", "vehicle_city", "Cidade inv√°lida!" );
 			} 
 			
 			if ($address->getState () == "") {
-				$e->add ( "UF", "vehicle_region", "UF inv·lida!" );
+				$e->add ( "UF", "vehicle_region", "UF inv√°lida!" );
 			}			
 		}
-		// conclus„o
+		// conclus√£o
 		if ($e->size () > 0) {
 			
 			throw $e;
@@ -400,9 +448,11 @@ class VehicleRegCtrl extends AbstractCtrl {
 	}
 	public function getImageCaptcha() {
 		$dir = dirname ( dirname ( dirname ( __FILE__ ) ) );
-		$codigoCaptcha = substr(str_shuffle("AaBbCcDdEeFfGgHhIiJjKkLlMmNnPpQqRrSsTtUuVvYyXxWwZz23456789"),0,4);
+		// stronger captcha: 6 chars and timestamp for expiry
+		$codigoCaptcha = substr(str_shuffle("AaBbCcDdEeFfGgHhIiJjKkLlMmNnPpQqRrSsTtUuVvYyXxWwZz23456789"),0,6);
 		
 		$_SESSION ["vehicle_captcha"] = $codigoCaptcha;
+		$_SESSION ["vehicle_captcha_ts"] = time();
 		
 		$imagemCaptcha = imagecreatefrompng ( $dir . "/images/fundocaptch.png" );
 		

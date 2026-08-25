@@ -11,19 +11,19 @@ $user = User::getLogged();
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/maps_brazil.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/diapo.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/main_ext.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery-bxslider-v3.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.easing.1.3.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.hoverIntent.minified.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/diapo.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/MainExt.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){MainExt.getInstance().initQuery();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery-bxslider-v3.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.easing.1.3.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.hoverIntent.minified.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/diapo.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/MainExt.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){MainExt.getInstance().initQuery();});</script>
 <div class="pix_background_diapo">
 	<div class="pix_diapo">
 		<div>
 			<img src="../shared/images/banner_slider1.jpg" width="1100px" height="300px" >
 			<div class="elemHover caption fromLeft caption_hdr" style="width: auto">
 				<h2><?=$msgPeriod?><?=(User::isLogged())?", ".$user->getPerson()->getName():""?>!</h2>
-				São <span id="span_tot_login"><?=$totalReg?></span> veículos ativos, <a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" title="Busca por veículos">clique aqui</a> para utilizar
+				SÃ£o <span id="span_tot_login"><?=$totalReg?></span> veÃ­culos ativos, <a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" title="Busca por veÃ­culos">clique aqui</a> para utilizar
 			</div>
 	
 		</div>
@@ -38,7 +38,7 @@ $user = User::getLogged();
 			<img src="../shared/images/banner_slider3.jpg" width="1100px" height="300px">
 			<div class="elemHover caption fromLeft caption_hdr" style="width: auto">
 				<h2><?=$msgPeriod?>!</h2>
-				São <span id="span_tot_login"><?=$totalReg?></span> veículos ativos, <a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" title="Busca por veículos">clique aqui</a> para utilizar
+				SÃ£o <span id="span_tot_login"><?=$totalReg?></span> veÃ­culos ativos, <a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" title="Busca por veÃ­culos">clique aqui</a> para utilizar
 			</div>
 		</div>
 	</div>
@@ -58,29 +58,29 @@ $user = User::getLogged();
 						<ul id="brasil" lang="pt">
 							<li id="br1"><a href="#AC">Acre</a></li>
 							<li id="br2"><a href="#AL">Alagoas</a></li>
-							<li id="br3"><a href="#AP">Amapá</a></li>
+							<li id="br3"><a href="#AP">AmapÃ¡</a></li>
 							<li id="br4"><a href="#AM">Amazonas</a></li>
 							<li id="br5"><a href="#BA">Bahia</a></li>
 							<li id="br6"><a href="#CE">Ceara</a></li>
 							<li id="br7"><a href="#DF">Distrito Federal</a></li>
-							<li id="br8"><a href="#ES">Espírito Santo</a></li>
-							<li id="br9"><a href="#GO">Goiás</a></li>
-							<li id="br10"><a href="#MA">Maranhão</a></li>
+							<li id="br8"><a href="#ES">EspÃ­rito Santo</a></li>
+							<li id="br9"><a href="#GO">GoiÃ¡s</a></li>
+							<li id="br10"><a href="#MA">MaranhÃ£o</a></li>
 							<li id="br11"><a href="#MT">Mato Grosso</a></li>
 							<li id="br12"><a href="#MS">Mato Grosso do Sul</a></li>
 							<li id="br13"><a href="#MG">Minas Gerais</a></li>
-							<li id="br14"><a href="#PA">Pará</a></li>
-							<li id="br15"><a href="#PB">Paraíba</a></li>
-							<li id="br16"><a href="#PR">Paraná</a></li>
+							<li id="br14"><a href="#PA">ParÃ¡</a></li>
+							<li id="br15"><a href="#PB">ParaÃ­ba</a></li>
+							<li id="br16"><a href="#PR">ParanÃ¡</a></li>
 							<li id="br17"><a href="#PE">Pernambuco</a></li>
-							<li id="br18"><a href="#PI">Piauí</a></li>
+							<li id="br18"><a href="#PI">PiauÃ­</a></li>
 							<li id="br19"><a href="#RJ">Rio de Janeiro</a></li>
 							<li id="br20"><a href="#RN">Rio Grande do Norte</a></li>
 							<li id="br21"><a href="#RS">Rio Grande do Sul</a></li>
-							<li id="br22"><a href="#RO">Rondônia</a></li>
+							<li id="br22"><a href="#RO">RondÃ´nia</a></li>
 							<li id="br23"><a href="#RR">Roraima</a></li>
 							<li id="br24"><a href="#SC">Santa Catarina</a></li>
-							<li id="br25"><a href="#SP">São Paulo</a></li>
+							<li id="br25"><a href="#SP">SÃ£o Paulo</a></li>
 							<li id="br26"><a href="#SE">Sergipe</a></li>
 							<li id="br27"><a href="#TO">Tocantins</a></li>
 						</ul>

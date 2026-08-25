@@ -37,11 +37,11 @@ $userSuper 	   = User::isUserSuper();
 	</li>
 	<li>
 		<span class="ui-icon ui-icon-disk"></span>
-		<a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/">Cadastre seu veículo</a>
+		<a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/">Cadastre seu veÃ­culo</a>
 	</li>
 	<li>
 		<span class="ui-icon ui-icon-search"></span>
-		<a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/">Buscar veículos</a>
+		<a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/">Buscar veÃ­culos</a>
 	</li>
 	<? if(!$userSuper){?>
 		<li>

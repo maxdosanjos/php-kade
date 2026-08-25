@@ -23,7 +23,7 @@ class PersonEntityDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		$out = $db->exec ( $sql );
 		if ($dbConfig instanceof DBConfig)
 			$db = null;
@@ -49,7 +49,7 @@ class PersonEntityDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		$out = $db->exec ( $sql );
 		if ($dbConfig instanceof DBConfig)
 			$db = null;
@@ -82,13 +82,13 @@ class PersonEntityDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$result = $db->query ( $sql );
 		
 		$personEntity = null;
 		$objDAO = $result->fetchObject ();
-		if ($objDAO->id != null) {
+		if ($objDAO !== false && $objDAO !== null && $objDAO->id != null) {
 			$personEntity = new PersonEntity ();
 			$personEntity->setId ( $objDAO->id );
 			$personEntity->setName ( $objDAO->name );

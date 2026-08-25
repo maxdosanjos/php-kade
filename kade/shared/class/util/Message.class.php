@@ -1,7 +1,7 @@
 <?php
 /**
  * Message
- * Classe que gerencia mensagens trocadas pela aplicação e a interface grafica
+ * Classe que gerencia mensagens trocadas pela aplicaÃ§Ã£o e a interface grafica
  */
 class Message {
     private $type = null;
@@ -22,7 +22,7 @@ class Message {
     }
     
     public function setDesc($desc){
-    	$desc = trim($desc);
+    	$desc = trim($desc ?? "");
     	$this->desc = nl2br($desc);
     	
     }
@@ -32,7 +32,7 @@ class Message {
     }
     
     public function setType($type){
-    	$this->type = trim($type);
+    	$this->type = trim($type ?? "");
     }
     
     public function __destruct(){

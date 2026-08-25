@@ -24,13 +24,13 @@ class CustumerQueryCtrl extends AbstractCtrl {
 	 * * Parametros para busca **
 	 */
 	private $custumers = null;
-	private $orderType = null; // tipo da ordenaÁ„o
+	private $orderType = null; // tipo da ordena√ß√£o
 	private $orderColumn = null; // coluna a ser ordenada
 	private $pagination = null;
 	public function __construct() {
 		parent::__construct ();
 		$this->initCtrlParam ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		$this->setPagination ( new Pagination ( 0 ) ); // inicia com o numero total de registros
 		
 		switch ($this->getAction ()) {
@@ -52,14 +52,14 @@ class CustumerQueryCtrl extends AbstractCtrl {
 			$this->clientDAO = ClientDAO::getInstance ();
 			$this->custumerParam = $this->getRequestBean ( $_POST );
 			if($this->custumerParam->getUser()->getPerson()->getId() <= 0){
-				throw new Exception("Cliente n„o encontrado!!");
+				throw new Exception("Cliente n√£o encontrado!!");
 			}
 			$this->custumerParam->getUser()->setStatus (User::CHEK);
 			$criteria = $this->getCriteriaFilterDefault ();
 				
 			$custumer = $this->clientDAO->getSingle ( $this->getDbConfig (), $criteria );
 			if($custumer == null){
-				throw new Exception("Cliente n„o encontrado!!");
+				throw new Exception("Cliente n√£o encontrado!!");
 			}
 		} catch ( PDOException $e ) {
 			$db = null;
@@ -70,9 +70,9 @@ class CustumerQueryCtrl extends AbstractCtrl {
 			$this->message->setDesc ( $e->getMessage () );
 		}
 		
-		$output ["error"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );			
+		$output ["error"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );			
 		if($custumer!=null){
-			$output ["name"] = iconv ( "ISO-8859-1", "UTF-8",$custumer->getUser()->getPerson()->getName());	
+			$output ["name"] = iconv ( "UTF-8", "UTF-8",$custumer->getUser()->getPerson()->getName());	
 		}
 			
 		
@@ -204,7 +204,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 				header("Content-Disposition: attachment; filename=resultado_busca_kade.csv");
 				header("Pragma: no-cache");
 				header("Expires: 0");
-				echo "Registro;Tipo;Criado em;Nome/Raz„o Social;CPF/CNPJ;CEP;Cidade;UF;Telefone;Contato;Status\r";
+				echo "Registro;Tipo;Criado em;Nome/Raz√£o Social;CPF/CNPJ;CEP;Cidade;UF;Telefone;Contato;Status\r";
 				$i = 0;
 				while($i < $length){
 					$custumerList     = $this->custumers[$i];
@@ -294,7 +294,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 	
 	/**
 	 *
-	 * @method String Retorna a imagem de acordo com a ordenaÁ„o
+	 * @method String Retorna a imagem de acordo com a ordena√ß√£o
 	 */
 	public function getImgOrder($columnBD) {
 		if ($this->getOrderColumn () == trim ( $columnBD )) {

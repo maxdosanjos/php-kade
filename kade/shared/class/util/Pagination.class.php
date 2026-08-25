@@ -2,7 +2,7 @@
 /**
  * @author Max dos anjos
  * @since 1.0 - 25/04/2011
- * @desc Classe para Paginação dos registros
+ * @desc Classe para PaginaÃ§Ã£o dos registros
  * @update 
  */
 	class Pagination
@@ -28,7 +28,7 @@
 				$this->loadInfo($totalReg);
 		}
 		/**
-		 * @method void Carrega as informações inicias para a classe
+		 * @method void Carrega as informaÃ§Ãµes inicias para a classe
 		 */
 		public function loadInfo($totalReg)
 		{
@@ -140,8 +140,8 @@
 			$this->endLimit = abs(intval($endLimit));
 		}
 		/**
-		 * @method String Método para exibir a paginação por numeros
-		 * @param Int Numero de opções de paginas a serem exibidas
+		 * @method String MÃ©todo para exibir a paginaÃ§Ã£o por numeros
+		 * @param Int Numero de opÃ§Ãµes de paginas a serem exibidas
 		 */
 		public function getPagByNumber($numberLimit)
 		{
@@ -155,7 +155,7 @@
 				 if($pag!=$i)
 				 {
 					 $link = '';
-					 echo "<a href='#' style='color:#000;font-weight:bold;padding:5px;margin:1px;text-decoration:none;' class='pag_number' title='Ir para página ".$i."'>".$i."</a>";
+					 echo "<a href='#' style='color:#000;font-weight:bold;padding:5px;margin:1px;text-decoration:none;' class='pag_number' title='Ir para pÃ¡gina ".$i."'>".$i."</a>";
 				 } 
 				 else
 					 echo "<span title='P&aacute;gina atual'>".$i."</span>"; 
@@ -163,7 +163,7 @@
 			} 
 		}
 		/**
-		 * @method String Exibi detalhes das páginas: total e pagina corrente
+		 * @method String Exibi detalhes das pÃ¡ginas: total e pagina corrente
 		 */
 		public function showDetailsPag()
 		{

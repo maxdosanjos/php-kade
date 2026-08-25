@@ -36,7 +36,7 @@ class AccountDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$clientDAO = ClientDAO::getInstance ();
 		$_accounts = array ();
@@ -81,7 +81,7 @@ class AccountDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$result = $db->query ( $sql );
 		if ($dbConfig instanceof DBConfig)
@@ -114,7 +114,7 @@ class AccountDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$result = $db->query ( $sql );
 		if ($dbConfig instanceof DBConfig)
@@ -135,7 +135,7 @@ class AccountDAO {
 		} else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		try {
 			//Atualizar Conta
 			$sql = "UPDATE `account`
@@ -176,7 +176,7 @@ class AccountDAO {
 		} else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		try {
 			
 			//Criar Conta
@@ -196,7 +196,7 @@ class AccountDAO {
 			$obj->setId($id);
 			
 			if($out == 0)
-				throw new PDOException("Erro ao registrar Veículo!");
+				throw new PDOException("Erro ao registrar VeÃ­culo!");
 				
 			//Criar Parcelas
 			$_installments = $obj->getInstallmentList();
@@ -239,7 +239,7 @@ class AccountDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$clientDAO = ClientDAO::getInstance ();
 		$_accounts = array ();

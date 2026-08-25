@@ -43,7 +43,7 @@ class VehicleTravelingDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$result = $db->query ( $sql );
 		if ($dbConfig instanceof DBConfig)
@@ -76,7 +76,7 @@ class VehicleTravelingDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$_logs = array ();
 		$result = $db->query ( $sql );
@@ -95,7 +95,7 @@ class VehicleTravelingDAO {
 		if($json[0]->message == ""){
 			$json[0]->message = $message->getDesc ();			
 		}else{
-			$json[0]->message = html_entity_decode(iconv (  "UTF-8","ISO-8859-1", $json[0]->message));
+			$json[0]->message = html_entity_decode(iconv (  "UTF-8","UTF-8", $json[0]->message));
 		}
 		
 		$sql = "INSERT INTO `log_sms`
@@ -120,7 +120,7 @@ class VehicleTravelingDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 			
 		
 		
@@ -143,7 +143,7 @@ class VehicleTravelingDAO {
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 			
 		if($obj->getStatus() == VehicleTraveling::UTILIZED){
 			$user_ultilized = ", `user_person_id_ut` = '".User::getLogged()->getPerson()->getId()."'";
@@ -188,14 +188,14 @@ class VehicleTravelingDAO {
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 		
 		$address		= $obj->getAddress();
 		$vehicleContact = $obj->getPersonContact();
 		
 		try {			
 			
-			// Criar Endereço
+			// Criar EndereÃ§o
 			$addressDAO = AddressDAO::getInstance ();
 			$addressDAO->insert ( $db, $address );
 			
@@ -225,7 +225,7 @@ class VehicleTravelingDAO {
 			$obj->setId($id);			
 			
 			if($id <= 0)
-				throw new PDOException("Erro ao registrar Veículo!");			
+				throw new PDOException("Erro ao registrar VeÃ­culo!");			
 				
 			//Criar pessoa de contato
 			$vehicleContact->setVehicleTraveling($obj);
@@ -236,7 +236,7 @@ class VehicleTravelingDAO {
 			$sql = 'call add_idx_traveling_city('.$obj->getAddress()->getId().');';
 			$out = $db->exec($sql);
 			if($out == 0)
-				throw new PDOException("Erro ao registrar Veículo!");
+				throw new PDOException("Erro ao registrar VeÃ­culo!");
 			
 			
 			if($dbConfig instanceof DBConfig){
@@ -305,12 +305,12 @@ class VehicleTravelingDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );		
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );		
 		
 		$result = $db->query ( $sql );
 		$objDAO = $result->fetchObject();
 		if($objDAO->id==null)
-			throw new PDOException ( "Registro não encontrado" );
+			throw new PDOException ( "Registro nÃ£o encontrado" );
 			
 		$person = null;
 		
@@ -339,7 +339,7 @@ class VehicleTravelingDAO {
 			$person = $personTypeDAO->getSingle ( $db, $critPers );
 		
 		if($person==null){
-			throw new PDOException("Contato não encontrado #sem_contato");
+			throw new PDOException("Contato nÃ£o encontrado #sem_contato");
 		}
 		
 		
@@ -387,7 +387,7 @@ class VehicleTravelingDAO {
 			$userDAO = UserDAO::getInstance ();
 			$user = $userDAO->getSingle ( $db, $critUser );	
 			if($user==null || $user->getLogin() == ""){
-				throw new PDOException("Utilizador não encontrado!");
+				throw new PDOException("Utilizador nÃ£o encontrado!");
 			}
 			
 			$vehTravUser->setUser( $user );		
@@ -425,7 +425,7 @@ class VehicleTravelingDAO {
 		else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 	
 		$result    =  $db->query($sql);
 	
@@ -486,7 +486,7 @@ class VehicleTravelingDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		
 		$_traveling = array();
@@ -567,7 +567,7 @@ class VehicleTravelingDAO {
 				$userDAO = UserDAO::getInstance ();
 				$user = $userDAO->getSingle ( $db, $critUser );
 				if($user==null || $user->getLogin() == ""){
-					throw new PDOException("Utilizador não encontrado!");
+					throw new PDOException("Utilizador nÃ£o encontrado!");
 				}
 					
 				$vehTravUser->setUser( $user );

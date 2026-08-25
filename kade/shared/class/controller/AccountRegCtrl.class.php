@@ -24,7 +24,7 @@ class AccountRegCtrl extends AbstractCtrl {
 	private $accountDAO = null;
 	public function __construct() {
 		parent::__construct ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		switch ($this->getAction ()) {
 			case "saveInter" :
@@ -56,9 +56,9 @@ class AccountRegCtrl extends AbstractCtrl {
 			$account = $this->getRequestBean ( $_POST );
 			$this->validateBean ( $account );
 			if ($account->getId () <= 0) {
-				throw new Exception ( "Conta inv·lida" );
+				throw new Exception ( "Conta inv√°lida" );
 			} elseif ($account->getStatus () != Account::UNPAID) {
-				throw new Exception ( "Conta n„o pode ser cancelada! Status atual:" . $account->getDescStatus () );
+				throw new Exception ( "Conta n√£o pode ser cancelada! Status atual:" . $account->getDescStatus () );
 			}
 			
 			$_installments = $account->getInstallmentList ();
@@ -96,13 +96,13 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			if (eregi ( 'fk_account_client1', $e->getMessage () )) {
 				$newItem = array (
-						"name" => htmlentities ( "CÛd.Cliente" ),
+						"name" => htmlentities ( "C√≥d.Cliente" ),
 						"id" => htmlentities ( "account_client_id" ),
-						"message" => htmlentities ( "Cliente n„o existe! Informe um outro" ) 
+						"message" => htmlentities ( "Cliente n√£o existe! Informe um outro" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else {
 				$this->message->setDesc ( $e->getMessage () );
 			}
@@ -120,7 +120,7 @@ class AccountRegCtrl extends AbstractCtrl {
 		
 		$output ["result"] = $this->message->getType ();
 		
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 		$output ["validationException"] = $_validationException;
 		
 		header ( "Content-type: text/plain" );
@@ -145,11 +145,11 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			$length = $_POST ["account_validate_month"];
 			if ($length <= 0) {
-				$excp->add ( "Total de parcelas", "account_validate_month", "Total de parcelas: Valor inv·lido" );
+				$excp->add ( "Total de parcelas", "account_validate_month", "Total de parcelas: Valor inv√°lido" );
 			}
 			$value = floatval ( $_POST ["installment_reg_value"] );
 			if ($value <= 0) {
-				$excp->add ( "Valor(R$)", "installment_reg_value", "Valor(R$): Valor inv·lido" );
+				$excp->add ( "Valor(R$)", "installment_reg_value", "Valor(R$): Valor inv√°lido" );
 			}
 			
 			if ($_POST ["installment_reg_dt"] != "") {
@@ -157,7 +157,7 @@ class AccountRegCtrl extends AbstractCtrl {
 				$date = new DateTimeCustom ( "NOW" );
 				$date->setDate ( $dt [2], $dt [1], $dt [0] );
 			} else {
-				$excp->add ( "Data Inicial", "installment_reg_dt", "Data Inicial: Data inv·lida" );
+				$excp->add ( "Data Inicial", "installment_reg_dt", "Data Inicial: Data inv√°lida" );
 			}
 			
 			if ($excp->size () > 0) {
@@ -191,7 +191,7 @@ class AccountRegCtrl extends AbstractCtrl {
 				$line .= '<input type="hidden" name="installment_due_date[]" id="installment_due_date_' . $installment->getId () . '" value="' . $installment->getDueDate ()->format ( "d/m/Y" ) . '" />';
 				$line .= '</td>';
 				
-				$line .= '<td class="td_sts ' . $installment->getStatus () . '">' . iconv ( "ISO-8859-1", "UTF-8", $installment->getDescStatus () );
+				$line .= '<td class="td_sts ' . $installment->getStatus () . '">' . iconv ( "UTF-8", "UTF-8", $installment->getDescStatus () );
 				$line .= '<input type="hidden" name="installment_status[]" id="installment_status_' . $installment->getId () . '" value="' . $installment->getStatus () . '" />';
 				$line .= '</td>';
 				
@@ -229,7 +229,7 @@ class AccountRegCtrl extends AbstractCtrl {
 		}
 		
 		$output ["result"] = $this->message->getType ();
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 		$output ["validationException"] = $_validationException;
 		$output ["html_inc_installment"] = $line;
 		
@@ -249,7 +249,7 @@ class AccountRegCtrl extends AbstractCtrl {
 				$this->accountDAO = AccountDAO::getInstance ();
 				$this->accountEdit = $this->accountDAO->getSingle ( $this->getDbConfig (), $criteria );
 				if ($this->accountEdit == null || $this->accountEdit->getId () <= 0)
-					throw new Exception ( "Conta n„o encontrada!" );
+					throw new Exception ( "Conta n√£o encontrada!" );
 			} catch ( PDOException $e ) {
 				$this->clientEdit = null;
 			} catch ( Exception $e ) {
@@ -288,7 +288,7 @@ class AccountRegCtrl extends AbstractCtrl {
 					
 				$countInstall     = $this->accountDAO->countByInterval($db,$account->getClient(),$dtInit,$dtEnd);
 				if($countInstall > 0){
-					throw new Exception("J· existe uma conta v·lida neste intervalo!");
+					throw new Exception("J√° existe uma conta v√°lida neste intervalo!");
 				}
 				
 				$this->accountDAO->insert ( $db, $account );
@@ -314,13 +314,13 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			if (eregi ( 'fk_account_client1', $e->getMessage () )) {
 				$newItem = array (
-						"name" => htmlentities ( "CÛd.Cliente" ),
+						"name" => htmlentities ( "C√≥d.Cliente" ),
 						"id" => htmlentities ( "account_client_id" ),
-						"message" => htmlentities ( "Cliente n„o existe! Informe um outro" ) 
+						"message" => htmlentities ( "Cliente n√£o existe! Informe um outro" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else {
 				$this->message->setDesc ( $e->getMessage () );
 			}
@@ -338,7 +338,7 @@ class AccountRegCtrl extends AbstractCtrl {
 		
 		$output ["result"] = $this->message->getType ();
 		
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 		$output ["validationException"] = $_validationException;
 		
 		header ( "Content-type: text/plain" );
@@ -421,43 +421,43 @@ class AccountRegCtrl extends AbstractCtrl {
 		}
 		
 		if ($person == null || $person->getId () <= 0) {
-			$e->add ( "CÛd. Cliente", "account_client_id", "Necess·rio CÛdigo de cliente v·lido" );
+			$e->add ( "C√≥d. Cliente", "account_client_id", "Necess√°rio C√≥digo de cliente v√°lido" );
 		} else {
 			
 			$_installs = $account->getInstallmentList ();
 			$length = sizeof ( $_installs );
 			if ($length <= 0) {
-				$e->add ( "Parcela", "account_client_id", "Necess·ria 1 parcela no minÌmo" );
+				$e->add ( "Parcela", "account_client_id", "Necess√°ria 1 parcela no min√≠mo" );
 			}
 			if ($length > 0) {
 				foreach ( $_installs as $installment ) {
 					if ($installment->getId () <= 0) {
-						$e->add ( "Parcela", "account_client_id", "Id da parcela inv·lido" );
+						$e->add ( "Parcela", "account_client_id", "Id da parcela inv√°lido" );
 						break;
 					} elseif ($installment->getDueDate () == null) {
-						$e->add ( "Parcela", "account_client_id", "Data de Vencimento da parcela " . $installment->getId () . " È inv·lida" );
+						$e->add ( "Parcela", "account_client_id", "Data de Vencimento da parcela " . $installment->getId () . " √© inv√°lida" );
 						break;
 					} elseif ($installment->getValue () <= 0) {
-						$e->add ( "Parcela", "account_client_id", "Valor da parcela " . $installment->getId () . " È inv·lido" );
+						$e->add ( "Parcela", "account_client_id", "Valor da parcela " . $installment->getId () . " √© inv√°lido" );
 						break;
 					}
 					
 					if($installment->getStatus() == Installment::PAID){
 						if ($installment->getPaymentMethod ()==null || $installment->getPaymentMethod()->getId() <= 0) {
-							$e->add ( "Parcela", "account_client_id", "Forma de pagamento da parcela " . $installment->getId () . "  inv·lida" );
+							$e->add ( "Parcela", "account_client_id", "Forma de pagamento da parcela " . $installment->getId () . "  inv√°lida" );
 							break;
 						} elseif ($installment->getPaymentDate () == null) {
-							$e->add ( "Parcela", "account_client_id", "Data de Pagamento da parcela " . $installment->getId () . " È inv·lida" );
+							$e->add ( "Parcela", "account_client_id", "Data de Pagamento da parcela " . $installment->getId () . " √© inv√°lida" );
 							break;
 						} elseif ($installment->getPaymentValue () <= 0) {
-							$e->add ( "Parcela", "account_client_id", "Valor pago da parcela " . $installment->getId () . " È inv·lido" );
+							$e->add ( "Parcela", "account_client_id", "Valor pago da parcela " . $installment->getId () . " √© inv√°lido" );
 							break;
 						}
 					}
 				}
 			}
 		}
-		// conclus„o
+		// conclus√£o
 		if ($e->size () > 0) {
 			throw $e;
 		}

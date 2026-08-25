@@ -22,10 +22,10 @@
 		
 		public function __construct() {
 			parent::__construct ();
-			$this->setAction ( $_REQUEST ["action"] );
+			$this->setAction ( $_REQUEST ["action"] ?? null );
 			
-			$this->message->setType ( $_SESSION["msg_type"] );
-			$this->message->setDesc ( $_SESSION["msg_txt"] );
+			$this->message->setType ( $_SESSION["msg_type"] ?? "" );
+			$this->message->setDesc ( $_SESSION["msg_txt"] ?? "" );
 			$this->resetSessionMsg();
 			
 			switch ($this->getAction ()) {
@@ -57,11 +57,11 @@
 				$user->setPassword($_REQUEST["custumer_password"]);
 				
 				if($user->getPerson()->getId() <= 0){
-					throw new Exception("Usu·rio inv·lido!");
+					throw new Exception("Usu√°rio inv√°lido!");
 				}elseif($user->getLogin() =="" || strlen ( $user->getLogin () ) < 5){
-					throw new Exception("Login: N˙mero de caracteres insuficiente! MÌnimo = 5");
+					throw new Exception("Login: N√∫mero de caracteres insuficiente! M√≠nimo = 5");
 				}elseif($user->getPassword() =="" || strlen ( $user->getPassword () ) < 5){
-					throw new Exception("Senha: N˙mero de caracteres insuficiente! MÌnimo = 5");
+					throw new Exception("Senha: N√∫mero de caracteres insuficiente! M√≠nimo = 5");
 				}
 				
 				$this->userDAO = UserDAO::getInstance ();				
@@ -115,7 +115,7 @@
 						$person->setCnpj ( $_REQUEST ["newpwd_cnpj"] );
 						break;
 					default :
-						throw new Exception("Necess·ria a definiÁ„o de Pessoa FÌsica ou JurÌdica");
+						throw new Exception("Necess√°ria a defini√ß√£o de Pessoa F√≠sica ou Jur√≠dica");
 				}
 				
 				$person->setEmail ( $_REQUEST ["newpwd_mail"] );
@@ -125,13 +125,13 @@
 						if ($person->getCNPJ () == "") {
 							$e->add ( "CNPJ", "custumer_cnpj", "CNPJ vazio!" );
 						} else if (! Validation::isCNPJ ( $person->getCNPJ () )) {
-							$e->add ( "CNPJ", "custumer_cnpj", "CNPJ inv·lido!" );
+							$e->add ( "CNPJ", "custumer_cnpj", "CNPJ inv√°lido!" );
 						}
 					} elseif ($person->getType () == Person::PF) {
 						if ($person->getCPF () == "") {
 							$e->add ( "CPF", "custumer_cpf", "CPF vazio!" );
 						} else if (! Validation::isCPF ( $person->getCPF () )) {
-							$e->add ( "CPF", "custumer_cpf", "CPF inv·lido" );
+							$e->add ( "CPF", "custumer_cpf", "CPF inv√°lido" );
 						}
 					}
 					
@@ -142,7 +142,7 @@
 					}			
 				}
 				else
-					throw new Exception("Necess·ria a definiÁ„o de Pessoa FÌsica ou JurÌdica");
+					throw new Exception("Necess√°ria a defini√ß√£o de Pessoa F√≠sica ou Jur√≠dica");
 				
 				if ($e->size () > 0) {
 					throw $e;
@@ -165,6 +165,7 @@
 					$criteria->eq("pf.cpf",$person->getCpf());
 				}
 				
+				$user = null;
 				if($personTypeDAO!=null)
 				{
 					$personDb = $personTypeDAO->getSingle ( $db, $criteria );
@@ -178,12 +179,10 @@
 						$user = $this->userDAO->getSingle($db,$criteria);
 					}
 				}		
-				
 				$criteria = null;
 				
 				
-				if($user==null){
-					throw new Exception("Nenhum usu·rio encontrado!");
+				if($user==null){					throw new Exception("Nenhum usu√°rio encontrado!");
 				} 		
 				$user->getPerson()->setEmail($person->getEmail ());
 				$this->sendMailConfirm ( $db, $user );
@@ -193,7 +192,7 @@
 					
 				$person = $user->getPerson ();
 				$this->message->setType ( Message::SUCCESS );
-				$this->message->setDesc ( "Enviado com sucesso ao email " . $person->getEmail () . "  o link para redefiniÁ„o de sua senha  " );
+				$this->message->setDesc ( "Enviado com sucesso ao email " . $person->getEmail () . "  o link para redefini√ß√£o de sua senha  " );
 				
 				
 			}catch(ValidationException $e){ 
@@ -222,7 +221,7 @@
 			
 			
 			$output ["result"] = $this->message->getType ();
-			$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+			$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 			$output ["validationException"] = $_validationException;
 			
 			header ( "Content-type: text/plain" );
@@ -247,10 +246,10 @@
 						$db->rollback ();
 					$db = null;
 					
-					throw new Exception ( "ConfirmaÁ„o n„o pode ser realizada!" );
+					throw new Exception ( "Confirma√ß√£o n√£o pode ser realizada!" );
 				}
 			} else {
-				throw new Exception ( "ConfirmaÁ„o n„o pode ser realizada!" );
+				throw new Exception ( "Confirma√ß√£o n√£o pode ser realizada!" );
 			}
 		}
 		public function confirmLinkPwd() {
@@ -259,7 +258,7 @@
 			$vua = $_REQUEST ["vua"];
 			if ($vua != "") {
 				if(User::isLogged()){
-					throw new Exception ( "N„o pode ser realizado com o usu·rio logado! Clique em 'Sair' para redefinir a senha" );
+					throw new Exception ( "N√£o pode ser realizado com o usu√°rio logado! Clique em 'Sair' para redefinir a senha" );
 				}
 			
 				try {
@@ -277,10 +276,10 @@
 						$db->rollback ();
 					$db = null;
 					
-					throw new Exception ( "A url informada j· foi utilizada ou est· inv·lida. Ser· necess·rio <a href='".ViewExtCtrl::NEW_PASSWRD."'>clicar aqui</a> para solicitar novamente uma nova senha." );
+					throw new Exception ( "A url informada j√° foi utilizada ou est√° inv√°lida. Ser√° necess√°rio <a href='".ViewExtCtrl::NEW_PASSWRD."'>clicar aqui</a> para solicitar novamente uma nova senha." );
 				}
 			} else {
-				throw new Exception ( "A url informada j· foi utilizada ou est· inv·lida. Ser· necess·rio <a href='".ViewExtCtrl::NEW_PASSWRD."'>clicar aqui</a> para solicitar novamente uma nova senha." );
+				throw new Exception ( "A url informada j√° foi utilizada ou est√° inv√°lida. Ser√° necess√°rio <a href='".ViewExtCtrl::NEW_PASSWRD."'>clicar aqui</a> para solicitar novamente uma nova senha." );
 			}
 		}
 		public function onLogof(){
@@ -292,7 +291,7 @@
 			{
 				$this->userParam = $this->getRequestBean($_REQUEST);
 				if($this->userParam==null || $this->userParam->getLogin()=="" || $this->userParam->getPassword()=="")
-					throw new Exception ( "Usu·rio ou senha inv·lida!" );
+					throw new Exception ( "Usu√°rio ou senha inv√°lida!" );
 					
 				$criteria = new Criteria();				
 				$criteria->eq("usr.login",$this->userParam->getLogin());
@@ -304,7 +303,7 @@
 			
 				$user = $this->userDAO->getSingle($this->getDbConfig (),$criteria);
 				if($user==null || ( $user!=null && $user->getLogin() =="") )
-					throw new Exception ( "Usu·rio ou senha inv·lida!!" );
+					throw new Exception ( "Usu√°rio ou senha inv√°lida!!" );
 					
 				$_SESSION ["user"] = serialize($user);
 				
@@ -370,8 +369,8 @@
 			
 			$person = $user->getPerson ();
 			
-			$subject = "RequisiÁ„o de nova senha KADE Caminhıes";
-			$from = new EmailAddress ( 'contato@kadecaminhoes.com.br', 'Contato KADE Caminhıes' );
+			$subject = "Requisi√ß√£o de nova senha KADE Caminh√µes";
+			$from = new EmailAddress ( 'contato@kadecaminhoes.com.br', 'Contato KADE Caminh√µes' );
 			$to [] = new EmailAddress ( $person->getEmail (), $person->getName () );
 			
 			$mail->sendPHPMail ( $from, $to, $subject, $content, "text/html" );

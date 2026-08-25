@@ -11,7 +11,7 @@ if ($custumer == null){
 	#p_obs{font-style:italic;}
 </style>
 
-<h2>Bem-vindo ao KADE Caminhões!!!</h2>
+<h2>Bem-vindo ao KADE CaminhÃµes!!!</h2>
 
 <p>
 	Para ativar sua conta e confirmar seu login e senha, clique neste link: 
@@ -21,22 +21,22 @@ if ($custumer == null){
 <div id="div_login">Login: <?=$custumer->getUser()->getLogin();?></div>
 <br/>
 <p id="p_obs">
-***OBSERVAÇÃO*** Para solicitar uma nova senha, <a href="<?=$_SERVER ["HTTP_HOST"]?>/request_new_password/">clique aqui</a> para redefinir sua senha. 
+***OBSERVAÃ‡ÃƒO*** Para solicitar uma nova senha, <a href="<?=$_SERVER ["HTTP_HOST"]?>/request_new_password/">clique aqui</a> para redefinir sua senha. 
 </p>
 
 <p>
-Se você recebeu esta mensagem por engano, é provável que outro usuário tenha 
-inserido seu endereço de e-mail ao tentar criar uma conta para outro 
-endereço de e-mail. Se você não clicar no link de verificação, a conta não 
-será ativada. 
+Se vocÃª recebeu esta mensagem por engano, Ã© provÃ¡vel que outro usuÃ¡rio tenha 
+inserido seu endereÃ§o de e-mail ao tentar criar uma conta para outro 
+endereÃ§o de e-mail. Se vocÃª nÃ£o clicar no link de verificaÃ§Ã£o, a conta nÃ£o 
+serÃ¡ ativada. 
 </p>
 
 <p>
-Se clicar no link acima não funcionar, copie e cole o URL em uma nova janela do navegador. 
+Se clicar no link acima nÃ£o funcionar, copie e cole o URL em uma nova janela do navegador. 
 </p>
 
 <p>
 Atenciosamente,<br/>
-Equipe Kade Caminhões.
+Equipe Kade CaminhÃµes.
 </p>
 

@@ -64,9 +64,9 @@ class PaymentMethod {
 	public function getArray(){
 		$output = array();
 		$output["id"] 	   = $this->getId();
-		$output["name"]    = iconv ( "ISO-8859-1", "UTF-8",$this->getName());
+		$output["name"]    = iconv ( "UTF-8", "UTF-8",$this->getName());
 		$output["enabled"] = $this->getEnabled();
-		$output["descr"]   = iconv ( "ISO-8859-1", "UTF-8",$this->getDescr());
+		$output["descr"]   = iconv ( "UTF-8", "UTF-8",$this->getDescr());
 		
 		return output;
 	}

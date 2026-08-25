@@ -8,67 +8,67 @@
 <div class="logo_back"></div>
 <div id="div_term_user" class="div_body">
 	<div id="div_limit_text">
-		<h1> TERMOS DE USO E CONDI«’ES GERAIS </h1>
+		<h1> TERMOS DE USO E CONDI√á√ïES GERAIS </h1>
 		<ol class="ol_main">
-			<li> <span class="span_title">DEFINI«’ES DO SISTEMA KADE CAMINH’ES:</span> 
-				 O Sistema Kade Caminhıes È um sistema de divulgaÁ„o de veÌculos de cargas vazios, gratuito para os USU¡RIOS que anunciam a disponibilidade dos seus veÌculos, tanto para pessoas jurÌdicas quanto para fÌsicas, 
-				 atravÈs do website ou via mensagens de texto - SMS.<br/> 
-				 A assinatura mensal È necess·ria apenas para as empresas CLIENTES, que necessitam visualizar os dados dos USU¡RIOS para a contrataÁ„o dos seus serviÁos.
+			<li> <span class="span_title">DEFINI√á√ïES DO SISTEMA KADE CAMINH√ïES:</span> 
+				 O Sistema Kade Caminh√µes √© um sistema de divulga√ß√£o de ve√≠culos de cargas vazios, gratuito para os USU√ÅRIOS que anunciam a disponibilidade dos seus ve√≠culos, tanto para pessoas jur√≠dicas quanto para f√≠sicas, 
+				 atrav√©s do website ou via mensagens de texto - SMS.<br/> 
+				 A assinatura mensal √© necess√°ria apenas para as empresas CLIENTES, que necessitam visualizar os dados dos USU√ÅRIOS para a contrata√ß√£o dos seus servi√ßos.
 				<ol>
 					<li>
-						<span class="span_subtitle">USU¡RIOS:</span> 
-						Pessoa FÌsica ou JurÌdica que utiliza o sistema via SMS ou WEB para anunciar veÌculos, informando sua localizaÁ„o e se dispıe a receber ofertas de fretes.</li>
+						<span class="span_subtitle">USU√ÅRIOS:</span> 
+						Pessoa F√≠sica ou Jur√≠dica que utiliza o sistema via SMS ou WEB para anunciar ve√≠culos, informando sua localiza√ß√£o e se disp√µe a receber ofertas de fretes.</li>
 					<li>
 						<span class="span_subtitle">CLIENTES:</span> 
-						Pessoa FÌsica ou JurÌdica que contratou os serviÁos da KADE CAMINH’ES e utiliza para contatar os USU¡RIOS anunciados no sistema KADE CAMINH’ES;</li>
+						Pessoa F√≠sica ou Jur√≠dica que contratou os servi√ßos da KADE CAMINH√ïES e utiliza para contatar os USU√ÅRIOS anunciados no sistema KADE CAMINH√ïES;</li>
 				</ol>
 			</li>		
 			<li> <span class="span_title">OBJETIVO DO TERMO: </span>
 				<ol>
-					<li> O objeto do presente termo È tornar ciente a prestaÁ„o de serviÁos da KADE CAMINH’ES aos CLIENTES, serviÁo voltado para o an˙ncio de veÌculos vazios e que buscam por cargas em todo o territÛrio nacional, 
-						 certo que tais informaÁıes disponibilizadas aos CLIENTES dever„o ser tratadas de forma coerente e de acordo com a atividade da empresa.
+					<li> O objeto do presente termo √© tornar ciente a presta√ß√£o de servi√ßos da KADE CAMINH√ïES aos CLIENTES, servi√ßo voltado para o an√∫ncio de ve√≠culos vazios e que buscam por cargas em todo o territ√≥rio nacional, 
+						 certo que tais informa√ß√µes disponibilizadas aos CLIENTES dever√£o ser tratadas de forma coerente e de acordo com a atividade da empresa.
 					</li>
 				</ol>
 			</li>
-			<li> <span class="span_title">CONDI«’ES GERAIS: </span>
+			<li> <span class="span_title">CONDI√á√ïES GERAIS: </span>
 				<ol>
-					<li> O CLIENTE concorda e reconhece que toda a informaÁ„o proveniente deste sistema È considerada confidencial, e seu conte˙do n„o dever· em hipÛtese alguma ser repassado a pessoas terceiras, 
-						 condizentes ou n„o com a atividade da empresa, O CLIENTE declara que as ·reas restritas do website da KADE CAMINH’ES contÍm informaÁıes de interesse particular da KADE CAMINH’ES e do CLIENTE, 
-						 sendo expressamente proibido expor, serem acessadas ou transmitidas a terceiros, motivo pelo qual o CLIENTE È respons·vel pelo sigilo e correta utilizaÁ„o da senha e do sistema por seus representantes, 
-						 devendo aplicar medidas de seguranÁa e tomar as precauÁıes necess·rias para evitar a divulgaÁ„o de tais informaÁıes a pessoas n„o autorizadas;
+					<li> O CLIENTE concorda e reconhece que toda a informa√ß√£o proveniente deste sistema √© considerada confidencial, e seu conte√∫do n√£o dever√° em hip√≥tese alguma ser repassado a pessoas terceiras, 
+						 condizentes ou n√£o com a atividade da empresa, O CLIENTE declara que as √°reas restritas do website da KADE CAMINH√ïES cont√™m informa√ß√µes de interesse particular da KADE CAMINH√ïES e do CLIENTE, 
+						 sendo expressamente proibido expor, serem acessadas ou transmitidas a terceiros, motivo pelo qual o CLIENTE √© respons√°vel pelo sigilo e correta utiliza√ß√£o da senha e do sistema por seus representantes, 
+						 devendo aplicar medidas de seguran√ßa e tomar as precau√ß√µes necess√°rias para evitar a divulga√ß√£o de tais informa√ß√µes a pessoas n√£o autorizadas;
 					</li>
-					<li> O CLIENTE È o ˙nico respons·vel por todos os acessos realizados, o qual ser· realizado mediante utilizaÁ„o de login e senha cadastrados previamente, 
-						 reconhecendo e declarando que o referido software constitui bem de propriedade intelectual da KADE CAMINH’ES e sua violaÁ„o estar· sujeita ‡s penalidades previstas na legislaÁ„o.
+					<li> O CLIENTE √© o √∫nico respons√°vel por todos os acessos realizados, o qual ser√° realizado mediante utiliza√ß√£o de login e senha cadastrados previamente, 
+						 reconhecendo e declarando que o referido software constitui bem de propriedade intelectual da KADE CAMINH√ïES e sua viola√ß√£o estar√° sujeita √†s penalidades previstas na legisla√ß√£o.
 					</li>
-					<li> A KADE CAMINH’ES n„o intermedia, e n„o se responsabiliza pelos contatos, acordos, contrataÁıes, pagamentos de fretes, saldos, ou quaisquer negociaÁıes entre CLIENTES e USU¡RIOS da ferramenta, 
+					<li> A KADE CAMINH√ïES n√£o intermedia, e n√£o se responsabiliza pelos contatos, acordos, contrata√ß√µes, pagamentos de fretes, saldos, ou quaisquer negocia√ß√µes entre CLIENTES e USU√ÅRIOS da ferramenta, 
 						 ficando totalmente a cargo de ambas as partes todo e qualquer acordo afirmado.
 					</li>
-					<li> A KADE CAMINH’ES n„o se responsabiliza por problemas decorrentes de fatores externos que possam impedir ou interromper a prestaÁ„o do serviÁo de envio de SMS, 
-						 relacionados a falhas nos envios devido regiıes de sombra das operadoras de telefonia mÛvel celular, ou por indisponibilidade moment‚nea ou definitiva dos serviÁos de telefonia mÛvel celular em virtude de falhas tÈcnicas, 
-						 oscilaÁıes, suspens„o do sinal de telefonia mÛvel ou problemas decorrentes de fatores atmosfÈricos ou geogr·ficos, dentre outros.
+					<li> A KADE CAMINH√ïES n√£o se responsabiliza por problemas decorrentes de fatores externos que possam impedir ou interromper a presta√ß√£o do servi√ßo de envio de SMS, 
+						 relacionados a falhas nos envios devido regi√µes de sombra das operadoras de telefonia m√≥vel celular, ou por indisponibilidade moment√¢nea ou definitiva dos servi√ßos de telefonia m√≥vel celular em virtude de falhas t√©cnicas, 
+						 oscila√ß√µes, suspens√£o do sinal de telefonia m√≥vel ou problemas decorrentes de fatores atmosf√©ricos ou geogr√°ficos, dentre outros.
 					</li>
 				</ol>
 			</li>
 			<li> <span class="span_title">ASSINATURA MENSAL:</span>
-				A assinatura mensal È necess·ria apenas para as empresas CLIENTES, que visualizam ou utilizam as informaÁıes dos USU¡RIOS do sistema KADE CAMINH’ES nas suas operaÁıes.
+				A assinatura mensal √© necess√°ria apenas para as empresas CLIENTES, que visualizam ou utilizam as informa√ß√µes dos USU√ÅRIOS do sistema KADE CAMINH√ïES nas suas opera√ß√µes.
 				<ol>
 					<li> <span class="span_subtitle">CADASTROS DE CLIENTES:</span>
-						As novas empresas podem fazer o cadastro gratuitamente, conhecer e utilizar o sistema KADE CAMINH’ES por um perÌodo de 30 dias sem custos. ApÛs este prazo, 
-						ser· informado ao CLIENTE a emiss„o do boleto banc·rio no valor da mensalidade com data de vencimento de 10 dias apÛs a emiss„o, 
-						porÈm este boleto somente ser· enviado para os CLIENTES que estiverem de acordo, e passar„o a utilizar o sistema nas suas operaÁıes. <br/>
-						Se o pagamento do boleto n„o for efetuado no prazo de 15 dias do vencimento, a empresa ser· bloqueada para a visualizaÁ„o dos veÌculos vazios, ela manter· seu cadastro no sistema, mas n„o ter· acesso aos serviÁos. 
+						As novas empresas podem fazer o cadastro gratuitamente, conhecer e utilizar o sistema KADE CAMINH√ïES por um per√≠odo de 30 dias sem custos. Ap√≥s este prazo, 
+						ser√° informado ao CLIENTE a emiss√£o do boleto banc√°rio no valor da mensalidade com data de vencimento de 10 dias ap√≥s a emiss√£o, 
+						por√©m este boleto somente ser√° enviado para os CLIENTES que estiverem de acordo, e passar√£o a utilizar o sistema nas suas opera√ß√µes. <br/>
+						Se o pagamento do boleto n√£o for efetuado no prazo de 15 dias do vencimento, a empresa ser√° bloqueada para a visualiza√ß√£o dos ve√≠culos vazios, ela manter√° seu cadastro no sistema, mas n√£o ter√° acesso aos servi√ßos. 
 					</li>		
-					<li> <span class="span_subtitle">COMO … FEITO O PAGAMENTO:</span>
-						O pagamento da mensalidade È feito atravÈs do envio de boleto banc·rio enviado por e-mail, atravÈs do mercado pago, cart„o de crÈdito, etc.
+					<li> <span class="span_subtitle">COMO √â FEITO O PAGAMENTO:</span>
+						O pagamento da mensalidade √© feito atrav√©s do envio de boleto banc√°rio enviado por e-mail, atrav√©s do mercado pago, cart√£o de cr√©dito, etc.
 					</li>
-					<li> <span class="span_subtitle">REATIVA«√O:</span>
-						 A reativaÁ„o em caso de bloqueio, ser· efetuado atravÈs de solicitaÁ„o por e-mail, sendo emitido um boleto no valor normal da assinatura, 
-						 a liberaÁ„o para visualizaÁ„o do sistema ser· efetuado imediatamente apÛs a confirmaÁ„o do pagamento. 
+					<li> <span class="span_subtitle">REATIVA√á√ÉO:</span>
+						 A reativa√ß√£o em caso de bloqueio, ser√° efetuado atrav√©s de solicita√ß√£o por e-mail, sendo emitido um boleto no valor normal da assinatura, 
+						 a libera√ß√£o para visualiza√ß√£o do sistema ser√° efetuado imediatamente ap√≥s a confirma√ß√£o do pagamento. 
 					</li>
 				</ol>
 			</li>
 			<li> <span class="span_title">CANCELAMENTO</span>
-				O Sistema Kade Caminhıes reserva-se no direito de cancelar qualquer assinatura com a devoluÁ„o proporcional do ˙ltimo pagamento efetuado.
+				O Sistema Kade Caminh√µes reserva-se no direito de cancelar qualquer assinatura com a devolu√ß√£o proporcional do √∫ltimo pagamento efetuado.
 			</li>
 		</ol>	
 	</div>

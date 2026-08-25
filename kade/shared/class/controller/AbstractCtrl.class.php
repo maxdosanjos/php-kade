@@ -15,7 +15,7 @@ abstract class AbstractCtrl {
 		return $this->action;
 	}
 	public function setAction($action) {
-		$this->action = trim ( $action );
+		$this->action = trim ( $action ?? "" );
 	}
 	public function getDbConfig() {
 		return $this->dbConfig;

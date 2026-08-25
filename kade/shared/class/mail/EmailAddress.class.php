@@ -4,9 +4,9 @@ class EmailAddress {
 	private $email;
 	private $type;  
 	public static $typeList = array(
-		"TO"  => "Destinatário",
-		"CC"  => "Com cópia",
-		"BCC" => "Com cópia oculta",		
+		"TO"  => "DestinatÃ¡rio",
+		"CC"  => "Com cÃ³pia",
+		"BCC" => "Com cÃ³pia oculta",		
 		"RPL" => "Resposta"		
 	);
 

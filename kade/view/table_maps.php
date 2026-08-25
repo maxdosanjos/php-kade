@@ -6,7 +6,7 @@ if ($ctrlMapsExt == null){
 
 if ($ctrlMapsExt->getIsAjax ()){
 	ob_start( 'ob_gzhandler' );
-	header('Content-type: text/html; charset=ISO-8859-1');
+	header('Content-type: text/html; charset=UTF-8');
 }
 
 require_once(dirname(dirname(__FILE__))."/shared/class/controller/ViewExtCtrl.class.php");
@@ -24,13 +24,13 @@ if (! $ctrlMapsExt->getIsGrpByUf () && $length > 0) {
 $mapsExt = null;
 $address = null;
 ?>
-<div id="div_title_maps">Últimos veículos<?=$stateName!=""?$stateName:"";?></div>
+<div id="div_title_maps">Ãšltimos veÃ­culos<?=$stateName!=""?$stateName:"";?></div>
 <table id="table_demonstr" class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th class="td_limit"></th>
 			<th class="td_cid"><?=$ctrlMapsExt->getIsGrpByUf()?"Estados":"Cidades"?></th>
-			<th class="td_qtde">Qtde.Veículos</th>
+			<th class="td_qtde">Qtde.VeÃ­culos</th>
 		</tr>
 	</thead>
 	<tbody>

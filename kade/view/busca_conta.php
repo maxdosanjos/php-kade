@@ -24,15 +24,15 @@ $message    	  = $ctrlAcctQry->getMessage();
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/busca_conta.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/AccountBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ViewInt.getInstance().initQuery();AccountBean.getInstance().initQuery();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/AccountBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();AccountBean.getInstance().initQuery();});</script>
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
 <?	} ?>
 <div id="div_body_busca_conta" class="div_body">
 	<div id="div_inter_esq">
@@ -42,20 +42,20 @@ $message    	  = $ctrlAcctQry->getMessage();
 		<div id="div_search">
 			<form id="conta_query_open" name="conta_query_open" action="<?=$_SERVER["REQUEST_URI"];?>" method="post">
 				<fieldset id="fieldset_filter" class="ui-widget ui-widget-content ui-corner-all">
-					<legend>Gerenciamento de Contas à receber</legend>
+					<legend>Gerenciamento de Contas Ã  receber</legend>
 					
 					<div class="div_input">
 						<label for="id" class="label_input">Registro</label>
 						<input type="text" id="account_id" name="account_id" size="20" maxlength="10" class="input_clear mask.numeric" value="<?=($accountParam->getId() > 0)?$accountParam->getId():""?>" />
 					</div>		
 					<div class="div_input">
-						<label for="vehicle_dt_init"  class="label_input">Período</label>
+						<label for="vehicle_dt_init"  class="label_input">PerÃ­odo</label>
 						<input type="text" id="account_dt_init" name="account_dt_init" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlAcctQry->getDtHrInit()->format("d.m.Y")?>"/>
-						 até 
+						 atÃ© 
 						<input type="text" id="account_dt_end" name="account_dt_end" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlAcctQry->getDtHrEnd()->format("d.m.Y")?>"/>
 					</div>
 					<div class="div_input">
-						<label for="id" class="label_input">Cód.Cliente</label>
+						<label for="id" class="label_input">CÃ³d.Cliente</label>
 						<input type="text" id="account_client_id" name="account_client_id" size="7" maxlength="10" class="client_id input_clear mask.numeric" value="<?=($personParam->getId() > 0)?$personParam->getId():""?>" />
 						<span id="btn_match_client" alt="Pesquisar por Clientes"></span>
 						<span id="span_account_client_name" class="client_name"><?=($personParam!=null && $personParam->getId() > 0)?$personParam->getName():""?></span>
@@ -90,12 +90,12 @@ $message    	  = $ctrlAcctQry->getMessage();
 				<table id="table_query_open" class="table table-bordered table-condensed">
 					<thead class="table_head">
 						<tr>
-							<th class="column-order td_id" lang="acc.id" title="Clique para alternar a ordenação dos registros">Registro <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.id');?></span></th>
-							<th class="column-order td_dthr" lang="acc.date_hr_proc" title="Clique para alternar a ordenação dos registros">Criado em <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.date_hr_proc');?></span></th>
-							<th class="column-order td_id" lang="acc.validate_month" title="Clique para alternar a ordenação dos registros">Total de Parcelas <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.validate_month');?></span></th>
-							<th class="column-order td_id" lang="acc.client_user_person_id" title="Clique para alternar a ordenação dos registros">Cód. Cliente <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.client_user_person_id');?></span></th>
+							<th class="column-order td_id" lang="acc.id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Registro <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.id');?></span></th>
+							<th class="column-order td_dthr" lang="acc.date_hr_proc" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Criado em <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.date_hr_proc');?></span></th>
+							<th class="column-order td_id" lang="acc.validate_month" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Total de Parcelas <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.validate_month');?></span></th>
+							<th class="column-order td_id" lang="acc.client_user_person_id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">CÃ³d. Cliente <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.client_user_person_id');?></span></th>
 							<th class="column-order td_name">Nome Cliente</th>
-							<th class="column-order td_name" lang="acc.status" title="Clique para alternar a ordenação dos registros">Status <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.status');?></span></th>
+							<th class="column-order td_name" lang="acc.status" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Status <span class="img_order"><?=$ctrlAcctQry->getImgOrder('acc.status');?></span></th>
 						</tr>
 					</thead>
 					<tbody class="tbody_query">
@@ -122,22 +122,22 @@ $message    	  = $ctrlAcctQry->getMessage();
 				</table>
 				<div id="table_foot">
 					<div class="details_pag">
-						Registro(s) por Página: <?=$pagination->getEndLimit();?>
+						Registro(s) por PÃ¡gina: <?=$pagination->getEndLimit();?>
 						<input type="hidden" id="param_regpag" class="xtextfield numeric formfield" name="param_regpag" value="<?=$pagination->getEndLimit();?>" size="3" readonly="true" /><br/>
-						Número de Resultados: <span title="De - Até"><?=$pagination->showDetailsPag();?></span> 
+						NÃºmero de Resultados: <span title="De - AtÃ©"><?=$pagination->showDetailsPag();?></span> 
 											  <span title="Total de Registros">(<?=$pagination->getTotalReg();?>)</span>
 					</div>
 					<div class="nav_pag"> 
 						<div class="nav_pag_left">
 						<? if($pagination->getPagCurrent()!=1) { ?>		        
-							<a href="#" class="nav_first" title="Ir para primeira página" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
-							<a href="#" class="nav_prev" title="Ir para página anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
+							<a href="#" class="nav_first" title="Ir para primeira pÃ¡gina" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
+							<a href="#" class="nav_prev" title="Ir para pÃ¡gina anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
 						<? } ?>
 						</div>
 						<div class="nav_pag_right">
 						<? if($pagination->getPagCurrent()!= $pagination->getTotalPag() && $pagination->getTotalReg() > 0) { ?> 
-							<a href="#" class="nav_next" title="Ir para próxima página" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
-							<a href="#" class="nav_end" title="Ir para última página"  lang="<?=$pagination->getTotalPag();?>"></a>
+							<a href="#" class="nav_next" title="Ir para prÃ³xima pÃ¡gina" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
+							<a href="#" class="nav_end" title="Ir para Ãºltima pÃ¡gina"  lang="<?=$pagination->getTotalPag();?>"></a>
 						 <?} ?>
 						</div>
 						 <div class="pags_number">

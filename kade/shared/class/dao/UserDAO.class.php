@@ -30,7 +30,7 @@
 			}else if($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException("Conexão Inválida");
+				throw new PDOException("ConexÃ£o InvÃ¡lida");
 			
 			try
 			{
@@ -76,7 +76,7 @@
 			}else if($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException("Conexão Inválida");
+				throw new PDOException("ConexÃ£o InvÃ¡lida");
 				
 			try
 			{
@@ -120,7 +120,7 @@
 				}else if($dbConfig instanceof DataBase)
 					$db = $dbConfig;
 				else
-					throw new PDOException("Conexão Inválida");
+					throw new PDOException("ConexÃ£o InvÃ¡lida");
 				
 				
 				$result = $db->query ( $sql );		
@@ -135,12 +135,12 @@
 						";
 					$out = $db->exec ( $sql );		
 					if($out == 0)
-						throw new PDOException("Erro ao confirmar usuário!");
+						throw new PDOException("Erro ao confirmar usuÃ¡rio!");
 					
 					return $objDAO->user_person_id;
 				}
 				else
-					throw new PDOException ( "URL inválida para confirmação" );
+					throw new PDOException ( "URL invÃ¡lida para confirmaÃ§Ã£o" );
 				
 				if($dbConfig instanceof DBConfig){
 					$db->commit ();
@@ -168,7 +168,7 @@
 				}else if($dbConfig instanceof DataBase)
 					$db = $dbConfig;
 				else
-					throw new PDOException("Conexão Inválida");
+					throw new PDOException("ConexÃ£o InvÃ¡lida");
 				
 				$user_person_id = $this->confirmLink($dbConfig,$vua);
 				if($user_person_id > 0)
@@ -180,10 +180,10 @@
 						";
 					$out = $db->exec ( $sql );		
 					if($out == 0)
-						throw new PDOException("Erro ao confirmar usuário!");
+						throw new PDOException("Erro ao confirmar usuÃ¡rio!");
 				}
 				else
-					throw new PDOException ( "URL inválida para confirmação" );
+					throw new PDOException ( "URL invÃ¡lida para confirmaÃ§Ã£o" );
 				
 				if($dbConfig instanceof DBConfig){
 					$db->commit ();
@@ -214,12 +214,12 @@
 					$user = $this->getSingle($dbConfig,$criteria);
 					
 					if($user == null)
-						throw new PDOException("Erro ao confirmar usuário!");
+						throw new PDOException("Erro ao confirmar usuÃ¡rio!");
 						
 					return $user;
 				}
 				else
-					throw new PDOException ( "URL inválida para confirmação" );
+					throw new PDOException ( "URL invÃ¡lida para confirmaÃ§Ã£o" );
 				
 				if($dbConfig instanceof DBConfig){
 					$db->commit ();
@@ -245,7 +245,7 @@
 			}else if($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException("Conexão Inválida");
+				throw new PDOException("ConexÃ£o InvÃ¡lida");
 			
 			$sql = "
 					SELECT 	usr.person_id
@@ -293,7 +293,7 @@
 					$person = $personTypeDAO->getSingle ( $db, $critPers );				
 				
 				if($person==null){
-					throw new PDOException("Usuário não encontrado #sem_pessoa");
+					throw new PDOException("UsuÃ¡rio nÃ£o encontrado #sem_pessoa");
 				}
 				$user->setPerson($person);
 				
@@ -331,7 +331,7 @@
 			else if ($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException ( "Conexão Inválida" );
+				throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 				
 				// echo $sql;
 			
@@ -339,7 +339,7 @@
 			if ($dbConfig instanceof DBConfig)
 				$db = null;			
 			if($out == 0)
-				throw new PDOException("Erro ao criar Usuário!");
+				throw new PDOException("Erro ao criar UsuÃ¡rio!");
 		}
 		
 		public function updatePwd($dbConfig, User $obj) {
@@ -352,12 +352,12 @@
 			else if ($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException ( "Conexão Inválida" );			
+				throw new PDOException ( "ConexÃ£o InvÃ¡lida" );			
 			$out = $db->exec ( $sql );			
 			if ($dbConfig instanceof DBConfig)
 				$db = null;			
 			/*if($out == 0)
-				throw new PDOException("Erro ao atualizar senha do Usuário!");*/
+				throw new PDOException("Erro ao atualizar senha do UsuÃ¡rio!");*/
 		}
 		
 		

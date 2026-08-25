@@ -21,9 +21,9 @@ class VehicleTravelingUserDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão Inválida" );
+			throw new PDOException ( "ConexÃ£o InvÃ¡lida" );
 		
-		// Criar Utilizador da informação
+		// Criar Utilizador da informaÃ§Ã£o
 		$sql = "INSERT INTO `vehicle_traveling_user` 
 				(   `vehicle_traveling_id`
 				  , `user_person_id`
@@ -38,7 +38,7 @@ class VehicleTravelingUserDAO {
 		
 		$out = $db->exec ( $sql );
 		if ($out == 0)
-			throw new PDOException ( "Erro ao registrar Utilizador da infomação!" );
+			throw new PDOException ( "Erro ao registrar Utilizador da infomaÃ§Ã£o!" );
 		
 		if ($dbConfig instanceof DBConfig) {
 			$db = null;

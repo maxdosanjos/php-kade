@@ -12,14 +12,14 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		private $vehicleTravelingDAO = null;
 		
 		private $msgLogs	 = null;
-		private $orderType   = null; // tipo da ordenação
+		private $orderType   = null; // tipo da ordenaÃ§Ã£o
 		private $orderColumn = null; // coluna a ser ordenada
 		private $pagination  = null;
 		
 		public function __construct() {
 			parent::__construct ();
 			$this->initCtrlParam ();
-			$this->setAction ( $_REQUEST ["action"] );
+			$this->setAction ( $_REQUEST ["action"] ?? null );
 			$this->setPagination ( new Pagination ( 0 ) ); // inicia com o numero total de registros
 		
 			switch ($this->getAction ()) {
@@ -82,7 +82,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		
 		/**
 		 *
-		 * @method String Retorna a imagem de acordo com a ordenação
+		 * @method String Retorna a imagem de acordo com a ordenaÃ§Ã£o
 		 */
 		public function getImgOrder($columnBD) {
 			if ($this->getOrderColumn () == trim ( $columnBD )) {

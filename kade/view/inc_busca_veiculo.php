@@ -6,17 +6,17 @@
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/busca_veiculo_ext.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Address.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/VehicleTravelingBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ViewInt.getInstance().initQuery();VehicleTravelingBean.getInstance().initQueryOpen();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Address.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/VehicleTravelingBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();VehicleTravelingBean.getInstance().initQueryOpen();});</script>
 
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
 <?	} ?>
 <div id="div_body_busc_veic" class="div_body">
 	<div id="div_inter_esq">
@@ -32,7 +32,7 @@
 					<? } elseif($ctrlVehQry->getTypeView() == VehicleQueryCtrl::REG_UTILIZED) {?>
 						Registros utilizados
 					<? } elseif($ctrlVehQry->getTypeView() == VehicleQueryCtrl::SEARCH_BY_ULT) {?>
-						Buscar Veículos
+						Buscar VeÃ­culos
 					<? } ?>
 					
 					</legend>
@@ -42,13 +42,13 @@
 							<input type="text" id="vehicle_id" name="vehicle_id" size="11" maxlength="10" class="input_clear mask.numeric" value="<?=($vehTravParam->getId() > 0)?$vehTravParam->getId():""?>" />
 						</div>		
 						<div class="div_input">
-							<label for="vehicle_dt_init"  class="label_input">Período</label>
+							<label for="vehicle_dt_init"  class="label_input">PerÃ­odo</label>
 							<input type="text" id="vehicle_dt_init" name="vehicle_dt_init" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlVehQry->getDtHrInit()->format("d.m.Y")?>"/>
-							 até 
+							 atÃ© 
 							<input type="text" id="vehicle_dt_end" name="vehicle_dt_end" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlVehQry->getDtHrEnd()->format("d.m.Y")?>"/>
 						</div>
 						<div class="div_input">
-							<label for="vehicle_type"  class="label_input">Tipo de Veículo</label>
+							<label for="vehicle_type"  class="label_input">Tipo de VeÃ­culo</label>
 							<select id="vehicle_type" name="vehicle_type" class="input_clear">
 								<option value="" selected="selected"></option>
 								<?php foreach ($_vechicleTypes as $vehicleType){?>
@@ -122,14 +122,14 @@
 			<table id="table_query_open" class="table table-bordered table-condensed">
 				<thead class="table_head">
 					<tr>
-						<th class="column-order td_id" lang="vt.id" title="Clique para alternar a ordenação dos registros">Registro <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.id');?></span></th>
-						<th class="column-order td_dthr" lang="vt.date_hr_proc" title="Clique para alternar a ordenação dos registros">Criado em <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.date_hr_proc');?></span></th>
-						<th class="column-order td_tvehicle" lang="vt.vehicle_type_id" title="Clique para alternar a ordenação dos registros">Tipo Veículo <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.vehicle_type_id');?></span></th>
-						<th class="column-order td_cep" lang="ad.cep" title="Clique para alternar a ordenação dos registros">CEP <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.cep');?></span></th>
-						<th class="column-order td_city" lang="ad.city" title="Clique para alternar a ordenação dos registros">Cidade <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.city');?></span></th>
-						<th class="column-order td_uf" lang="ad.state" title="Clique para alternar a ordenação dos registros">UF <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.state');?></span></th>
+						<th class="column-order td_id" lang="vt.id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Registro <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.id');?></span></th>
+						<th class="column-order td_dthr" lang="vt.date_hr_proc" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Criado em <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.date_hr_proc');?></span></th>
+						<th class="column-order td_tvehicle" lang="vt.vehicle_type_id" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Tipo VeÃ­culo <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.vehicle_type_id');?></span></th>
+						<th class="column-order td_cep" lang="ad.cep" title="Clique para alternar a ordenaÃ§Ã£o dos registros">CEP <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.cep');?></span></th>
+						<th class="column-order td_city" lang="ad.city" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Cidade <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.city');?></span></th>
+						<th class="column-order td_uf" lang="ad.state" title="Clique para alternar a ordenaÃ§Ã£o dos registros">UF <span class="img_order"><?=$ctrlVehQry->getImgOrder('ad.state');?></span></th>
 						<? if($ctrlVehQry->getTypeView() == VehicleQueryCtrl::REG_CREATED || $userSuper) {?>
-							<th class="column-order td_uf" lang="vt.status" title="Clique para alternar a ordenação dos registros">Status <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.status');?></span></th>
+							<th class="column-order td_uf" lang="vt.status" title="Clique para alternar a ordenaÃ§Ã£o dos registros">Status <span class="img_order"><?=$ctrlVehQry->getImgOrder('vt.status');?></span></th>
 						<? } ?>
 					</tr>
 				</thead>
@@ -160,22 +160,22 @@
 			</table>
 			<div id="table_foot">
 				<div class="details_pag">
-					Registro(s) por Página: <?=$pagination->getEndLimit();?>
+					Registro(s) por PÃ¡gina: <?=$pagination->getEndLimit();?>
 					<input type="hidden" id="param_regpag" class="xtextfield numeric formfield" name="param_regpag" value="<?=$pagination->getEndLimit();?>" size="3" readonly="true" /><br/>
-					Número de Resultados: <span title="De - Até"><?=$pagination->showDetailsPag();?></span> 
+					NÃºmero de Resultados: <span title="De - AtÃ©"><?=$pagination->showDetailsPag();?></span> 
 										  <span title="Total de Registros">(<?=$pagination->getTotalReg();?>)</span>
 				</div>
 				<div class="nav_pag"> 
 					<div class="nav_pag_left">
 					<? if($pagination->getPagCurrent()!=1) { ?>		        
-						<a href="#" class="nav_first" title="Ir para primeira página" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
-						<a href="#" class="nav_prev" title="Ir para página anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
+						<a href="#" class="nav_first" title="Ir para primeira pÃ¡gina" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
+						<a href="#" class="nav_prev" title="Ir para pÃ¡gina anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
 					<? } ?>
 					</div>
 					<div class="nav_pag_right">
 					<? if($pagination->getPagCurrent()!= $pagination->getTotalPag() && $pagination->getTotalReg() > 0) { ?> 
-						<a href="#" class="nav_next" title="Ir para próxima página" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
-						<a href="#" class="nav_end" title="Ir para última página"  lang="<?=$pagination->getTotalPag();?>"></a>
+						<a href="#" class="nav_next" title="Ir para prÃ³xima pÃ¡gina" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
+						<a href="#" class="nav_end" title="Ir para Ãºltima pÃ¡gina"  lang="<?=$pagination->getTotalPag();?>"></a>
 					 <?} ?>
 					</div>
 					 <div class="pags_number">
@@ -199,7 +199,7 @@
 						<label for="dt_hr" class="label_input">Criado em</label> <div id="div_vehicle_dt_proc" class="div_input_reaonly"></div>
 					</div>				
 					<div class="div_input">
-						<label for="tvehicle" class="label_input">Tipo de Veículo</label> <div id="div_vehicle_type" class="div_input_reaonly"></div>
+						<label for="tvehicle" class="label_input">Tipo de VeÃ­culo</label> <div id="div_vehicle_type" class="div_input_reaonly"></div>
 					</div>
 					<? if($ctrlVehQry->getTypeView() == VehicleQueryCtrl::REG_UTILIZED || $ctrlVehQry->getTypeView() == VehicleQueryCtrl::REG_CREATED || $userSuper) {?>
 						<div class="div_input">
@@ -213,7 +213,7 @@
 					<? } ?>
 				</fieldset>
 				<fieldset class="fieldset_detail">	
-					<legend>Localização</legend>
+					<legend>LocalizaÃ§Ã£o</legend>
 					<div class="div_input">
 						<label for="cep" class="label_input">CEP</label> <div id="div_vehicle_cep" class="div_input_reaonly"></div>
 					</div>

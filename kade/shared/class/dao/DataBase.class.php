@@ -1,7 +1,7 @@
 <?php
 /**
  * DataBase
- * Classe para criar instâncias de conexão com o banco de dados
+ * Classe para criar instÃ¢ncias de conexÃ£o com o banco de dados
  * Obs.: Antigamente esta classe era singleton
  */
 class DataBase extends PDO {
@@ -38,11 +38,11 @@ class DataBase extends PDO {
 	 */
 	/**
 	 * Cria e retorna um objeto database (PDO)
-	 * Retorna uma instância da conexão com o banco de dados. Este método era
-	 * singleton porém o WebMax possui algumas transações que usando conexões
+	 * Retorna uma instÃ¢ncia da conexÃ£o com o banco de dados. Este mÃ©todo era
+	 * singleton porÃ©m o WebMax possui algumas transaÃ§Ãµes que usando conexÃµes
 	 * diferentes simultaneamente.
 	 *
-	 * @param DBConfig $config Configuração do banco de dados
+	 * @param DBConfig $config ConfiguraÃ§Ã£o do banco de dados
 	 * @return DataBase
 	 */
 	public static function getInstance(DBConfig $config,$useSSL=false){	
@@ -51,7 +51,7 @@ class DataBase extends PDO {
 		);
 		
 		
-		// SSL com PDO MySQL só funciona a partir da versão 5.3.7.
+		// SSL com PDO MySQL sÃ³ funciona a partir da versÃ£o 5.3.7.
 		/*if($useSSL){
 			$keyFolder = "/home/cpd/security/";
 			$MYSQL_ATTR_SSL_KEY = 1007;
@@ -72,7 +72,7 @@ class DataBase extends PDO {
 		}
 	
 	/**
-	 * Imprime os drivers disponíveis no servidor
+	 * Imprime os drivers disponÃ­veis no servidor
 	 */
 	public function viewDrivers(){
 		foreach(parent::getAvailableDrivers() AS $driver){

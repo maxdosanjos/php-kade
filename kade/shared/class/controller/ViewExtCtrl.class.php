@@ -31,7 +31,7 @@ class ViewExtCtrl {
 	private $pageInc     = null;
 	
 	public function __construct() {
-		if ($_SESSION ["auth"] != null)
+		if (! empty($_SESSION ["auth"]))
 			$_GET ["auth"] = $_SESSION ["auth"];
 		if ($this->manuten == true && $_SERVER ["HTTP_HOST"] == "kadecaminh.dominiotemporario.com" && $_GET ["auth"] == "MAX") {
 			$_SESSION ["auth"] = $_GET ["auth"];
@@ -53,8 +53,8 @@ class ViewExtCtrl {
 		return ($isMobile > 0 ? true : false);
 	}
 	public function getRequest() {
-		$this->setIndexPage ( $_REQUEST ["page"] );
-		$this->setWindowPopUp ( $_REQUEST ["windowPopUp"] );
+		$this->setIndexPage ( $_REQUEST ["page"] ?? null );
+		$this->setWindowPopUp ( $_REQUEST ["windowPopUp"] ?? null );
 		switch ($this->getIndexPage ()) {
 			case ViewExtCtrl::QUEM_SOMOS :
 				$this->pageInc = ViewExtCtrl::getDirView () . "quem_somos.php";
@@ -203,7 +203,7 @@ class ViewExtCtrl {
 		return dirname ( dirname ( dirname ( __FILE__ ) ) ) . $dir_view;
 	}
 	public function setIndexPage($indexPage) {
-		$this->indexPage = trim ( $indexPage );
+		$this->indexPage = trim ( $indexPage ?? "" );
 	}
 	public function setWindowPopUp($windowPopUp){
 		$this->windowPopUp = false;

@@ -29,7 +29,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 	private $dtHrEnd			 = null; 
 	private $vehTravParam  		 = null;
 	/*** Parametros para busca ***/
-	private $orderType  		 = null; //tipo da ordenaÁ„o
+	private $orderType  		 = null; //tipo da ordena√ß√£o
 	private $orderColumn 		 = null; //coluna a ser ordenada
 	private $pagination			 = null;
 	
@@ -38,7 +38,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->initCtrlParam( );
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		if($this->typeView == ""){
 			$this->typeView = VehicleQueryCtrl::SEARCH_BY_ULT;
@@ -86,7 +86,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 				header("Content-Disposition: attachment; filename=resultado_busca_kade.csv");
 				header("Pragma: no-cache");
 				header("Expires: 0");
-				echo "Registro;Criado em;Tipo VeÌculo;CEP;Cidade;UF;Telefone;Contato;Status;Origem;Utilizado em;Usu·rio Utilizador\r";
+				echo "Registro;Criado em;Tipo Ve√≠culo;CEP;Cidade;UF;Telefone;Contato;Status;Origem;Utilizado em;Usu√°rio Utilizador\r";
 				$i = 0;
 				while($i < $length){
 					$vehicleTrav 	= $this->vehiclesTraveling[$i];
@@ -155,7 +155,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     }
     
     /**
-     * @method String Retorna a imagem de acordo com a ordenaÁ„o
+     * @method String Retorna a imagem de acordo com a ordena√ß√£o
      */
     public function getImgOrder($columnBD){
 		if($this->getOrderColumn()==trim($columnBD))
@@ -229,7 +229,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 				$vehicleTravelingUser->setVehicleTraveling($this->vehTravParam);
 			
 			
-				// Criar Utilizador da informaÁ„o
+				// Criar Utilizador da informa√ß√£o
 				$vehicleTravUserDAO = VehicleTravelingUserDAO::getInstance ();
 				$vehicleTravUserDAO->insert ( $db, $vehicleTravelingUser );
 				
@@ -240,7 +240,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     			$this->message->setDesc ( "Status alterado com sucesso" );
     			
     		}else{
-    			throw new Exception("Registro n„o informado");
+    			throw new Exception("Registro n√£o informado");
     		}
     	} catch ( PDOException $e ) {
     		if ($db!=null && $inTransaction)
@@ -260,7 +260,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     	
     	$vehJsonArr = array();
     	$vehJsonArr ["result"]  = $this->message->getType();
-    	$vehJsonArr ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));    	
+    	$vehJsonArr ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));    	
     	
     	echo json_encode($vehJsonArr);
 	}
@@ -279,7 +279,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 				$vehicleTravelingUser->setVehicleTraveling($this->vehTravParam);
 					
 				
-				// Criar Utilizador da informaÁ„o
+				// Criar Utilizador da informa√ß√£o
 				$vehicleTravUserDAO = VehicleTravelingUserDAO::getInstance ();
 				$vehicleTravUserDAO->insert ( $db, $vehicleTravelingUser );
 				
@@ -293,7 +293,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     			$this->message->setDesc ( "Status alterado com sucesso" );
     			
     		}else{
-    			throw new Exception("Registro n„o informado");
+    			throw new Exception("Registro n√£o informado");
     		}
     	} catch ( PDOException $e ) {
     		if ($db!=null && $inTransaction)
@@ -313,7 +313,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     	
     	$vehJsonArr = array();
     	$vehJsonArr ["result"]  = $this->message->getType();
-    	$vehJsonArr ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));    	
+    	$vehJsonArr ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));    	
     	
     	echo json_encode($vehJsonArr);
     }
@@ -326,7 +326,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		try {
 		
 			if(!User::isLogged()){
-				throw new Exception("Necess·rio usu·rio estar logado!");
+				throw new Exception("Necess√°rio usu√°rio estar logado!");
 			}
 			$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
 			$criteria  = new Criteria();
@@ -353,7 +353,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 					$vehicleTravelingUser->setVehicleTraveling($vehicleTrav);
 				
 				
-					// Criar Utilizador da informaÁ„o
+					// Criar Utilizador da informa√ß√£o
 					$vehicleTravUserDAO = VehicleTravelingUserDAO::getInstance ();
 					$vehicleTravUserDAO->insert ( $db, $vehicleTravelingUser );
 					
@@ -364,7 +364,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			}
 			
 			if($vehicleTrav==null){
-				throw new Exception("Registro n„o informado");
+				throw new Exception("Registro n√£o informado");
 			}				
 		} catch ( PDOException $e ) {			
 			if ($db!=null && $inTransaction)
@@ -391,19 +391,19 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			
 			$vehJsonArr["id"] 	   = $vehicleTrav->getId();
 			$vehJsonArr["type_id"] = $vehicleType->getId();
-			$vehJsonArr["type_nm"] = iconv ("ISO-8859-1", "UTF-8", $vehicleType->getDescr());
+			$vehJsonArr["type_nm"] = iconv ("UTF-8", "UTF-8", $vehicleType->getDescr());
 			$vehJsonArr["dt_proc"] = $vehicleTrav->getDateHrProc()->format("d/m/Y H:i");
 			
 			$vehJsonArr["addr_id"] 	   = $address->getId();
 			$vehJsonArr["cep"] 	   = $address->getCepMask();
-			$vehJsonArr["city"]    = iconv ("ISO-8859-1", "UTF-8", $address->getCity());
+			$vehJsonArr["city"]    = iconv ("UTF-8", "UTF-8", $address->getCity());
 			$vehJsonArr["state"]   = $address->getState();
 			
-			$vehJsonArr["contact_phone"]    = iconv ("ISO-8859-1", "UTF-8", $phone->getPhoneMask());
-			$vehJsonArr["contact_name"]    = iconv ("ISO-8859-1", "UTF-8", $vehicleContact->getName());
+			$vehJsonArr["contact_phone"]    = iconv ("UTF-8", "UTF-8", $phone->getPhoneMask());
+			$vehJsonArr["contact_name"]    = iconv ("UTF-8", "UTF-8", $vehicleContact->getName());
 			
 			$vehJsonArr["source"]   = $vehicleTrav->getDescSource();
-			$vehJsonArr["sts_nm"]   = iconv ("ISO-8859-1", "UTF-8",$vehicleTrav->getDescStatus());
+			$vehJsonArr["sts_nm"]   = iconv ("UTF-8", "UTF-8",$vehicleTrav->getDescStatus());
 			$vehJsonArr["sts"]   = $vehicleTrav->getStatus();
 			
 			$vehJsonArr["dt_used"] = "";
@@ -415,7 +415,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			
 		}		
 		$vehJsonArr ["result"]  = $this->message->getType();
-		$vehJsonArr ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));
+		$vehJsonArr ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>",$this->message->getDesc() ));
 		
 	
 	

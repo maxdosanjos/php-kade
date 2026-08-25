@@ -101,8 +101,8 @@ class VehicleTraveling {
 	public static function listStatus() {
 		$_list = array (
 				VehicleTraveling::ONLY_VIEW => "Somente visualizado",
-				VehicleTraveling::UTILIZED => "Informação utilizada",
-				VehicleTraveling::NONE => "Nenhuma ação",
+				VehicleTraveling::UTILIZED => "InformaÃ§Ã£o utilizada",
+				VehicleTraveling::NONE => "Nenhuma aÃ§Ã£o",
 				VehicleTraveling::CANCEL => "Cancelada" ,
 				VehicleTraveling::EXPIRED => "Expirado" 
 				

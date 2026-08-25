@@ -1,1 +1,162 @@
-var UserBean=function(){var f=false;var e="";var c=60;var b=new Array();var d=false;var a=function(){if($("#person_pj").attr("checked")){$("#div_fields_pf").toggle(false);$("#div_fields_pf input").val("");$("#div_fields_pj").toggle(true)}else{if($("#person_pf").attr("checked")){$("#div_fields_pf").toggle(true);$("#div_fields_pj").toggle(false);$("#div_fields_pj input").val("")}}};this.initConfirmPwd=function(){$("#tabs").tabs();$("#button_save").button().click(function(g){g.preventDefault();$("#form_confirm_pwd").submit()})};this.initRequestPwd=function(){$("#tabs").tabs();$("#person_pj").live("click",function(){a()});$("#person_pf").live("click",function(){a()});$("#button_sender").button().click(function(g){g.preventDefault();$("#form_new_password").submit()});e=$("#form_new_password").serialize();$("#form_new_password").submit(function(){var g=$(this).serialize();if(d&&e==g){System.showMessageDialog("VocÍ n„o alterou nenhuma informaÁ„o para salvar!");return false}e=g;if(f){return false}f=true;$("#dialog-working").dialog("open");window.setTimeout(function(){onTimeoutSaving()},c*1000);return true});a();$("#newpwd_iframe").load(function(){if(f){f=false;$("#dialog-working").dialog("close");var m="";try{var l=$(this).contents().text();var o=$.parseJSON(l);System.setImgMessage(o.result);m=o.message;var j=new Array();for(var n in b){var g=b[n];$(g).css("background","#FFFFFF")}b=new Array();if(o.result=="error"){if(o.validationException.length>0){m+="<br/></br>";for(var n in o.validationException){var i=o.validationException[n];var h=(i.id!="");i.id="#"+(i.id.replace(/\./g,"\\."));if(h){$(i.id).css("background","#FFC1C1")}b.push(i.id);j.push(i.message)}m+=j.join("<br/>")}}else{$("#form_new_password .input_clear").val("")}}catch(k){System.setImgMessage("error");m="Erro ao requisitar nova senha<br/><br/>";m+="O sistema esta indisponÌvel no momento, aguarde e tente novamente mais tarde. <br/><br/>";m+="Detalhes tÈcnicos: "+k.message}$("#dialog-result\\.messageText").html(m);$("#dialog-result").dialog("open")}});$("#dialog-result").dialog({autoOpen:false,closeOnEscape:false,width:640,height:240,modal:true,open:function(g,h){$(this).parent().children().children(".ui-dialog-titlebar-close").hide()},buttons:{OK:function(){$(this).dialog("close")}}});$("#dialog-working").dialog({width:420,height:220,modal:true,autoOpen:false,draggable:false,resizable:false,closeOnEscape:false,open:function(g,h){$(this).parent().children().children(".ui-dialog-titlebar-close").hide()}})}};UserBean.instance=null;UserBean.getInstance=function(){if(UserBean.intance==null){UserBean.instance=new UserBean()}return UserBean.instance};
+var UserBean = function() {
+	var saving = false;
+	var initialFormHash = "";
+	var timeoutSaving = 60; // em segundos 
+	var errorFields = new Array();
+	var checkChangesBeforeSave = false;
+	
+	var viewFieldsPerson = function(){
+		if ($("#person_pj").attr("checked")) {
+			$("#div_fields_pf").toggle(false);
+			$("#div_fields_pf input").val("");
+			$("#div_fields_pj").toggle(true);
+		}else if ($("#person_pf").attr("checked")) {				
+			$("#div_fields_pf").toggle(true);
+			$("#div_fields_pj").toggle(false);
+			$("#div_fields_pj input").val("");
+		}
+	}
+	
+	this.initConfirmPwd = function(){
+		$("#tabs").tabs();
+		
+		$("#button_save").button().click(function(e) {
+			e.preventDefault();
+			$("#form_confirm_pwd").submit();
+		});
+	}
+	
+	this.initRequestPwd = function(){
+		$("#tabs").tabs();
+
+		$("#person_pj").live("click", function() {
+			viewFieldsPerson();
+			
+		});
+		
+		$("#person_pf").live("click", function() {
+			viewFieldsPerson();
+		});
+		
+		$("#button_sender").button().click(function(e) {
+			e.preventDefault();
+			$("#form_new_password").submit();
+		});
+		
+		initialFormHash = $("#form_new_password").serialize();
+		$("#form_new_password").submit(function(){
+			// controle de altera√ß√£o
+			var formHash = $(this).serialize();
+			if(checkChangesBeforeSave && initialFormHash == formHash){
+				System.showMessageDialog("Voc√™ n√£o alterou nenhuma informa√ß√£o para salvar!");
+				return false;
+			}
+			initialFormHash = formHash;
+			
+			if(saving){
+				return false;
+			}
+			saving = true;
+			$("#dialog-working").dialog("open");
+			
+			window.setTimeout(function(){
+				onTimeoutSaving();
+			},timeoutSaving*1000);
+			
+			return true;
+		});
+		
+		viewFieldsPerson();
+		
+		$("#newpwd_iframe").load(function(){
+			if(saving){
+				saving = false;
+				$("#dialog-working").dialog("close");
+				
+				// resultado
+				var messageText = "";
+				try {
+					var content = $(this).contents().text();
+					var json = $.parseJSON(content);
+					System.setImgMessage(json.result);
+
+					
+					messageText = json.message;
+					// independente se deu certo errado, verifica as mensagens
+					var messageList = new Array();
+					
+					// limpando todos os erros anteriores
+					for(var key in errorFields){
+						var id = errorFields[key];
+						$(id).css("background","#FFFFFF");
+					}
+					errorFields = new Array();
+					
+					if(json.result == 'error'){
+						if(json.validationException.length > 0){
+							messageText += "<br/></br>";
+							for(var key in json.validationException){
+								var obj = json.validationException[key];
+								var isValidId = (obj.id != "");
+								
+								// trocando ponto e adaptando id
+								obj.id = "#"+(obj.id.replace(/\./g,"\\."));
+								if(isValidId){
+									$(obj.id).css("background","#FFC1C1");
+								}
+								errorFields.push(obj.id);
+								messageList.push(obj.message);
+							}
+							
+							messageText += messageList.join("<br/>");
+						}
+					}else{
+						$("#form_new_password .input_clear").val("");
+					}
+				}catch(e){
+					System.setImgMessage('error');
+					messageText = "Erro ao requisitar nova senha<br/><br/>"; 
+					messageText += "O sistema esta indispon√≠vel no momento, aguarde e tente novamente mais tarde. <br/><br/>"; 
+					messageText += "Detalhes t√©cnicos: "+e.message; 
+				}
+				$("#dialog-result\\.messageText").html(messageText);
+				$("#dialog-result").dialog("open");
+			}
+		});
+		
+		$("#dialog-result").dialog({
+			autoOpen: false,
+			closeOnEscape: false,
+			width: 640,
+			height: 240,
+			modal: true,
+			open: function(event, ui) {
+		    	 $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+		    },
+			buttons: {
+				"OK": function(){
+					$(this).dialog("close");
+				}
+			}
+		});
+		
+		$("#dialog-working").dialog({
+			width: 420,
+			height: 220,
+		    modal: true,
+		    autoOpen: false,
+		    draggable: false,
+	        resizable: false,
+		    closeOnEscape: false,
+		    open: function(event, ui) {
+		    	 $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+		    }
+		});
+	};
+}
+UserBean.instance = null;
+UserBean.getInstance = function() {
+	if (UserBean.intance == null)
+		UserBean.instance = new UserBean();
+	return UserBean.instance;
+};

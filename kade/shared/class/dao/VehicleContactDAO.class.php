@@ -25,7 +25,7 @@ class VehicleContactDAO {
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 		
 		$phone		    = $obj->getPhoneContact();
 		$person 	    = $obj->getPerson ();

@@ -34,7 +34,7 @@
 			else if ($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException ( "Conex„o Inv·lida" );
+				throw new PDOException ( "Conex√£o Inv√°lida" );
 				
 				// echo $sql;
 			
@@ -53,7 +53,7 @@
 			}else if($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException("Conex„o Inv·lida");
+				throw new PDOException("Conex√£o Inv√°lida");
 				
 			$sql = "
 					SELECT 	  prf.id

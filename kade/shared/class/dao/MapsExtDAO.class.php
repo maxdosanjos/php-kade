@@ -35,7 +35,7 @@ class MapsExtDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		
 		$result = $db->query ( $sql );
@@ -84,7 +84,7 @@ class MapsExtDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 		
 		$result = $db->query ( $sql );
@@ -129,7 +129,7 @@ class MapsExtDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 	
 		$result = $db->query ( $sql );

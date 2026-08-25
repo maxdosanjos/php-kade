@@ -61,7 +61,7 @@ class User {
 	}
 	
 	public static function listStatus(){
- 		$_list = array(User::PEND=>"Pendente de confirmação",User::CHEK=>"Ativo",User::BLCK=>"Bloqueado",User::CANC=>"Cancelado");
+ 		$_list = array(User::PEND=>"Pendente de confirmaÃ§Ã£o",User::CHEK=>"Ativo",User::BLCK=>"Bloqueado",User::CANC=>"Cancelado");
  		return $_list; 
  	}
 	public function getDescStatus(){
@@ -134,7 +134,7 @@ class User {
 	public static function getLogged() {
 		$user = null;
 		
-		if($_SESSION ["user"]!="")
+		if(!empty($_SESSION ["user"]))
 			$user = unserialize($_SESSION ["user"]);
 			
 		if ($user != null && $user instanceof User) 

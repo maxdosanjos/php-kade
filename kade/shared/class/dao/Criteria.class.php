@@ -1,9 +1,9 @@
 <?php
 /**
  * Criteria
- * Classe para geraÁ„o de instruÁıes SQL. Baseadas em testes e 
+ * Classe para gera√ß√£o de instru√ß√µes SQL. Baseadas em testes e 
  * na classe Criteria do Hibernate
- * @author VinÌcius Cesar Dias
+ * @author Vin√≠cius Cesar Dias
  * @criado 10/06/2010 16:00
  * @version 0.33
  */
@@ -22,13 +22,13 @@ class Criteria {
 	const FIELD_DOUBLE = 8;
 	
 	/**
-	 * Operadores lÛgicos
+	 * Operadores l√≥gicos
 	 */
 	const LOGIC_AND = "AND";
 	const LOGIC_OR = "OR";
 	
 	/**
-	 * OrdenaÁıes
+	 * Ordena√ß√µes
 	 */
 	const ORDER_ASC = "ASC";
 	const ORDER_DESC = "DESC";
@@ -40,25 +40,25 @@ class Criteria {
 	const NORMAL_WHERE = 1;
 	
 	/**
-	 * Habilita quebra de linhas nas instruÁıes
+	 * Habilita quebra de linhas nas instru√ß√µes
 	 */
 	private $enableBreakLines;
 	
 	/**
 	 * Par de separadores de palavras reservadas
-	 * utilizadas em instruÁıes SQL
+	 * utilizadas em instru√ß√µes SQL
 	 */
 	private $separator = array("","");
 	
 	/**
-	 * N˙mero m·ximo de resultados da consulta
-	 * utilizado pelo SQL Server na cl·usula TOP
+	 * N√∫mero m√°ximo de resultados da consulta
+	 * utilizado pelo SQL Server na cl√°usula TOP
 	 */
 	private $maxResults;
 	
 	/**
 	 * Faixa de registros da consulta utilizado
-	 * pelo MySQL na cl·usula LIMIT
+	 * pelo MySQL na cl√°usula LIMIT
 	 */
 	private $limit = array();
 	
@@ -73,12 +73,12 @@ class Criteria {
 	private $field = array();
 	
 	/**
-	 * Par‚metros da cl·usula ORDER BY
+	 * Par√¢metros da cl√°usula ORDER BY
 	 */
 	private $order = array();
 	
 	/**
-	 * Par‚metros da cl·usula WHERE
+	 * Par√¢metros da cl√°usula WHERE
 	 */
 	private $where = array();
 	
@@ -131,8 +131,8 @@ class Criteria {
 	}
 	
 	/**
-	 * Verifica se a quebra de linha est· habilitada
-	 * @return true caso a quebra de linha est· habilitada
+	 * Verifica se a quebra de linha est√° habilitada
+	 * @return true caso a quebra de linha est√° habilitada
 	 * e false caso esteja desabilitada.
 	 */
 	public function isBreakLines(){
@@ -153,9 +153,9 @@ class Criteria {
 	}
 	
 	/**
-	 * Retorna o caracter de tabulaÁ„o se 
+	 * Retorna o caracter de tabula√ß√£o se 
 	 * estiver habilitado
-	 * @return Caracterer de tabulaÁ„o ou string vazia
+	 * @return Caracterer de tabula√ß√£o ou string vazia
 	 */
 	public function getHorizontalTabulationString(){
 		$output = "";
@@ -226,8 +226,8 @@ class Criteria {
 	}
 	
 	/**
-	 * Define o m·ximo de resultados da consulta
-	 * @param num N˙mero de resultados
+	 * Define o m√°ximo de resultados da consulta
+	 * @param num N√∫mero de resultados
 	 */
 	public function setMaxResults($num){
 		$this->maxResults = abs($num);
@@ -241,8 +241,8 @@ class Criteria {
 	}
 	
 	/**
-	 * Retorna o m·ximo de resultados da consulta
-	 * @return N˙mero de resultados
+	 * Retorna o m√°ximo de resultados da consulta
+	 * @return N√∫mero de resultados
 	 */
 	public function getMaxResults(){
 		return $this->maxResults;
@@ -250,10 +250,10 @@ class Criteria {
 	
 	/**
 	 * Define a faixa de registros retornados por
-	 * uma consulta do MySQL usando a cl·sula LIMIT
-	 * @param start O ponteiro dos registros comeÁando 
+	 * uma consulta do MySQL usando a cl√°sula LIMIT
+	 * @param start O ponteiro dos registros come√ßando 
 	 * dos primeiros resultados da busca
-	 * @param length Quando registros o ponteiro vai avanÁar
+	 * @param length Quando registros o ponteiro vai avan√ßar
 	 * na consulta
 	 */
 	public function setLimit($start,$length){
@@ -262,15 +262,15 @@ class Criteria {
 	}
 		
 	/**
-	 * ConstrÛi uma funÁ„o IN
+	 * Constr√≥i uma fun√ß√£o IN
 	 * @param name Nome do campo
-	 * @param data Valores que ser„o inseridos no IN
-	 * @param logic Operador lÛgico
+	 * @param data Valores que ser√£o inseridos no IN
+	 * @param logic Operador l√≥gico
 	 */
 	public function in($name,array $data,$logic=self::LOGIC_AND){
 		$data = $this->addQuotesIfString($data);
 		if(sizeof($data)>0){
-			$buffer = implode($data, ",");			
+			$buffer = implode(",", $data);			
 			$this->where[] = array(self::getLogicName($logic),$this->applySeparator($name)." IN(".$buffer.")");			
 		}		
 	}
@@ -279,15 +279,15 @@ class Criteria {
 		$data = $this->addQuotesIfString($data);
 		$length = sizeof($data);
 		if($length>0){
-			$buffer = implode($data, ",");
+			$buffer = implode(",", $data);
 			$this->where[] = array(self::getLogicName($logic),$this->applySeparator($name)." NOT IN(".$buffer.")");
 		}		
 	}
 		
 	/**
-	 * Verifica se o campo È nulo
+	 * Verifica se o campo √© nulo
 	 * @param name Nome do campo
-	 * @param logic Operador lÛgico
+	 * @param logic Operador l√≥gico
 	 */
 	public function isNull($name,$logic=self::LOGIC_AND){
 		$this->where[] = array(self::getLogicName($logic),$this->applySeparator($name)." IS NULL");
@@ -298,10 +298,10 @@ class Criteria {
 	}
 	
 	/**
-	 * CondiÁ„o LIKE	
+	 * Condi√ß√£o LIKE	
 	 * @param name Nome do campo
 	 * @param value Valor do campo
-	 * @param logic Operador LÛgico
+	 * @param logic Operador L√≥gico
 	 */
 	public function like($name,$value,$logic=self::LOGIC_AND){
 		$value = $this->addQuotesIfString($value);
@@ -344,10 +344,10 @@ class Criteria {
 	}
 	
 	/**
-	 * CondiÁ„o igual
+	 * Condi√ß√£o igual
 	 * @param name Nome do campo
 	 * @param value Valor do campo
-	 * @param logic Operador LÛgico
+	 * @param logic Operador L√≥gico
 	 */
 	public function eq($name,$value,$logic=self::LOGIC_AND){
 		$value = $this->addQuotesIfString($value);		
@@ -395,11 +395,11 @@ class Criteria {
 	}
 					
 	/**
-	 * CondiÁ„o ENTRE
+	 * Condi√ß√£o ENTRE
 	 * @param name Nome do campo
 	 * @param arg1 Argumento 1
 	 * @param arg2 Argumento 2
-	 * @param logic Operador lÛgico
+	 * @param logic Operador l√≥gico
 	 */
 	public function between($name,$arg1,$arg2,$fieldType,$logic=self::LOGIC_AND){
 		if($fieldType == self::FIELD_DATETIME | $fieldType == self::FIELD_DATE | $fieldType == self::FIELD_TIME){
@@ -447,16 +447,16 @@ class Criteria {
 	}
 				
 	/**
-	 * Adiciona um critÈrio diretamente na instruÁ„o SQL
-	 * @param sql CÛdigo SQL
-	 * @param logic Operador lÛgico
+	 * Adiciona um crit√©rio diretamente na instru√ß√£o SQL
+	 * @param sql C√≥digo SQL
+	 * @param logic Operador l√≥gico
 	 */
 	public function appendCritery($sql,$logic=self::LOGIC_AND){
 		$this->where[] = array(self::getLogicName($logic),$sql);
 	}
 		
 	/**
-	 * Efetua a fus„o de uma critÈria com a critÈria 
+	 * Efetua a fus√£o de uma crit√©ria com a crit√©ria 
 	 * atualmente instanciada
 	 * @param criteria Criteria a ser fundida
 	 */
@@ -471,7 +471,7 @@ class Criteria {
 			
 	/**
 	 * Adiciona um campo na lista
-	 * @param name conte˙do do campo
+	 * @param name conte√∫do do campo
 	 */
 	public function addField($name){
 		$this->field[] = $this->applySeparator($name);
@@ -490,7 +490,7 @@ class Criteria {
 	/**
 	 * Adiciona uma ordem na lista
 	 * @param name Nome do campo
-	 * @param ordem Tipo de OrdenaÁ„o
+	 * @param ordem Tipo de Ordena√ß√£o
 	 */
 	public function addOrder($name,$order){
 		$this->order[] = array($this->applySeparator($name),self::getOrderName($order));
@@ -505,11 +505,11 @@ class Criteria {
 	}
 	
 	/**
-	 * Retorna a cl·usula SELECT montada de acordo
+	 * Retorna a cl√°usula SELECT montada de acordo
 	 * com os campos.
 	 * Se nenhum campo foi definido, retorna asterisco no 
 	 * lugar do campo
-	 * @return Cl·usula SELECT
+	 * @return Cl√°usula SELECT
 	 */
 	public function getSelect(){
 		if($this->getTableName()==""){
@@ -532,11 +532,11 @@ class Criteria {
 	}
 	
 	/**
-	 * O mesmo mÈtodo que o getWhere(), porÈm permite
+	 * O mesmo m√©todo que o getWhere(), por√©m permite
 	 * definir se a primeira palavra seja WHERE ou se 
 	 * fica vazia
 	 * @param flag true para retornar sem WHERE
-	 * @return Cl·usula WHERE
+	 * @return Cl√°usula WHERE
 	 */
 	public function getWhere($flag=self::NORMAL_WHERE){
 		$output = "";
@@ -559,11 +559,11 @@ class Criteria {
 	}
 		
 	/**
-	 * Retorna a cl·usula ORDER BY montada de acordo
-	 * com os valores definidos pelos mÈtodos. Caso
-	 * nenhuma ordenaÁ„o foi definida, retorna uma 
+	 * Retorna a cl√°usula ORDER BY montada de acordo
+	 * com os valores definidos pelos m√©todos. Caso
+	 * nenhuma ordena√ß√£o foi definida, retorna uma 
 	 * string vazia.
-	 * @return Cl·usula ORDER
+	 * @return Cl√°usula ORDER
 	 */
 	public function getOrder(){
 		$output = "";		
@@ -598,47 +598,47 @@ class Criteria {
 	}
 	
 	/**
-	 * Retorna uma cl·usula LIMIT. Caso nenhuma configuraÁ„o
+	 * Retorna uma cl√°usula LIMIT. Caso nenhuma configura√ß√£o
 	 * foi definida, retorna uma string vazia.
-	 * @return Cl·usula LIMIT
+	 * @return Cl√°usula LIMIT
 	 */
 	public function getLimit(){
 		return (is_array($this->limit) && count($this->limit) == 2 && $this->limit[1]>0)?" LIMIT ".$this->limit[0].",".$this->limit[1]:"";
 	}
 	
 	/**
-	 * Retorna a cl·usula TOP do SQL Server. Caso nenhuma
-	 * configuraÁ„o foi definida, retorna uma string vazia.
-	 * @return Cl·usula TOP
+	 * Retorna a cl√°usula TOP do SQL Server. Caso nenhuma
+	 * configura√ß√£o foi definida, retorna uma string vazia.
+	 * @return Cl√°usula TOP
 	 */
 	public function getTop(){
 		return ($this->getMaxResults()>0)?" TOP ".$this->getMaxResults():"";
 	}
 	
 	/**
-	 * Retorna o nome do operador lÛgico de 
+	 * Retorna o nome do operador l√≥gico de 
 	 * acordo com sua constante
 	 * @param logic
-	 * @return Nome do operador lÛgico
+	 * @return Nome do operador l√≥gico
 	 */
 	public static function getLogicName($logic){
 		return ($logic == self::LOGIC_OR)?"OR":"AND";
 	}
 	
 	/**
-	 * Retorna o nome da ordenaÁ„o
+	 * Retorna o nome da ordena√ß√£o
 	 * acordo com sua constante
 	 * @param logic
-	 * @return Nome da ordenaÁ„o
+	 * @return Nome da ordena√ß√£o
 	 */
 	public static function getOrderName($code){
 		return($code == self::ORDER_ASC)?"ASC":"DESC";
 	}
 			
 	/**
-	 * Verifica se o nome contÈm um dos separadores definidos
+	 * Verifica se o nome cont√©m um dos separadores definidos
 	 * @param name Nome do campo a ser avaliado
-	 * @return true se encontrou algum separador ou false se n„o encontrou
+	 * @return true se encontrou algum separador ou false se n√£o encontrou
 	 */
 	public function findSeparator($name){
 		if($name==""){
@@ -692,9 +692,9 @@ class Criteria {
 	}
 	
 	/**
-	 * Verifica se o nome contÈm uma funÁ„o
+	 * Verifica se o nome cont√©m uma fun√ß√£o
 	 * @param name Nome do campo a ser avaliado
-	 * @return true se È funÁ„o ou false se n„o È funÁ„o
+	 * @return true se √© fun√ß√£o ou false se n√£o √© fun√ß√£o
 	 */
 	public function isFunction($name){
 		$pattern = "/^[a-zA-Z_]{1}[a-zA-Z0-9_]*[\(](.*)[\)]$/";

@@ -27,25 +27,28 @@
 	$_ufList 		  = $ctrlVehReg->getListUf();
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/cad_veiculo_ext.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Address.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/VehicleTravelingBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){VehicleTravelingBean.getInstance().initBean();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Address.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/VehicleTravelingBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){VehicleTravelingBean.getInstance().initBean();});</script>
 <div class="logo_back"></div>		
 <div id="div_body_cad_veic" class="div_body">
 	<form id="vehicle_form" method="post" target="vehicle_iframe" action="../VehicleRegCtrl.ctrlExt/save">
+			<!-- Anti-bot hidden fields: honeypot and form timestamp (optional client JS can update form_ts) -->
+			<input type="hidden" id="hp_name" name="hp_name" value="" />
+			<input type="hidden" id="form_ts" name="form_ts" value="<?php echo time(); ?>" />
 		<div id="tabs">
 			<ul>
-		    	<li><a href="#tabs-1">Cadastre seu Veículo</a></li>
+		    	<li><a href="#tabs-1">Cadastre seu VeÃ­culo</a></li>
 		    </ul>
 		  	<div id="tabs-1">
 				<div class="div_input" style="<?=($user!=null)?"display:none;":""?>">
-		    		<label for="person_pf" id="person_pf_label">Pessoa Física</label>
-		    		<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa Física" title="Pessoa Física" <?=$checkedPF?> />
-		    		<label for="person_pj" id="person_pj_label">Pessoa Jurídica</label>
-		    		<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa Jurídica" title="Pessoa Jurídica" <?=$checkedPJ?>/>
+		    		<label for="person_pf" id="person_pf_label">Pessoa FÃ­sica</label>
+		    		<input type="radio" name="type_person" value="PF" id="person_pf" alt="Pessoa FÃ­sica" title="Pessoa FÃ­sica" <?=$checkedPF?> />
+		    		<label for="person_pj" id="person_pj_label">Pessoa JurÃ­dica</label>
+		    		<input type="radio" name="type_person" value="PJ" id="person_pj" alt="Pessoa JurÃ­dica" title="Pessoa JurÃ­dica" <?=$checkedPJ?>/>
 		    	</div>
 		    	<div id="div_fields_pf" class="div_input" >
 					<div id="div_vehicle_cpf" class="div_input">
@@ -63,7 +66,7 @@
 						<input type="text" id="vehicle_cnpj" name="vehicle_cnpj" class="mask.cnpj required <?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly":"input_clear";?>" size="14" maxlength="14" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?$user->getPerson()->getCnpj():"";?>" alt="CNPJ" title="CNPJ" <?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly='true'":"";?>/>
 					</div>
 					<div class="div_input">
-			    		<label for="vehicle_rsoc"  class="label_input">Razão Social: </label>
+			    		<label for="vehicle_rsoc"  class="label_input">RazÃ£o Social: </label>
 			    		<input type="text" id="vehicle_rsoc" name="vehicle_rsoc" size="40" maxlength="120" class="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly":"input_clear";?>" value="<?=($user!=null && $user->getPerson()->getType() == Person::PJ)?$user->getPerson()->getName():"";?>" <?=($user!=null && $user->getPerson()->getType() == Person::PJ)?"readonly='true'":"";?>/>
 			    	</div>
 			    	<div class="div_input">
@@ -72,7 +75,7 @@
 			    	</div>
 				</div>
 				<div class="div_input">
-					<label for="vehicle_type"  class="label_input">Tipo de Veículo</label>
+					<label for="vehicle_type"  class="label_input">Tipo de VeÃ­culo</label>
 					<select id="vehicle_type" name="vehicle_type" class="required input_clear">
 						<option value="" selected="selected"></option>
 						<?php foreach ($_vechicleTypes as $vehicleType){?>
@@ -86,17 +89,17 @@
 		    	</div>    	
 		    	<br style="clear: both"/>
 		    	<fieldset style="border:1px solid #CCC;padding:10px 10px 10px 0;margin-top:10px;">
-		    		<legend style="font-style: italic;margin-left:10px;">Localização</legend>
+		    		<legend style="font-style: italic;margin-left:10px;">LocalizaÃ§Ã£o</legend>
 			    	<div class="div_input">
 			    		<label for="vehicle_zipcode" id="vehicle_zipcode_label"  class="label_input">CEP: </label>
 			    		<input type="text" id="vehicle_zipcode" name="vehicle_zipcode" size="14" maxlength="10" class="mask.cep required input_clear" value=""/>
 			    	</div>
 			    	<div class="div_input">
-			    		<!-- <label for="vehicle_address"  class="label_input">Endereço: </label> -->
+			    		<!-- <label for="vehicle_address"  class="label_input">EndereÃ§o: </label> -->
 			    		<input type="hidden" id="vehicle_address" name="vehicle_address" size="40" maxlength="120" class="input_clear" readonly="readonly" value=""/>
 			    		
 			    		
-			    		<!-- <label for="vehicle_address_number" id="vehicle_address_number_label"  class="label_input">Número: </label>-->
+			    		<!-- <label for="vehicle_address_number" id="vehicle_address_number_label"  class="label_input">NÃºmero: </label>-->
 			    		<input type="hidden" id="vehicle_address_number" name="vehicle_address_number" size="10" maxlength="12" class="input_clear"  value=""/>
 			    		
 			    	</div>
@@ -121,12 +124,12 @@
 			    	</div>
 		    	</fieldset>
 		        <div>
-		        	<span id="span_text_captcha">Queremos garantir que uma pessoa real está criando um registro.</span>
+		        	<span id="span_text_captcha">Queremos garantir que uma pessoa real estÃ¡ criando um registro.</span>
 		        </div>
 		    	<div class="div_input">
 		    		<img id="img_captcha" src="../VehicleRegCtrl.ctrlExt/getCaptcha"/>
 			    	<input type="text" id="vehicle_captcha" name="vehicle_captcha" size="11" maxlength="9" class="required input_clear" value="" autocompleted="false"/>	    		
-					<span id="span_exp_cap">***Há diferença letras maiúsculas e minúsculas<br/> Se os caracteres da imagem estiverem ilegíveis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a></span>
+					<span id="span_exp_cap">***HÃ¡ diferenÃ§a letras maiÃºsculas e minÃºsculas<br/> Se os caracteres da imagem estiverem ilegÃ­veis, <a id="btn_new_captcha" class="btn_default" href="#">gerar outra imagem</a></span>
 		    	</div>
 		    	<br style="clear: both"/>
 		    	<div id="buttonBar" class="">
@@ -162,9 +165,9 @@
 	<div id="div_explc" class="ui-state-highlight ui-corner-all">
 		<span id="span_icon_explc" class="ui-icon ui-icon-info"></span>
 		<p id="p_explc">
-			<strong>Obs.:</strong> Você pode enviar a localização de seu caminhão através de um SMS! 
-			Basta enviar para o número <span style="font-weight: bold">(43) 9676-1700</span> a mensagem com o seguinte padrão:<br/>
-			<span id="span_tp_explc">Tipo de Veículo *(asterisco) CEP</span>
+			<strong>Obs.:</strong> VocÃª pode enviar a localizaÃ§Ã£o de seu caminhÃ£o atravÃ©s de um SMS! 
+			Basta enviar para o nÃºmero <span style="font-weight: bold">(43) 9676-1700</span> a mensagem com o seguinte padrÃ£o:<br/>
+			<span id="span_tp_explc">Tipo de VeÃ­culo *(asterisco) CEP</span>
 			<span id="span_ex_explc">Exemplo: 1*86188000</span><br>
 		</p>
 	</div>

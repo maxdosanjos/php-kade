@@ -7,13 +7,13 @@
 	$message   = $ctrlLogQry->getMessage();	
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/confirm_pwd_ext.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/UserBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){UserBean.getInstance().initConfirmPwd();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/UserBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){UserBean.getInstance().initConfirmPwd();});</script>
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#button_sender").notify("<?=$message->getDesc()?>", "<?=$message->getType()?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#button_sender").notify("<?=$message->getDesc()?>", "<?=$message->getType()?>");});</script>
 <?}?>
 <div class="logo_back"></div>
 <div id="div_body_confirm_pwd" class="div_body">
@@ -29,7 +29,7 @@
 				Nova senha registrada com sucesso!!!
 			</h1>
 			<p id="p_success">
-				Obrigado por confirmar seus dados. Seu usu·rio est· validado! Basta realizar <a href="/<?=ViewExtCtrl::LOGIN."/"?>">seu login</a> para usufruir de nossos serviÁos.
+				Obrigado por confirmar seus dados. Seu usu√°rio est√° validado! Basta realizar <a href="/<?=ViewExtCtrl::LOGIN."/"?>">seu login</a> para usufruir de nossos servi√ßos.
 			</p>
 		</div>
 		<? } else {
@@ -66,7 +66,7 @@
 		<div id="div_text_content">
 			<h1 id="h1_error">
 				<div id="span_message_icon" class="img_msg_error"></div>
-				URL inv·lida para confirmaÁ„o!!!
+				URL inv√°lida para confirma√ß√£o!!!
 			</h1>
 			<p id="p_error">
 				<?=$e->getMessage()?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @autor VinÌcius Cesar Dias
+ * @autor Vin√≠cius Cesar Dias
  */
 class DBConfig {
 	private $user;
@@ -16,7 +16,7 @@ class DBConfig {
 	const ORACLE   = 2;//"ORACLE";
 	
 	/**
-	 * Define a string de conex„o PDO.
+	 * Define a string de conex√£o PDO.
 	 * @access public
 	 * @since 09.04.2011
 	 * @param string $strConnection
@@ -34,7 +34,7 @@ class DBConfig {
 			switch($this->SGBD)
 			{
 				case DBConfig::MYSQL:
-					return "mysql:host=".$this->host.";port=".$this->port.";dbname=".$this->database;
+					return "mysql:host=".$this->host.";port=".$this->port.";dbname=".$this->database.";charset=utf8mb4";
 				break;
 				case DBConfig::MSSQL:
 					return "dblib:host=".$this->host.":".$this->port.";dbname=".$this->database."";
@@ -50,7 +50,7 @@ class DBConfig {
 	}
 	
 	/**
-	 * Define o usu·rio.
+	 * Define o usu√°rio.
 	 * @access public
 	 * @since 24.09.2009
 	 * @param string $user
@@ -62,7 +62,7 @@ class DBConfig {
 	}
 
 	/**
-	 * Recupera o usu·rio.
+	 * Recupera o usu√°rio.
 	 * @access public
 	 * @since 24.09.2009
 	 * @return string
@@ -142,7 +142,7 @@ class DBConfig {
 	}
 	
 	/**
-	 * Define a porta de comunicaÁ„o
+	 * Define a porta de comunica√ß√£o
 	 * @access public 
 	 * @since 05.04.2010
 	 * @return DBConfig

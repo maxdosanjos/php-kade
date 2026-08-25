@@ -20,7 +20,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 	private $clientEdit = null;
 	public function __construct() {
 		parent::__construct ();
-		$this->setAction ( $_REQUEST ["action"] );
+		$this->setAction ( $_REQUEST ["action"] ?? null );
 		
 		switch ($this->getAction ()) {
 			case "save" :
@@ -45,7 +45,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 		$person->setId ( $_GET ["custumer_person_id"] );
 		try {
 			if ($person==null || $person->getId() <= 0)
-				throw new Exception ( "Cliente n„o encontrado!" );
+				throw new Exception ( "Cliente n√£o encontrado!" );
 			
 			$criteria = new Criteria ();
 			$criteria->eq ( "cli.user_person_id", $person->getId() );
@@ -53,7 +53,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$this->clientDAO = ClientDAO::getInstance ();		
 			$this->clientEdit = $this->clientDAO->getSingle ( $this->getDbConfig (), $criteria );
 			if ($this->clientEdit == null || $this->clientEdit->getUser()->getPerson()->getId() <= 0)
-				throw new Exception ( "Cliente n„o encontrado!" );
+				throw new Exception ( "Cliente n√£o encontrado!" );
 			
 		} catch ( PDOException $e ) {
 			$this->clientEdit = null;
@@ -70,73 +70,75 @@ class CustumerRegCtrl extends AbstractCtrl {
 		$phone = new Phone ();
 		$address = new Address ();
 		
-		switch ($_data ["type_person"]) {
-			case Person::PF :
-				$person = new PersonIndividual ();
-				$person->setName ( $_data ["custumer_name"] );
-				$person->setCpf ( $_data ["custumer_cpf"] );
-				break;
-			case Person::PJ :
-				$person = new PersonEntity ();
-				$person->setName ( $_data ["custumer_rsoc"] );
-				$person->setContact ( $_data ["custumer_contact"] );
-				$person->setCnpj ( $_data ["custumer_cnpj"] );
+			$type_person = $_data["type_person"] ?? '';
+			switch ($type_person) {
+				case Person::PF :
+					$person = new PersonIndividual ();
+					$person->setName ( $_data["custumer_name"] ?? '' );
+					$person->setCpf ( $_data["custumer_cpf"] ?? '' );
+					break;
+				case Person::PJ :
+					$person = new PersonEntity ();
+					$person->setName ( $_data["custumer_rsoc"] ?? '' );
+					$person->setContact ( $_data["custumer_contact"] ?? '' );
+					$person->setCnpj ( $_data["custumer_cnpj"] ?? '' );
 				
-				if ($_data ["custumer_ie_isento"] == "on")
-					$_data ["custumer_ie"] = PersonEntity::ISENTO;
+					if (isset($_data["custumer_ie_isento"]) && $_data["custumer_ie_isento"] == "on")
+						$_data["custumer_ie"] = PersonEntity::ISENTO;
 				
-				$person->setIe ( $_data ["custumer_ie"] );
+					$person->setIe ( $_data["custumer_ie"] ?? '' );
 				
-				break;
-			default :
-				return $client;
+					break;
+				default :
+					return $client;
+			}
+		
+			$person->setEmail ( $_data["custumer_mail"] ?? '' );
+		
+			$phone->setPhoneByMask ( $_data["custumer_phone"] ?? '' );
+		
+			$phone->setId ( $_data["custumer_phone_id"] ?? null );
+		
+			$person->setPhone ( $phone );
+		
+			$address->setCep ( $_data["custumer_zipcode"] ?? '' );
+			$address->setStreet ( $_data["custumer_address"] ?? '' );
+			$address->setNeighborhood ( $_data["custumer_neighborhood"] ?? '' );
+			$address->setNumber ( $_data["custumer_address_number"] ?? '' );
+			$address->setComplement ( $_data["custumer_complement"] ?? '' );
+			$address->setCity ( $_data["custumer_city"] ?? '' );
+			$address->setState ( $_data["custumer_region"] ?? '' );
+			$_ufs = $this->getListUf ();
+			$selRegion = $_data["custumer_region"] ?? null;
+			$address->setStateNm ( $selRegion !== null && isset($_ufs[$selRegion]) ? $_ufs[$selRegion] : '' );
+		
+			/*
+			 * if ($address->getCep () != "" && ($address->getCity () == "" || $address->getState () == "")) { try { $addressDAO = AddressDAO::getInstance (); $db = DataBase::getInstance ( $addressDAO->loadDBConfigCep () ); $addressDAO->getAddressByZipCode ( $db, $address ); $db = null; } catch ( PDOException $e ) { $db = null; } }
+			 */
+		
+			$address->setId ( $_data["custumer_address_id"] ?? null );
+			$person->setAddress ( $address );
+		
+			$user = new User ();
+		
+			$person->setId ( $_data["custumer_person_id"] ?? null );
+			$user->setPerson ( $person );
+		
+			$user->setLogin ( $_data["custumer_login"] ?? '' );
+			$user->setPassword ( $_data["custumer_password"] ?? '' );
+			$user->setStatus ( User::PEND );
+		
+			if(($_data["custumer_status"] ?? '')!=""){
+				$user->setStatus ( $_data["custumer_status"] );
+			}
+		
+			if(($_data["custumer_obs"] ?? '')!="")
+				$user->setText ( $_data["custumer_obs"] );
+		
+			$client->setUser ( $user );
+		
+			return $client;
 		}
-		
-		$person->setEmail ( $_data ["custumer_mail"] );
-		
-		$phone->setPhoneByMask ( $_data ["custumer_phone"] );
-		
-		$phone->setId ( $_data ["custumer_phone_id"] );
-		
-		$person->setPhone ( $phone );
-		
-		$address->setCep ( $_data ["custumer_zipcode"] );
-		$address->setStreet ( $_data ["custumer_address"] );
-		$address->setNeighborhood ( $_data ["custumer_neighborhood"] );
-		$address->setNumber ( $_data ["custumer_address_number"] );
-		$address->setComplement ( $_data ["custumer_complement"] );
-		$address->setCity ( $_data ["custumer_city"] );
-		$address->setState ( $_data ["custumer_region"] );
-		$_ufs = $this->getListUf ();
-		$address->setStateNm ( $_ufs [$_data ["custumer_region"]] );
-		
-		/*
-		 * if ($address->getCep () != "" && ($address->getCity () == "" || $address->getState () == "")) { try { $addressDAO = AddressDAO::getInstance (); $db = DataBase::getInstance ( $addressDAO->loadDBConfigCep () ); $addressDAO->getAddressByZipCode ( $db, $address ); $db = null; } catch ( PDOException $e ) { $db = null; } }
-		 */
-		
-		$address->setId ( $_data ["custumer_address_id"] );
-		$person->setAddress ( $address );
-		
-		$user = new User ();
-		
-		$person->setId ( $_data ["custumer_person_id"] );
-		$user->setPerson ( $person );
-		
-		$user->setLogin ( $_data ["custumer_login"] );
-		$user->setPassword ( $_data ["custumer_password"] );
-		$user->setStatus ( User::PEND );
-		
-		if($_data ["custumer_status"]!=""){
-			$user->setStatus ( $_data ["custumer_status"] );
-		}
-		
-		if($_data["custumer_obs"]!="")
-			$user->setText ( $_data["custumer_obs"] );
-		
-		$client->setUser ( $user );
-		
-		return $client;
-	}
 	public function validateBean(Client $obj, $validateLogin = true) {
 		$e = new ValidationException ( "Dados incompletos!" );
 		
@@ -154,11 +156,11 @@ class CustumerRegCtrl extends AbstractCtrl {
 					if ($person->getCNPJ () == "") {
 						$e->add ( "CNPJ", "custumer_cnpj", "CNPJ vazio!" );
 					} else if (! Validation::isCNPJ ( $person->getCNPJ () )) {
-						$e->add ( "CNPJ", "custumer_cnpj", "CNPJ inv·lido!" );
+						$e->add ( "CNPJ", "custumer_cnpj", "CNPJ inv√°lido!" );
 					}
 					
 					if ($person->getName () == "") {
-						$e->add ( "Raz„o Social", "custumer_rsoc", "Raz„o Social vazia!" );
+						$e->add ( "Raz√£o Social", "custumer_rsoc", "Raz√£o Social vazia!" );
 					}
 					
 					if ($person->getContact () == "") {
@@ -166,13 +168,13 @@ class CustumerRegCtrl extends AbstractCtrl {
 					}
 					
 					if ($person->getIe () == "") {
-						$e->add ( "I.E.", "custumer_ie", "InscriÁ„o Estadual vazio!" );
+						$e->add ( "I.E.", "custumer_ie", "Inscri√ß√£o Estadual vazio!" );
 					}
 				} elseif ($person->getType () == Person::PF) {
 					if ($person->getCPF () == "") {
 						$e->add ( "CPF", "custumer_cpf", "CPF vazio!" );
 					} else if (! Validation::isCPF ( $person->getCPF () )) {
-						$e->add ( "CPF", "custumer_cpf", "CPF inv·lido" );
+						$e->add ( "CPF", "custumer_cpf", "CPF inv√°lido" );
 					}
 					
 					if ($person->getName () == "") {
@@ -191,13 +193,13 @@ class CustumerRegCtrl extends AbstractCtrl {
 						if ($user->getLogin () == "") {
 							$e->add ( "Login", "custumer_login", "Login vazio!" );
 						} elseif (strlen ( $user->getLogin () ) < 5) {
-							$e->add ( "Login", "custumer_login", "Login: N˙mero de caracteres insuficiente! MÌnimo = 5" );
+							$e->add ( "Login", "custumer_login", "Login: N√∫mero de caracteres insuficiente! M√≠nimo = 5" );
 						}
 						
 						if ($user->getPassword () == "") {
 							$e->add ( "Senha", "custumer_password", "Senha vazia!" );
 						} elseif (strlen ( $user->getPassword () ) < 5) {
-							$e->add ( "Senha", "custumer_password", "Senha: N˙mero de caracteres insuficiente! MÌnimo = 5" );
+							$e->add ( "Senha", "custumer_password", "Senha: N√∫mero de caracteres insuficiente! M√≠nimo = 5" );
 						}
 					}
 					if ($phone != null) {
@@ -210,27 +212,27 @@ class CustumerRegCtrl extends AbstractCtrl {
 								$e->add ( "CEP", "custumer_zipcode", "CEP vazio!" );
 							}
 							if ($address->getCity () == "") {
-								$e->add ( "Cidade", "custumer_city", "Cidade inv·lida!" );
+								$e->add ( "Cidade", "custumer_city", "Cidade inv√°lida!" );
 							}
 							if ($address->getState () == "") {
-								$e->add ( "UF", "custumer_region", "UF inv·lida!" );
+								$e->add ( "UF", "custumer_region", "UF inv√°lida!" );
 							}
 							
 							if ($address->getNumber () == "") {
-								$e->add ( "N˙mero", "custumer_address_number", "N˙mero vazio!" );
+								$e->add ( "N√∫mero", "custumer_address_number", "N√∫mero vazio!" );
 							}
 						} else
-							$e->add ( "CEP", "custumer_zipcode", "Necess·rio os dados obrigatÛrios" );
+							$e->add ( "CEP", "custumer_zipcode", "Necess√°rio os dados obrigat√≥rios" );
 					} else
-						$e->add ( "Telefone", "custumer_phone", "Necess·rio os dados obrigatÛrios" );
+						$e->add ( "Telefone", "custumer_phone", "Necess√°rio os dados obrigat√≥rios" );
 				} else
-					$e->add ( "Login", "custumer_login", "Necess·rio os dados obrigatÛrios" );
+					$e->add ( "Login", "custumer_login", "Necess√°rio os dados obrigat√≥rios" );
 			} else
-				$e->add ( "Tipo de Pessoa", "type_person", "Necess·rio o tipo de Pessoa" );
+				$e->add ( "Tipo de Pessoa", "type_person", "Necess√°rio o tipo de Pessoa" );
 		} else
-			$e->add ( "Tipo de Pessoa", "type_person", "Necess·rio os dados obrigatÛrios" );
+			$e->add ( "Tipo de Pessoa", "type_person", "Necess√°rio os dados obrigat√≥rios" );
 			
-			// conclus„o
+			// conclus√£o
 		if ($e->size () > 0) {
 			throw $e;
 		}
@@ -253,65 +255,85 @@ class CustumerRegCtrl extends AbstractCtrl {
 		
 		$person = $custumer->getUser ()->getPerson ();
 		
-		$subject = "ConfirmaÁ„o de usu·rio KADE Caminhıes";
-		$from = new EmailAddress ( 'contato@kadecaminhoes.com.br', 'Contato KADE Caminhıes' );
+		$subject = "Confirma√ß√£o de usu√°rio KADE Caminh√µes";
+		$from = new EmailAddress ( 'contato@kadecaminhoes.com.br', 'Contato KADE Caminh√µes' );
 		$to [] = new EmailAddress ( $person->getEmail (), $person->getName () );
 		
 		$mail->sendPHPMail ( $from, $to, $subject, $content, "text/html", array (), array (), true );
 	}
 	public function onSaveInter() {
-		$output = array (
-				"result" => 0,
-				"message" => "",
-				"validationException" => array () 
-		);
+			ob_start();
+			$output = array (
+					"result" => 0,
+					"message" => "",
+					"validationException" => array () 
+			);
 		
-		$_validationException = array ();
-		$inTransaction = false;
+			$_validationException = array ();
+			$inTransaction = false;
 		
-		try {
+			try {
+			// Anti-bot: honeypot and minimum form fill time (optional fields in form)
+			$hp = isset($_POST['hp_name']) ? trim($_POST['hp_name']) : '';
+			$form_ts_post = isset($_POST['form_ts']) ? intval($_POST['form_ts']) : 0;
+			if ($hp !== '') {
+				throw new ValidationException('Suspeita de bot detectada');
+			}
+			if ($form_ts_post > 0 && (time() - $form_ts_post) < 3) {
+				$excp = new ValidationException ( "Dados incompletos!" );
+				$excp->add ( "Form", "form_ts", "Envio r√°pido demais. Tente novamente." );
+				throw $excp;
+			}
 			$custumer = $this->getRequestBean ( $_POST );
-			
+		
 			if(User::isUserSuper() && $custumer->getUser()->getPerson()->getId()!= User::getLogged()->getPerson()->getId()){
 				if($_POST ["custumer_captcha"] == "")
 					$_POST ["custumer_captcha"] = $_SESSION ["custumer_captcha"];
 			}
-			
+		
 			$this->validateBean ( $custumer, false );
 			$excp = new ValidationException ( "Dados incompletos!" );
-			
-			// ValidaÁ„o Captcha
-			if ($_POST ["custumer_captcha"] == "")
-				$excp->add ( "CÛdigo", "custumer_captcha", "CÛdigo de seguranÁa vazio!" );
-			elseif ($_SESSION ["custumer_captcha"] != $_POST ["custumer_captcha"])
-				$excp->add ( "CÛdigo", "custumer_captcha", "CÛdigo de seguranÁa inv·lido!" );
-				// conclus„o
+	
+			// Valida√ß√£o Captcha (safe checks and expiry)
+			$posted = isset($_POST["custumer_captcha"]) ? trim($_POST["custumer_captcha"]) : '';
+			$sess = isset($_SESSION["custumer_captcha"]) ? $_SESSION["custumer_captcha"] : '';
+			$sess_ts = isset($_SESSION["custumer_captcha_ts"]) ? intval($_SESSION["custumer_captcha_ts"]) : 0;
+			if ($posted == '')
+				$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo de seguran√ßa vazio!" );
+			else {
+				if ($sess_ts <= 0 || (time() - $sess_ts) > 300) {
+					$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo expirado! Gere um novo c√≥digo." );
+				} else if (mb_strtoupper($sess, 'UTF-8') != mb_strtoupper($posted, 'UTF-8')) {
+					$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo de seguran√ßa inv√°lido!" );
+				}
+			}
+				// conclus√£o
 			if ($excp->size () > 0) {
 				throw $excp;
 			}
-			
+		
 			$this->clientDAO = ClientDAO::getInstance ();
-			
+		
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			$inTransaction = $db->beginTransaction ();
 			$this->clientDAO->update ( $db, $custumer );
-			
+		
 			$userLogged = User::getLogged ();
-			
+		
 			if ($userLogged != null && $custumer->getUser ()->getPerson ()->getId () == $userLogged->getPerson ()->getId ()) {
 				$criteria = new Criteria ();
 				$criteria->eq ( "usr.person_id", $userLogged->getPerson ()->getId () );
 				$userDAO = UserDAO::getInstance ();
 				$userLogged = $userDAO->getSingle ( $db, $criteria );
 				if ($userLogged == null || ($userLogged != null && $userLogged->getLogin () == ""))
-					throw new Exception ( "Usu·rio inv·lido!!" );
-				
+					throw new Exception ( "Usu√°rio inv√°lido!!" );
+			
 				$_SESSION ["user"] = serialize ( $userLogged );
 			}
-			
+		
 			$db->commit ();
 			$db = null;
-			
+		
 			$this->message->setType ( Message::SUCCESS );
 			$this->message->setDesc ( "Cadastro atualizado com sucesso!" );
 		} catch ( ValidationException $e ) {
@@ -333,29 +355,29 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
-						"message" => htmlentities ( "Login j· existente! Informe um outro" ) 
+						"message" => htmlentities ( "Login j√° existente! Informe um outro" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else if (eregi ( 'cpf_UNIQUE', $e->getMessage () )) {
 				$newItem = array (
 						"name" => htmlentities ( "CPF" ),
 						"id" => htmlentities ( "custumer_cpf" ),
-						"message" => htmlentities ( "CPF j· utilizado!" ) 
+						"message" => htmlentities ( "CPF j√° utilizado!" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else if (eregi ( 'cnpj_UNIQUE', $e->getMessage () )) {
 				$newItem = array (
 						"name" => htmlentities ( "CNPJ" ),
 						"id" => htmlentities ( "custumer_cnpj" ),
-						"message" => htmlentities ( "CNPJ j· utilizado!" ) 
+						"message" => htmlentities ( "CNPJ j√° utilizado!" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else {
 				$this->message->setDesc ( $e->getMessage () );
 			}
@@ -368,17 +390,26 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$this->message->setDesc ( $e->getMessage () );
 		}
 		
-		$output ["result"] = $this->message->getType ();
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
-		$output ["validationException"] = $_validationException;
+			$buffer = ob_get_clean();
+			if (trim($buffer) !== '') {
+				// Unexpected output (warnings/notices) detected - log and return a safe JSON error
+				error_log("Unexpected output in onSaveInter(): " . $buffer);
+				header ( "Content-type: application/json; charset=UTF-8" );
+				echo json_encode (array("result"=>0,"message"=>"O sistema est√° indispon√≠vel no momento."));
+				exit();
+			}
 		
-		header ( "Content-type: text/plain" );
-		echo json_encode ( $output );
-		exit ();
+			$output ["result"] = $this->message->getType ();
+			$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+			$output ["validationException"] = $_validationException;
+		
+			header ( "Content-type: application/json; charset=UTF-8" );
+			echo json_encode ( $output );
+			exit ();
 		
 		// $output ["result"] = $this->message->getType ();
 		/*
-		 * $output ["result"] = "error"; $output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>","Tente mais tarde" )); $output ["validationException"] = $_validationException; header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
+		 * $output ["result"] = "error"; $output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>","Tente mais tarde" )); $output ["validationException"] = $_validationException; header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
 		 */
 	}
 	public function getListUf() {
@@ -400,16 +431,35 @@ class CustumerRegCtrl extends AbstractCtrl {
 		$inTransaction = false;
 		
 		try {
+			// Anti-bot: honeypot and minimum form fill time (optional hidden inputs in form)
+			$hp = isset($_POST['hp_name']) ? trim($_POST['hp_name']) : '';
+			$form_ts_post = isset($_POST['form_ts']) ? intval($_POST['form_ts']) : 0;
+			if ($hp !== '') {
+				throw new ValidationException('Suspeita de bot detectada');
+			}
+			if ($form_ts_post > 0 && (time() - $form_ts_post) < 3) {
+				$excpTmp = new ValidationException ( "Dados incompletos!" );
+				$excpTmp->add ( "Form", "form_ts", "Envio r√°pido demais. Tente novamente." );
+				throw $excpTmp;
+			}
 			$custumer = $this->getRequestBean ( $_POST );
 			$this->validateBean ( $custumer );
 			$excp = new ValidationException ( "Dados incompletos!" );
 			
-			// ValidaÁ„o Captcha
-			if ($_POST ["custumer_captcha"] == "")
-				$excp->add ( "CÛdigo", "custumer_captcha", "CÛdigo de seguranÁa vazio!" );
-			elseif ($_SESSION ["custumer_captcha"] != $_POST ["custumer_captcha"])
-				$excp->add ( "CÛdigo", "custumer_captcha", "CÛdigo de seguranÁa inv·lido!" );
-				// conclus„o
+			// Valida√ß√£o Captcha (safe checks and expiry)
+			$posted = isset($_POST["custumer_captcha"]) ? trim($_POST["custumer_captcha"]) : '';
+			$sess = isset($_SESSION["custumer_captcha"]) ? $_SESSION["custumer_captcha"] : '';
+			$sess_ts = isset($_SESSION["custumer_captcha_ts"]) ? intval($_SESSION["custumer_captcha_ts"]) : 0;
+			if ($posted == '')
+				$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo de seguran√ßa vazio!" );
+			else {
+				if ($sess_ts <= 0 || (time() - $sess_ts) > 300) {
+					$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo expirado! Gere um novo c√≥digo." );
+				} else if (mb_strtoupper($sess, 'UTF-8') != mb_strtoupper($posted, 'UTF-8')) {
+					$excp->add ( "C√≥digo", "custumer_captcha", "C√≥digo de seguran√ßa inv√°lido!" );
+				}
+			}
+				// conclus√£o
 			if ($excp->size () > 0) {
 				throw $excp;
 			}
@@ -447,29 +497,29 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
-						"message" => htmlentities ( "Login j· existente! Informe um outro" ) 
+						"message" => htmlentities ( "Login j√° existente! Informe um outro" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else if (eregi ( 'cpf_UNIQUE', $e->getMessage () )) {
 				$newItem = array (
 						"name" => htmlentities ( "CPF" ),
 						"id" => htmlentities ( "custumer_cpf" ),
-						"message" => htmlentities ( "CPF j· utilizado!" ) 
+						"message" => htmlentities ( "CPF j√° utilizado!" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else if (eregi ( 'cnpj_UNIQUE', $e->getMessage () )) {
 				$newItem = array (
 						"name" => htmlentities ( "CNPJ" ),
 						"id" => htmlentities ( "custumer_cnpj" ),
-						"message" => htmlentities ( "CNPJ j· utilizado!" ) 
+						"message" => htmlentities ( "CNPJ j√° utilizado!" ) 
 				);
 				$_validationException [] = $newItem;
 				
-				$this->message->setDesc ( "Dados inv·lidos!" );
+				$this->message->setDesc ( "Dados inv√°lidos!" );
 			} else {
 				$this->message->setDesc ( $e->getMessage () );
 			}
@@ -482,24 +532,35 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$this->message->setDesc ( $e->getMessage () );
 		}
 		
+		$buffer = ob_get_clean();
+		if (trim($buffer) !== '') {
+			// Unexpected output (warnings/notices) detected - log and return a safe JSON error
+			error_log("Unexpected output in onSaveWeb(): " . $buffer);
+			header ( "Content-type: application/json; charset=UTF-8" );
+			echo json_encode (array("result"=>0,"message"=>"O sistema est√° indispon√≠vel no momento."));
+			exit();
+		}
+		
 		$output ["result"] = $this->message->getType ();
-		$output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
+		$output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );
 		$output ["validationException"] = $_validationException;
 		
-		header ( "Content-type: text/plain" );
+		header ( "Content-type: application/json; charset=UTF-8" );
 		echo json_encode ( $output );
 		exit ();
 		
 		// $output ["result"] = $this->message->getType ();
 		/*
-		 * $output ["result"] = "error"; $output ["message"] = iconv ( "ISO-8859-1", "UTF-8", str_replace("\\n","<br/>","Tente mais tarde" )); $output ["validationException"] = $_validationException; header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
+		 * $output ["result"] = "error"; $output ["message"] = iconv ( "UTF-8", "UTF-8", str_replace("\\n","<br/>","Tente mais tarde" )); $output ["validationException"] = $_validationException; header ( "Content-type: text/plain" ); echo json_encode ( $output ); exit ();
 		 */
 	}
 	public function getImageCaptcha() {
 		$dir = dirname ( dirname ( dirname ( __FILE__ ) ) );
-		$codigoCaptcha = substr ( str_shuffle ( "AaBbCcDdEeFfGgHhIiJjKkLlMmNnPpQqRrSsTtUuVvYyXxWwZz23456789" ), 0, 4 );
+		// stronger captcha: 6 chars and timestamp for expiry
+		$codigoCaptcha = substr ( str_shuffle ( "AaBbCcDdEeFfGgHhIiJjKkLlMmNnPpQqRrSsTtUuVvYyXxWwZz23456789" ), 0, 6 );
 		
 		$_SESSION ["custumer_captcha"] = $codigoCaptcha;
+		$_SESSION ["custumer_captcha_ts"] = time();
 		
 		$imagemCaptcha = imagecreatefrompng ( $dir . "/images/fundocaptch.png" );
 		

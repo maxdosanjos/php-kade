@@ -38,7 +38,7 @@ class PersonDAO {
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 		
 		try {			
 			// Atualizar Telefone
@@ -46,7 +46,7 @@ class PersonDAO {
 			$phoneDAO->update ( $db, $phone );
 			$obj->setPhone($phone);
 			
-			// Atualizar Endereço
+			// Atualizar EndereÃ§o
 			$addressDAO = AddressDAO::getInstance ();
 			$addressDAO->update ( $db, $address );
 			$obj->setAddress($address);
@@ -101,7 +101,7 @@ class PersonDAO {
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conexão Inválida");
+			throw new PDOException("ConexÃ£o InvÃ¡lida");
 		
 		$criteria = null;
 		
@@ -111,7 +111,7 @@ class PersonDAO {
 			$phoneDAO->insert ( $db, $phone );
 			$obj->setPhone($phone);
 			
-			// Criar Endereço
+			// Criar EndereÃ§o
 			$addressDAO = AddressDAO::getInstance ();
 			$addressDAO->insert ( $db, $address );
 			$obj->setAddress($address);
@@ -181,7 +181,7 @@ class PersonDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 		$result = $db->query ( $sql );
 	

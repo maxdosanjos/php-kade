@@ -20,15 +20,15 @@ $message    	  = $ctrlMsgLogQry->getMessage();
 ?>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
 <link type="text/css" rel="stylesheet" media="screen" href="../shared/css/view_log_msg.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/MsgLogBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ViewInt.getInstance().initQuery();MsgLogBean.getInstance().initQuery();});</script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/MsgLogBean.class.js?f=1"></script>
+<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();MsgLogBean.getInstance().initQuery();});</script>
 <?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
+	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
 <?	} ?>
 <div id="div_body_msg_log" class="div_body">
 	<div id="div_inter_esq">
@@ -40,9 +40,9 @@ $message    	  = $ctrlMsgLogQry->getMessage();
 				<fieldset id="fieldset_filter" class="ui-widget ui-widget-content ui-corner-all">
 					<legend>Logs de SMS</legend>
 					<div class="div_input">
-						<label for="msglog_dt_init"  class="label_input">Período</label>
+						<label for="msglog_dt_init"  class="label_input">PerÃ­odo</label>
 						<input type="text" id="msglog_dt_init" name="msglog_dt_init" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrInit()->format("d.m.Y")?>"/>
-						 até 
+						 atÃ© 
 						<input type="text" id="msglog_dt_end" name="msglog_dt_end" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrEnd()->format("d.m.Y")?>"/>
 					</div>
 					<div class="div_input">						
@@ -79,7 +79,7 @@ $message    	  = $ctrlMsgLogQry->getMessage();
 				<thead class="table_head">
 					<tr>
 						<th class="td_dthr">Data/Hora</th>
-						<th class="td_name">Nº telefone</th>
+						<th class="td_name">NÂº telefone</th>
 						<th class="td_name">Mensagem</th>
 						<th class="td_dthr">Tipo</th>
 						<th class="td_name">Log</th>
@@ -97,7 +97,7 @@ $message    	  = $ctrlMsgLogQry->getMessage();
 							if($json[0]->message == ""){
 								$json[0]->message = $msgLogList->log;
 							}else{
-								$json[0]->message = html_entity_decode(iconv (  "UTF-8","ISO-8859-1", $json[0]->message));
+								$json[0]->message = html_entity_decode(iconv (  "UTF-8","UTF-8", $json[0]->message));
 							}
 					?>
 					<tr class="tr_hover">
@@ -113,22 +113,22 @@ $message    	  = $ctrlMsgLogQry->getMessage();
 			</table>
 			<div id="table_foot">
 				<div class="details_pag">
-					Registro(s) por Página: <?=$pagination->getEndLimit();?>
+					Registro(s) por PÃ¡gina: <?=$pagination->getEndLimit();?>
 					<input type="hidden" id="param_regpag" class="xtextfield numeric formfield" name="param_regpag" value="<?=$pagination->getEndLimit();?>" size="3" readonly="true" /><br/>
-					Número de Resultados: <span title="De - Até"><?=$pagination->showDetailsPag();?></span> 
+					NÃºmero de Resultados: <span title="De - AtÃ©"><?=$pagination->showDetailsPag();?></span> 
 										  <span title="Total de Registros">(<?=$pagination->getTotalReg();?>)</span>
 				</div>
 				<div class="nav_pag"> 
 					<div class="nav_pag_left">
 					<? if($pagination->getPagCurrent()!=1) { ?>		        
-						<a href="#" class="nav_first" title="Ir para primeira página" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
-						<a href="#" class="nav_prev" title="Ir para página anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
+						<a href="#" class="nav_first" title="Ir para primeira pÃ¡gina" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
+						<a href="#" class="nav_prev" title="Ir para pÃ¡gina anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
 					<? } ?>
 					</div>
 					<div class="nav_pag_right">
 					<? if($pagination->getPagCurrent()!= $pagination->getTotalPag() && $pagination->getTotalReg() > 0) { ?> 
-						<a href="#" class="nav_next" title="Ir para próxima página" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
-						<a href="#" class="nav_end" title="Ir para última página"  lang="<?=$pagination->getTotalPag();?>"></a>
+						<a href="#" class="nav_next" title="Ir para prÃ³xima pÃ¡gina" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
+						<a href="#" class="nav_end" title="Ir para Ãºltima pÃ¡gina"  lang="<?=$pagination->getTotalPag();?>"></a>
 					 <?} ?>
 					</div>
 					 <div class="pags_number">

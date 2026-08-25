@@ -64,7 +64,7 @@ class ClientDAO{
 		else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 	
 		$result    =  $db->query($sql);
 		
@@ -78,7 +78,7 @@ class ClientDAO{
 				$userDAO = UserDAO::getInstance ();
 				$user = $userDAO->getSingle ( $db, $critUser );
 				if($user==null || $user->getLogin() == ""){
-					throw new PDOException("Cliente n„o encontrado!! #Sem usu·rio");
+					throw new PDOException("Cliente n√£o encontrado!! #Sem usu√°rio");
 				}
 			
 				$client = new Client();
@@ -130,7 +130,7 @@ class ClientDAO{
 		else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 	
 		$result    =  $db->query($sql);
 	
@@ -149,7 +149,7 @@ class ClientDAO{
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 			
 		$sql = "
 			    SELECT 	cli.user_person_id
@@ -175,7 +175,7 @@ class ClientDAO{
 			$userDAO = UserDAO::getInstance ();
 			$user = $userDAO->getSingle ( $db, $critUser );	
 			if($user==null || $user->getLogin() == ""){
-				throw new PDOException("Cliente n„o encontrado!! #Sem usu·rio");
+				throw new PDOException("Cliente n√£o encontrado!! #Sem usu√°rio");
 			}
 		
 			$client = new Client();	
@@ -194,7 +194,7 @@ class ClientDAO{
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 		
 		$sql = "
 				SELECT 	COUNT(cli.user_person_id) AS total
@@ -219,7 +219,7 @@ class ClientDAO{
 				
 				break;
 			default :
-				throw new PDOException ( "Tipo de Pessoa inv·lida" );
+				throw new PDOException ( "Tipo de Pessoa inv√°lida" );
 		}
 		
 		if ($dbConfig instanceof DBConfig)
@@ -227,7 +227,7 @@ class ClientDAO{
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conex„o inv·lida" );
+			throw new PDOException ( "Conex√£o inv√°lida" );
 		
 		$result = $db->query ( $sql );
 		
@@ -249,7 +249,7 @@ class ClientDAO{
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 			
 		$user 	    	= $obj->getUser ();
 		$person 	    = $user->getPerson ();
@@ -282,7 +282,7 @@ class ClientDAO{
 		}else if($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException("Conex„o Inv·lida");
+			throw new PDOException("Conex√£o Inv√°lida");
 		
 		
 		$user 	    	= $obj->getUser ();
@@ -296,11 +296,11 @@ class ClientDAO{
 			
 			if ($person->getType () == Person::PJ && $person->getCnpj()!="")
 			{
-				// Verifica se j· existe cliente com esse CNPJ/CPF
+				// Verifica se j√° existe cliente com esse CNPJ/CPF
 				$qtde = $this->verifyExist($db,$obj);
 				
 				if($qtde > 0){
-					throw new PDOException("CNPJ j· est· sendo utilizado por um cliente");
+					throw new PDOException("CNPJ j√° est√° sendo utilizado por um cliente");
 				}				
 				
 				$personTypeDAO = PersonEntityDAO::getInstance ();
@@ -309,11 +309,11 @@ class ClientDAO{
 			elseif ($person->getType () == Person::PF  && $person->getCpf()!="")
 			{
 			
-				// Verifica se j· existe cliente com esse CNPJ/CPF
+				// Verifica se j√° existe cliente com esse CNPJ/CPF
 				$qtde = $this->verifyExist($db,$obj);
 				
 				if($qtde > 0){
-					throw new PDOException("CPF j· est· sendo utilizado por um cliente");
+					throw new PDOException("CPF j√° est√° sendo utilizado por um cliente");
 				}	
 				
 				$personTypeDAO = PersonIndividualDAO::getInstance ();
@@ -356,7 +356,7 @@ class ClientDAO{
 			
 			$user->setPerson($person);
 			
-			// Criar Usu·rio
+			// Criar Usu√°rio
 			$userDAO = UserDAO::getInstance ();
 			$userDAO->insert ( $db, $user );	
 			
@@ -371,7 +371,7 @@ class ClientDAO{
 			$critProfile = null;
 			
 			if($profile==null)
-				throw new PDOException("Perfil inv·lido");
+				throw new PDOException("Perfil inv√°lido");
 			
 			// Atrelar ao perfil cliente normal
 			$userProfile = new UserProfile($user,$profile);			
