@@ -8,30 +8,35 @@ $popUp	= $viewExtCtrl->getWindowPopUp();
 $msgPeriod = $viewExtCtrl->getMsgPeriod();
 $user = User::getLogged();
 
-header("Content-Type: text/html; charset=ISO-8859-1",true);
+header("Content-Type: text/html; charset=UTF-8",true);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-	<title>Kade Caminhões</title>
+	<title>Kade CaminhÃµes</title>
 		<meta http-equiv="Content-Language" content="pt-br" />
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-		<meta name="title" content="Kade Caminhões"/>
-		<meta name="description" content="Trazemos informações em tempo real de veículos disponíveis em todo o território nacional, agilizando seu processo de embarque."/>
+		<meta name="title" content="Kade CaminhÃµes"/>
+		<meta name="description" content="Trazemos informaÃ§Ãµes em tempo real de veÃ­culos disponÃ­veis em todo o territÃ³rio nacional, agilizando seu processo de embarque."/>
 		<meta name="robots" content="index, follow">
 		<link rel="shortcut icon" href="../shared/images/favicon.ico"/>
+		<!-- Bootstrap 5 (CDN) -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1FQ784/j6cY/iJTQUOhcWr7x9JvJmZQ5stwEULTy" crossorigin="anonymous">
+		<!-- Project styles (kept after bootstrap to allow overrides) -->
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/jquery-ui/jquery-ui.min.css?f=1"/>
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default.css?f=1"/>
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/index_ext.css?f=1"/>
+		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/bootstrap-helpers.css?f=1"/>
 		<link rel="alternate" hreflang="pt-BR" href="http://<?=$_SERVER["HTTP_HOST"];?>">
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery.min.js?f=1"></script>
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery-migrate-1.2.1.js?f=1"></script>
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/jquery-ui.min.js?f=1"></script>
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/notify.min.js?f=1"></script>
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/System.class.js?f=1"></script>
-		<script type="text/javascript" language="javascript" charset="ISO-8859-1" src="../shared/js/ViewExt.class.js?f=1"></script>
-		<script language="javascript" type="text/javascript" charset="iso-8859-1">$(document).ready(function(){ ViewExt.getInstance().initQuery();});</script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.min.js?f=1"></script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery-migrate-1.2.1.js?f=1"></script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery-ui.min.js?f=1"></script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/notify.min.js?f=1"></script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/System.class.js?f=1"></script>
+		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewExt.class.js?f=1"></script>
+		<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ ViewExt.getInstance().initQuery();});</script>
 		<? include_once("analyticstracking.php");?>
 	</head>
 	<body>
@@ -45,12 +50,12 @@ header("Content-Type: text/html; charset=ISO-8859-1",true);
 		<div class="header">
 			<div class="controle">
 				<h1 class="logo">
-					<a href="/" title="voltar para página inicial">Kade Caminhões</a>
+					<a href="/" title="voltar para pÃ¡gina inicial">Kade CaminhÃµes</a>
 				</h1>
 				<ul class="navigation">
 					<li><a href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" 	 id="a_como_func" title="Quem somos?" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::QUEM_SOMOS);?>">Quem somos?</a></li>
-					<li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" 	 id="a_cad_vei"   title="Cadastre seu veículo" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>">Cadastre seu veículo</a></li>
-					<li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt"   title="Busca por veículos" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>">Busca por veículos</a></li>
+					<li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" 	 id="a_cad_vei"   title="Cadastre seu veÃ­culo" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>">Cadastre seu veÃ­culo</a></li>
+					<li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt"   title="Busca por veÃ­culos" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>">Busca por veÃ­culos</a></li>
 					<?php if(!User::isLogged()){?>
 					<li><a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" 	 id="a_cad_assi"  title="Cadastre-se" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_CLIENTE);?>">Cadastre-se</a></li>
 					<?php } else {?>
@@ -101,8 +106,8 @@ header("Content-Type: text/html; charset=ISO-8859-1",true);
 					<div id="div_esq_foot">
 						<ul class="navigation">
 							<li><a href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" 	 id="a_como_func_foot"  title="Quem somos?">Quem somos?</a></li>
-							<li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/"   id="a_cad_vei_foot"    title="Cadastre seu veículo">Cadastre seu veículo</a></li>
-							<li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt_foot"    title="Busca por veículos">Busca por veículos</a></li>
+							<li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/"   id="a_cad_vei_foot"    title="Cadastre seu veÃ­culo">Cadastre seu veÃ­culo</a></li>
+							<li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt_foot"    title="Busca por veÃ­culos">Busca por veÃ­culos</a></li>
 							<?php if(!User::isLogged()){?>
 								<li><a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" 	 id="a_cad_assi_foot"  title="Cadastre-se">Cadastre-se</a></li>
 							<?php } else {?>
@@ -111,13 +116,13 @@ header("Content-Type: text/html; charset=ISO-8859-1",true);
 						</ul>				
 					</div>
 					<div id="div_dir_foot">
-						<span id="span_logo_fr">É barato, rápido e fácil!</span>
+						<span id="span_logo_fr">Ã‰ barato, rÃ¡pido e fÃ¡cil!</span>
 						<!-- <span id="span_pag_txt">Formas de Pagamento:</span>
 						<span>
 							<img src="../shared/images/logo_pagseguro.gif" width="180px" height="41px" />
 						</span>
 						 -->				
-						<span id="span_cpy_ri">Copyright © 2012-<?=date("Y")?> Kade Caminhoes - Todos os direitos reservados.</span>
+						<span id="span_cpy_ri">Copyright Â© 2012-<?=date("Y")?> Kade Caminhoes - Todos os direitos reservados.</span>
 					</div>
 					<span class="span_both"></span>
 				</div>
@@ -126,11 +131,13 @@ header("Content-Type: text/html; charset=ISO-8859-1",true);
 		<!-- .footer -->
 		<div id="fix-facebook">
 			<p class="bt-link bt-face">
-				<a href="https://www.facebook.com/KadeCaminhoes" target="_blank" title="Acesse a Página Facebook da Kade"> 
-					<img src="../shared/images/ico-facebook.jpg" alt="Acesse a Página Facebook da Kade" title="Acesse a Página Facebook da Kade" width="61px" height="61px">
+				<a href="https://www.facebook.com/KadeCaminhoes" target="_blank" title="Acesse a PÃ¡gina Facebook da Kade"> 
+					<img src="../shared/images/ico-facebook.jpg" alt="Acesse a PÃ¡gina Facebook da Kade" title="Acesse a PÃ¡gina Facebook da Kade" width="61px" height="61px">
 				</a>
 			</p>
 		</div>
+		<!-- Bootstrap bundle (CDN) -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 		<?php  } ?>
 	</body>
 </html>

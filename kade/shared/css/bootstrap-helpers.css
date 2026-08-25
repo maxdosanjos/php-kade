@@ -1,0 +1,17 @@
+/* Minimal compatibility helpers for Bootstrap integration.
+   Keep overrides small and scoped so legacy styles keep working.
+   Add more rules here during incremental migration. */
+
+.header .controle {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 15px;
+}
+
+.logo a { display:block; }
+
+.navigation { list-style:none; margin:0; padding:0; }
+.navigation li { display:inline-block; margin-right:8px; }
+
+/* Ensure images scale */
+img { max-width:100%; height:auto; }
