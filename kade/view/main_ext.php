@@ -22,8 +22,9 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<meta name="description" content="Trazemos informações em tempo real de veículos disponíveis em todo o território nacional, agilizando seu processo de embarque."/>
 		<meta name="robots" content="index, follow">
 		<link rel="shortcut icon" href="../shared/images/favicon.ico"/>
-		<!-- Bootstrap 5 (CDN) -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1FQ784/j6cY/iJTQUOhcWr7x9JvJmZQ5stwEULTy" crossorigin="anonymous">
+		<!-- Bootswatch Lux (Bootstrap 5 theme, CDN) -->
+		<link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/lux/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 		<!-- Project styles (kept after bootstrap to allow overrides) -->
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/jquery-ui/jquery-ui.min.css?f=1"/>
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default.css?f=1"/>
@@ -47,56 +48,43 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<? $viewExtCtrl->includePage(); 
 		}else{
 		?>
-		<div class="header">
-			<div class="controle">
-				<h1 class="logo">
-					<a href="/" title="voltar para página inicial">Kade Caminhões</a>
-				</h1>
-				<ul class="navigation">
-					<li><a href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" 	 id="a_como_func" title="Quem somos?" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::QUEM_SOMOS);?>">Quem somos?</a></li>
-					<li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" 	 id="a_cad_vei"   title="Cadastre seu veículo" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>">Cadastre seu veículo</a></li>
-					<li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt"   title="Busca por veículos" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>">Busca por veículos</a></li>
-					<?php if(!User::isLogged()){?>
-					<li><a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" 	 id="a_cad_assi"  title="Cadastre-se" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_CLIENTE);?>">Cadastre-se</a></li>
-					<?php } else {?>
-					<li><a href="/<?=ViewExtCtrl::DATA_USER;?>/" 	 id="a_dad_assi"  title="Meus Dados" class="<?=$viewExtCtrl->defineClass(ViewExtCtrl::DATA_USER);?>">Meus Dados</a></li>
-					<?php } ?>
-				</ul>
-				<div id="glb-menu_div_login">
-					<?php if(!User::isLogged()){?>
-					<div id="div_form_login">					
-						<form name="FormLoginTopoEmpresa" id="FormLoginTopoEmpresa" method="POST" action="../LoginQueryCtrl.ctrlExt/onLogin">
-							<input type="text" size="16" maxlength="20" class="mask.login input_clear input03b" placeholder="Seu login" name="user_login" id="user_login" title="seu login" alt="seu login">
-							<input type="password" value="" placeholder="Sua senha" size="13" maxlength="40" name="user_password" id="user_password" class="input03b cor-cinza5 input_clear" title="sua senha" alt="sua senha">			
-							<input type="hidden" value="ok" name="user_rup" />
-							<button id="" class="btn_default submit_login" title="digite o seu login e senha e clique para acessar sua conta" alt="digite o seu login e senha e clique para acessar sua conta">
-								<div class="div_btn_with_image"></div>
-								<span>Entrar</span>
-							</button>
-						</form>
-					</div>
-					<div class="glb-menu_div_login_msg">
-						<a href="/<?=ViewExtCtrl::NEW_PASSWRD;?>/" class="link-cinza4"> Esqueceu seu login ou sua senha?</a>
-					</div>
-					<?php } else { ?>
-						<div id="div_form_login">					
-							<form name="FormLoginTopoEmpresa" id="FormLoginTopoEmpresa" method="POST" action="../LoginQueryCtrl.ctrlExt/onLogof">				
-								<div id="div_content_logof">								
-									<div id="div_name_user_top">
-										<a href="/<?=ViewExtCtrl::DATA_USER;?>/" title="Meus Dados"> <?=$msgPeriod?>, <?=$user->getPerson()->getName()?></a>
-									</div>
-									<button id="" class="btn_default submit_login" title="clique aqui para sair" alt="clique aqui para sair">
-										<div class="div_btn_with_image"></div>
-										<span>Sair</span>
-									</button>
-								</div>
-							</form>
-						</div>
-					<?php } ?>
-					</br style="clear:both">
-				</div>
+
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		  <div class="container-fluid">
+			<a class="navbar-brand" href="/" title="voltar para página inicial">Kade Caminhões</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#kadeNavbar" aria-controls="kadeNavbar" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="kadeNavbar">
+			  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item"><a class="nav-link <?=$viewExtCtrl->defineClass(ViewExtCtrl::QUEM_SOMOS);?>" href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" id="a_como_func" title="Quem somos?">Quem somos?</a></li>
+				<li class="nav-item"><a class="nav-link <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>" href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" id="a_cad_vei" title="Cadastre seu veículo">Cadastre seu veículo</a></li>
+				<li class="nav-item"><a class="nav-link <?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>" href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt" title="Busca por veículos">Busca por veículos</a></li>
+				<?php if(!User::isLogged()){?>
+				<li class="nav-item"><a class="nav-link <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_CLIENTE);?>" href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" id="a_cad_assi" title="Cadastre-se">Cadastre-se</a></li>
+				<?php } else {?>
+				<li class="nav-item"><a class="nav-link <?=$viewExtCtrl->defineClass(ViewExtCtrl::DATA_USER);?>" href="/<?=ViewExtCtrl::DATA_USER;?>/" id="a_dad_assi" title="Meus Dados">Meus Dados</a></li>
+				<?php } ?>
+			  </ul>
+			  <div class="d-flex align-items-center">
+			  <?php if(!User::isLogged()){?>
+				<form class="d-flex" name="FormLoginTopoEmpresa" id="FormLoginTopoEmpresa" method="POST" action="../LoginQueryCtrl.ctrlExt/onLogin">
+					<input type="text" name="user_login" id="user_login" placeholder="Seu login" class="form-control form-control-sm me-2 mask.login input_clear input03b" size="16" maxlength="20" title="seu login" alt="seu login">
+					<input type="password" name="user_password" id="user_password" placeholder="Sua senha" class="form-control form-control-sm me-2 input03b cor-cinza5 input_clear" size="13" maxlength="40" title="sua senha" alt="sua senha">
+					<input type="hidden" value="ok" name="user_rup" />
+					<button type="submit" class="btn btn-light btn-sm me-2 btn_default submit_login" title="digite o seu login e senha e clique para acessar sua conta"><i class="bi bi-box-arrow-in-right"></i> <span class="d-none d-sm-inline">Entrar</span></button>
+				</form>
+				<a href="/<?=ViewExtCtrl::NEW_PASSWRD;?>/" class="link-cinza4 text-light">Esqueceu seu login ou sua senha?</a>
+			  <?php } else { ?>
+				<form name="FormLoginTopoEmpresa" id="FormLoginTopoEmpresa" method="POST" action="../LoginQueryCtrl.ctrlExt/onLogof" class="d-flex align-items-center">
+					<span class="me-3 text-light"><a href="/<?=ViewExtCtrl::DATA_USER;?>/" class="text-light" title="Meus Dados"><?=$msgPeriod?>, <?=$user->getPerson()->getName()?></a></span>
+					<button type="submit" class="btn btn-light btn-sm btn_default submit_login" title="clique aqui para sair"><i class="bi bi-box-arrow-right"></i> <span class="d-none d-sm-inline">Sair</span></button>
+				</form>
+			  <?php } ?>
+			  </div>
 			</div>
-		</div>		
+		  </div>
+		</nav>
 		<div id="div_middle">
 			<?php $viewExtCtrl->includePage();?>
 		</div>
