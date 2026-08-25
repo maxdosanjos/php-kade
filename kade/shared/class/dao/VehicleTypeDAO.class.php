@@ -35,7 +35,7 @@ class VehicleTypeDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 		
 		$result = $db->query ( $sql );
 		
@@ -74,7 +74,7 @@ class VehicleTypeDAO {
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
-			throw new PDOException ( "Conexão inválida" );
+			throw new PDOException ( "ConexÃ£o invÃ¡lida" );
 	
 		$result = $db->query ( $sql );
 	
@@ -88,28 +88,36 @@ class VehicleTypeDAO {
 		return 0; 
 	}
 	public function getArrayCache($dbConfig) {
-		//$_SESSION ["list_vehicle_type"] = "";
-		if($_SESSION ["list_vehicle_type"]!=""){
-			$_result = unserialize ( $_SESSION ["list_vehicle_type"] );
-		}
-		
-		if (sizeof ( $_result ) > 0) {
-			return $_result;
-		} else {
-			$_result = array ();
-			
-			try {
-				$_result = $this->getArray ( $dbConfig );
-				$_SESSION["list_vehicle_type"] = serialize($_result);
-			} catch ( PDOException $e ) {
-				throw $e;
+			// Use defensive checks for session cache
+			$_result = array();
+			if (isset($_SESSION) && isset($_SESSION["list_vehicle_type"]) && $_SESSION["list_vehicle_type"] != "") {
+				try {
+					$_tmp = @unserialize($_SESSION["list_vehicle_type"]);
+					if (is_array($_tmp)) {
+						$_result = $_tmp;
+					}
+				} catch ( Exception $e ) {
+					// ignore and fallback to fetching from DB
+				}
 			}
+		
+			if (count($_result) > 0) {
+				return $_result;
+			} else {
+				try {
+					$_result = $this->getArray ( $dbConfig );
+					if (is_array($_result)) {
+						if (isset($_SESSION)) $_SESSION["list_vehicle_type"] = serialize($_result);
+					}
+				} catch ( PDOException $e ) {
+					throw $e;
+				}
+			}
+		
+			if (!is_array($_result))
+				$_result = array ();
+		
+			return $_result;
 		}
-		
-		if (sizeof ( $_result ) <= 0)
-			$_result = array ();
-		
-		return $_result;
-	}
 }
 ?>
