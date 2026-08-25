@@ -14,7 +14,7 @@ body { background-color: #ffffff; font-family: 'Poppins', sans-serif; }
 .header-grid .menu-wrap { justify-self: center; }
 
 /* Shadow and spacing for header */
-.site-header { box-shadow: 0 4px 18px rgba(2,6,23,0.08); }
+.site-header { box-shadow: 0 4px 18px rgba(2,6,23,0.08); position: relative; z-index: 60; }
 .site-header .logo-wrap img { border-radius: 6px; }
 
 /* Login card sizing and look */
@@ -29,23 +29,32 @@ body { background-color: #ffffff; font-family: 'Poppins', sans-serif; }
 /* Hover effect for menu links */
 .menu-link { transition: color .18s ease, transform .18s ease; }
 .menu-link:hover { color: #0b5fff; transform: translateY(-3px); }
+.menu-link { font-size: 0.95rem; padding: 6px 4px; }
 
-/* Hero styles */
-.hero { background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0)); }
-.hero h1 { color: #0f1724; }
+/* Hide legacy sliders that conflict with the new hero */
+.pix_diapo, .pix_background_diapo, .pix_pag_back, .pix_pag, .pix_slider, .pix_diapo .elemHover { display: none !important; }
+
+/* Hero styles with lower stacking context */
+.hero { z-index: 10; position: relative; background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0)); }
+.hero h1 { color: #0f1724; max-width: 42rem; }
 .hero p { color: #475569; }
+.hero img { object-fit: cover; height: 220px; }
 
 /* CTA styles fallback */
 a.bg-kade-primary { background-color: #0b5fff; }
 a.bg-kade-primary:hover { background-color: #08327a; }
 
 /* Ensure main content has gap from hero */
-#div_middle { padding-top: 1rem; }
+#div_middle { padding-top: .5rem; }
+
+/* Reduce header padding to compact the top area */
+.header-grid { padding-top: .4rem; padding-bottom: .4rem; }
 
 /* Responsive tweaks */
 @media (max-width: 767px) {
-    .header-grid { grid-template-columns: 1fr; text-align: center; gap: .75rem; }
-    .login-card { margin: 0 auto; }
-    .login-card .input_clear { width: 100%; display:block; }
-    .menu-wrap ul { flex-wrap: wrap; justify-content:center; }
+   .header-grid { grid-template-columns: 1fr; text-align: center; gap: .75rem; }
+   .login-card { margin: 0 auto; }
+   .login-card .input_clear { width: 100%; display:block; }
+   .menu-wrap ul { flex-wrap: wrap; justify-content:center; }
+   .hero img { height: 160px; }
 }
