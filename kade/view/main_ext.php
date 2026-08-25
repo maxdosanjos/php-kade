@@ -24,8 +24,9 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<link rel="shortcut icon" href="../shared/images/favicon.ico"/>
 		<!-- Tailwind CSS (Play CDN) -->
 		<script src="https://cdn.tailwindcss.com"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 		<script>
-		  // Tailwind config: small container max-width to match legacy layout
+		  // Tailwind config: small container max-width to match legacy layout and custom fonts/colors
 		  tailwind.config = {
 		    theme: {
 		      container: {
@@ -34,7 +35,11 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		      },
 		      extend: {
 		        colors: {
-		          'kade-primary': '#0b5fff'
+		          'kade-primary': '#0b5fff',
+		          'kade-accent': '#0a3d8f'
+		        },
+		        fontFamily: {
+		          sans: ['Poppins', 'ui-sans-serif', 'system-ui']
 		        }
 		      }
 		    }
@@ -126,6 +131,26 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		    </div>
 		  </div>
 		</header>
+			
+		<!-- Hero / Banner -->
+		<section class="hero relative">
+		  <div class="container mx-auto px-4">
+		    <div class="grid grid-cols-12 gap-4 items-center py-12">
+		      <div class="col-span-12 md:col-span-7">
+		        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">Conectando caminhões e cargas em todo o Brasil</h1>
+		        <p class="mt-4 text-slate-600">Encontre fretes ou divulgue disponibilidade de veículos com rapidez e segurança.</p>
+		        <div class="mt-6 flex flex-wrap gap-3">
+		          <a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" class="inline-block bg-kade-primary hover:bg-kade-accent text-white font-medium rounded-lg px-5 py-3">Buscar veículos</a>
+		          <a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" class="inline-block border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg px-4 py-3">Cadastre seu veículo</a>
+		        </div>
+		      </div>
+		      <div class="col-span-12 md:col-span-5 hidden md:block">
+		        <img src="../shared/images/banner_slider1.jpg" alt="Banner" class="rounded-lg shadow-lg object-cover w-full h-64">
+		      </div>
+		    </div>
+		  </div>
+		</section>
+			
 		<div id="div_middle">
 			<?php $viewExtCtrl->includePage();?>
 		</div>
