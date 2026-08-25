@@ -35,8 +35,11 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		      },
 		      extend: {
 		        colors: {
-		          'kade-primary': '#0b5fff',
-		          'kade-accent': '#0a3d8f'
+		          // primary: deep navy similar to logistics themes
+		          'kade-primary': '#0b3b6f',
+		          // accent: energetic orange for CTAs
+		          'kade-accent': '#ff8a00',
+		          'kade-muted': '#6b7280'
 		        },
 		        fontFamily: {
 		          sans: ['Poppins', 'ui-sans-serif', 'system-ui']

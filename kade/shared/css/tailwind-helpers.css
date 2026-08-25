@@ -41,8 +41,17 @@ body { background-color: #ffffff; font-family: 'Poppins', sans-serif; }
 .hero img { object-fit: cover; height: 220px; }
 
 /* CTA styles fallback */
-a.bg-kade-primary { background-color: #0b5fff; }
-a.bg-kade-primary:hover { background-color: #08327a; }
+a.bg-kade-primary { background-color: #0b3b6f; color: #fff; box-shadow: 0 6px 18px rgba(11,59,111,0.12); }
+a.bg-kade-primary:hover { background-color: #092b55; }
+a.cta-accent { background-color: #ff8a00; color: #fff; box-shadow: 0 8px 20px rgba(255,138,0,0.14); }
+a.cta-accent:hover { background-color: #e67600; }
+
+/* Button primary (used for header login) */
+button.bg-kade-primary { background-color: #0b3b6f; }
+button.bg-kade-primary:hover { background-color: #092b55; }
+
+/* Muted text */
+.text-kade-muted { color: #6b7280; }
 
 /* Ensure main content has gap from hero */
 #div_middle { padding-top: .5rem; }
