@@ -45,6 +45,7 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default.css?f=1"/>
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/index_ext.css?f=1"/>
 		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/bootstrap-helpers.css?f=1"/>
+		<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/tailwind-helpers.css?f=1"/>
 		<link rel="alternate" hreflang="pt-BR" href="http://<?=$_SERVER["HTTP_HOST"];?>">
 		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.min.js?f=1"></script>
 		<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery-migrate-1.2.1.js?f=1"></script>
@@ -64,30 +65,47 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		}else{
 		?>
 
-		<header class="bg-white">
+		<!-- Top contact bar -->
+		<div class="topbar bg-slate-900 text-white text-sm">
+		  <div class="container mx-auto px-4 flex justify-between items-center py-1">
+		    <div class="flex items-center space-x-4">
+		      <div>📞 (41) 1234-5678</div>
+		      <div>✉️ contato@kadecaminhoes.com.br</div>
+		    </div>
+		    <div class="flex items-center space-x-3">
+		      <a href="#" class="text-white hover:underline">Entrar</a>
+		      <a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" class="text-white hover:underline">Cadastre-se</a>
+		    </div>
+		  </div>
+		</div>
+			
+		<header class="site-header bg-white">
 		  <div class="container mx-auto px-4">
-		    <div class="flex items-center justify-between py-3">
+		    <div class="header-grid py-4">
 		      <!-- Logo (left) -->
-		      <div class="flex-shrink-0">
-		        <a href="/" title="voltar para página inicial" class="text-xl font-bold text-slate-800">Kade Caminhões</a>
+		      <div class="logo-wrap">
+		        <a href="/" title="voltar para página inicial" class="flex items-center gap-3">
+		          <img src="../shared/images/favicon.ico" alt="Kade" class="w-10 h-10 object-contain">
+		          <span class="text-2xl font-extrabold text-slate-800">Kade Caminhões</span>
+		        </a>
 		      </div>
 		      <!-- Center menu -->
-		      <nav class="flex-1 text-center">
+		      <nav class="menu-wrap">
 		        <ul class="inline-flex space-x-6">
-		          <li><a href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" id="a_como_func" class="text-slate-700 hover:text-kade-primary transition-colors duration-200 <?=$viewExtCtrl->defineClass(ViewExtCtrl::QUEM_SOMOS);?>">Quem somos?</a></li>
-		          <li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" id="a_cad_vei" class="text-slate-700 hover:text-kade-primary transition-colors duration-200 <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>">Cadastre seu veículo</a></li>
-		          <li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt" class="text-slate-700 hover:text-kade-primary transition-colors duration-200 <?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>">Busca por veículos</a></li>
+		          <li><a href="/<?=ViewExtCtrl::QUEM_SOMOS;?>/" id="a_como_func" class="menu-link text-slate-700 <?=$viewExtCtrl->defineClass(ViewExtCtrl::QUEM_SOMOS);?>">Quem somos?</a></li>
+		          <li><a href="/<?=ViewExtCtrl::CAD_VEICULO;?>/" id="a_cad_vei" class="menu-link text-slate-700 <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_VEICULO);?>">Cadastre seu veículo</a></li>
+		          <li><a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/" id="a_bus_frt" class="menu-link text-slate-700 <?=$viewExtCtrl->defineClass(ViewExtCtrl::BUSCA_VEICULO);?>">Busca por veículos</a></li>
 		          <?php if(!User::isLogged()){?>
-		            <li><a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" id="a_cad_assi" class="text-slate-700 hover:text-kade-primary transition-colors duration-200 <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_CLIENTE);?>">Cadastre-se</a></li>
+		            <li><a href="/<?=ViewExtCtrl::CAD_CLIENTE;?>/" id="a_cad_assi" class="menu-link text-slate-700 <?=$viewExtCtrl->defineClass(ViewExtCtrl::CAD_CLIENTE);?>">Cadastre-se</a></li>
 		          <?php } else {?>
-		            <li><a href="/<?=ViewExtCtrl::DATA_USER;?>/" id="a_dad_assi" class="text-slate-700 hover:text-kade-primary transition-colors duration-200 <?=$viewExtCtrl->defineClass(ViewExtCtrl::DATA_USER);?>">Meus Dados</a></li>
+		            <li><a href="/<?=ViewExtCtrl::DATA_USER;?>/" id="a_dad_assi" class="menu-link text-slate-700 <?=$viewExtCtrl->defineClass(ViewExtCtrl::DATA_USER);?>">Meus Dados</a></li>
 		          <?php } ?>
 		        </ul>
 		      </nav>
 		      <!-- Login card (right) -->
-		      <div class="flex-shrink-0">
+		      <div class="login-wrap flex justify-end">
 		        <?php if(!User::isLogged()){?>
-		          <div class="rounded-lg border border-slate-200 px-3 py-1.5 shadow-sm bg-white">
+		          <div class="login-card rounded-lg border border-slate-200 px-3 py-1.5 shadow-sm bg-white">
 		            <form name="FormLoginTopoEmpresa" id="FormLoginTopoEmpresa" method="POST" action="../LoginQueryCtrl.ctrlExt/onLogin" class="flex items-center space-x-2">
 		              <input type="text" size="16" maxlength="20" class="mask.login input_clear input03b rounded-md border border-slate-200 px-3 py-1.5" placeholder="Seu login" name="user_login" id="user_login" title="seu login" alt="seu login">
 		              <input type="password" value="" placeholder="Sua senha" size="13" maxlength="40" name="user_password" id="user_password" class="input03b cor-cinza5 input_clear rounded-md border border-slate-200 px-3 py-1.5" title="sua senha" alt="sua senha">

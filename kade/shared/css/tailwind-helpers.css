@@ -1,0 +1,32 @@
+/* Tailwind helper overrides for legacy project
+   - Remove legacy gray background
+   - Provide a few utility tweaks for the new header
+*/
+body {
+    background-color: #ffffff; /* remove legacy gray */
+}
+
+/* Adjust topbar small text */
+.topbar { font-size: .875rem; }
+
+/* Centered menu adjustments: ensure middle column stays centered */
+.header-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.header-grid .menu-wrap { justify-self: center; }
+
+/* Slight shadow for header */
+.site-header { box-shadow: 0 2px 6px rgba(15,23,42,0.06); }
+
+/* Make the login card compact on smaller screens */
+.login-card { min-width: 220px; }
+
+/* Map legacy input classes (compat) */
+.input_clear, .input03b, .input_per {
+    display: block;
+}
+
+/* Hover effect for menu links */
+.menu-link { transition: color .18s ease, transform .18s ease; }
+.menu-link:hover { color: #0b5fff; transform: translateY(-2px); }
+
+/* Small responsive tweak for hero spacing under header */
+#div_middle { padding-top: .5rem; }
