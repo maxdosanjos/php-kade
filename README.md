@@ -108,3 +108,10 @@ Contribuindo / verificações locais antes do PR
 - Sempre executar php -l nos arquivos modificados.
 - Testar manualmente os fluxos principais no Laragon (cadastro de cliente, cadastro de veículo, busca por CEP, login).
 - Não commitar dados sensíveis (senhas reais, credenciais) — use placeholders ou variáveis de ambiente.
+
+Configuração de credenciais
+
+- Copie `.env.example` para `.env` na raiz do repositório e preencha os valores do ambiente.
+- O arquivo `.env` é carregado automaticamente por `Properties.class.php`; variáveis já definidas no servidor têm prioridade.
+- Em produção, prefira definir as variáveis diretamente no servidor e manter o `.env` fora da pasta pública.
+- As credenciais que estavam no código foram removidas. Como elas já fizeram parte do repositório, altere/rotacione as senhas de banco e SMTP no provedor.
