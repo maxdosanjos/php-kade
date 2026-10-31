@@ -97,10 +97,10 @@ class AccountQueryCtrl extends AbstractCtrl {
 		$client  = new Client();
 		$user	 = new User();
 		$person  = new Person();
-		$account->setId ( $_data ["account_id"] );
+		$account->setId ( ($_data["account_id"] ?? "") );
 		
-		$person->setId($_data["account_client_id"]);
-		$person->setName($_data["account_client_name"]);
+		$person->setId(($_data["account_client_id"] ?? ""));
+		$person->setName(($_data["account_client_name"] ?? ""));
 		
 		$user->setPerson($person);
 		$client->setUser($user);
@@ -108,20 +108,20 @@ class AccountQueryCtrl extends AbstractCtrl {
 		
 		$this->initCtrlParam( );
 		
-		if($_data["vehicle_dt_init"]!=""){
-			$dt = explode("/",$_data["vehicle_dt_init"]);
+		if(($_data["vehicle_dt_init"] ?? "")!=""){
+			$dt = explode("/",($_data["vehicle_dt_init"] ?? ""));
 			$this->getDtHrInit()->setDate($dt[2],$dt[1],$dt[0]);
 		}
-		if($_data["vehicle_dt_end"]!=""){
-			$dt = explode("/",$_data["vehicle_dt_end"]);
+		if(($_data["vehicle_dt_end"] ?? "")!=""){
+			$dt = explode("/",($_data["vehicle_dt_end"] ?? ""));
 			$this->getDtHrEnd()->setDate($dt[2],$dt[1],$dt[0]);
 		}
 		
-		$this->setOrderColumn($_data['order_column']);
-		$this->setOrderType($_data['order_type']);
+		$this->setOrderColumn(($_data['order_column'] ?? ""));
+		$this->setOrderType(($_data['order_type'] ?? ""));
 		 
-		$this->message->setType ( $_data["msg_type"] );
-		$this->message->setDesc ( $_data["msg_txt"] );
+		$this->message->setType ( ($_data["msg_type"] ?? "") );
+		$this->message->setDesc ( ($_data["msg_txt"] ?? "") );
 		
 		return $account;
 	}

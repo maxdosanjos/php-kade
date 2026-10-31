@@ -106,16 +106,17 @@ class CustumerQueryCtrl extends AbstractCtrl {
 				if ($personParam->getCpf () != "")
 					$criteria->eq ( "pf.cpf", $personParam->getCpf () );
 				
+				// O nome fica em person (per.name); pf.name não existe e a busca sempre falhava
 				if ($personParam->getName () != "")
-					$criteria->eq ( "pf.name", $personParam->getName () );
-				
+					$criteria->like ( "per.name", "%" . $personParam->getName () . "%" );
+
 				$criteria->eq ( "per.type", $personParam->getType () );
-				
+
 				break;
 			case Person::PJ :
-				
+
 				if ($personParam->getContact () != "")
-					$criteria->eq ( "pj.contact", $personParam->getContact () );
+					$criteria->like ( "pj.contact", "%" . $personParam->getContact () . "%" );
 				
 				if ($personParam->getCnpj () != "")
 					$criteria->eq ( "pj.cnpj", $personParam->getCnpj () );
@@ -124,7 +125,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 					$criteria->eq ( "pj.ie", $personParam->getIe () );
 				
 				if ($personParam->getName () != "")
-					$criteria->eq ( "pj.name", $personParam->getName () );
+					$criteria->like ( "per.name", "%" . $personParam->getName () . "%" );
 				
 				$criteria->eq ( "per.type", $personParam->getType () );
 				break;
@@ -202,54 +203,28 @@ class CustumerQueryCtrl extends AbstractCtrl {
 				$this->message->setDesc ( 'Nenhum resultado encontrado' );
 			}else{
 		
-				header("Content-type: text/csv");
-				header("Content-Disposition: attachment; filename=resultado_busca_kade.csv");
-				header("Pragma: no-cache");
-				header("Expires: 0");
-				echo "Registro;Tipo;Criado em;Nome/Razão Social;CPF/CNPJ;CEP;Cidade;UF;Telefone;Contato;Status\r";
-				$i = 0;
-				while($i < $length){
-					$custumerList     = $this->custumers[$i];
-					
-					$userList		  = $custumerList->getUser();
-					$personList 	  = $userList->getPerson();
-					$addressList 	  = $personList->getAddress ( );
-					
-					$address 	 	= $personList->getAddress ( );
-					$phone 			= $personList->getPhone( );
-		
-					echo $personList->getId().";";
-					echo $personList->getDescType().";";
-					echo $userList->getDateCad()->format("d/m/Y H:i").";";
-					echo $personList->getName().";";
-					
-					switch ($personList->getType ()) {
-						case Person::PF :
-							echo Util::mask($personList->getCpf(),"###.###.###-##").";";
-							break;
-						case Person::PJ :
-							echo Util::mask($personList->getCnpj(),"##.###.###/####-##").";";
-							break;
-					}
-					
-					
-					echo $address->getCepMask().";";
-					echo $address->getCity().";";
-					echo $address->getState().";";
-					echo $phone->getPhoneMask().";";
-					
-					switch ($personList->getType ()) {
-						case Person::PF :
-							echo $personList->getName().";";
-							break;
-						case Person::PJ :
-							echo $personList->getContact().";";
-							break;
-					}
-					
-					echo $userList->getDescStatus().";";
-					echo "\r";
-					$i++;
+				Util::csvStart ( "clientes_kade.csv" );
+				echo Util::csvRow ( array ( "Registro", "Tipo", "Criado em", "Nome/Razão Social", "CPF/CNPJ", "CEP", "Cidade", "UF", "Telefone", "Contato", "Status" ) );
+				foreach ( $this->custumers as $custumerList ) {
+					$userList   = $custumerList->getUser();
+					$personList = $userList->getPerson();
+					$address    = $personList->getAddress () ?? new Address ();
+					$phone      = $personList->getPhone () ?? new Phone ();
+					$isPJ       = ($personList->getType () == Person::PJ);
+
+					echo Util::csvRow ( array (
+						$personList->getId (),
+						$personList->getDescType (),
+						$userList->getDateCad ()->format ( "d/m/Y H:i" ),
+						$personList->getName (),
+						$isPJ ? Util::mask ( $personList->getCnpj (), "##.###.###/####-##" ) : Util::mask ( $personList->getCpf (), "###.###.###-##" ),
+						$address->getCepMask (),
+						$address->getCity (),
+						$address->getState (),
+						$phone->getPhoneMask (),
+						$isPJ ? $personList->getContact () : $personList->getName (),
+						$userList->getDescStatus ()
+					) );
 				}
 			}
 		
@@ -363,60 +338,60 @@ class CustumerQueryCtrl extends AbstractCtrl {
 		$address = new Address ();
 		$phone = new Phone ();
 		
-		/*if ($_data ["type_person"] == "")
+		/*if (($_data["type_person"] ?? "") == "")
 			$_data ["type_person"] = Person::PJ;*/
 		
-		switch ($_data ["type_person"]) {
+		switch (($_data["type_person"] ?? "")) {
 			case Person::PF :
 				$person = new PersonIndividual ();
-				$person->setName ( $_data ["custumer_name"] );
-				$person->setCpf ( $_data ["custumer_cpf"] );
+				$person->setName ( ($_data["custumer_name"] ?? "") );
+				$person->setCpf ( ($_data["custumer_cpf"] ?? "") );
 				break;
 			case Person::PJ :
 				$person = new PersonEntity ();
-				$person->setName ( $_data ["custumer_rsoc"] );
-				$person->setContact ( $_data ["custumer_contact"] );
-				$person->setCnpj ( $_data ["custumer_cnpj"] );
+				$person->setName ( ($_data["custumer_rsoc"] ?? "") );
+				$person->setContact ( ($_data["custumer_contact"] ?? "") );
+				$person->setCnpj ( ($_data["custumer_cnpj"] ?? "") );
 				
-				if ($_data ["custumer_ie_isento"] == "on")
+				if (($_data["custumer_ie_isento"] ?? "") == "on")
 					$_data ["custumer_ie"] = PersonEntity::ISENTO;
 				
-				$person->setIe ( $_data ["custumer_ie"] );
+				$person->setIe ( ($_data["custumer_ie"] ?? "") );
 				
 				break;
 			default :
 				$person = new Person ();
 		}
-		$person->setId ( $_data ["custumer_id"] );
-		$person->setEmail ( $_data ["custumer_mail"] );
+		$person->setId ( ($_data["custumer_id"] ?? "") );
+		$person->setEmail ( ($_data["custumer_mail"] ?? "") );
 		
-		$phone->setPhoneByMask ( $_data ["custumer_phone"] );
+		$phone->setPhoneByMask ( ($_data["custumer_phone"] ?? "") );
 		
 		$_ufs = $this->getListUf ();
-		$address->setState ( $_data ["custumer_region"] );
-		$address->setStateNm ( $_ufs [$_data ["custumer_region"]] );
-		$address->setCep ( $_data ["custumer_zipcode"] );
-		$address->setCity ( $_data ["custumer_city"] );
+		$address->setState ( ($_data["custumer_region"] ?? "") );
+		$address->setStateNm ( ($_ufs[$_data["custumer_region"] ?? ""] ?? "") );
+		$address->setCep ( ($_data["custumer_zipcode"] ?? "") );
+		$address->setCity ( ($_data["custumer_city"] ?? "") );
 		
-		if ($_data ["custumer_status"] == "") {
+		if (($_data["custumer_status"] ?? "") == "") {
 			$_data ["custumer_status"] = User::CHEK;
 		}
-		$user->setStatus ( $_data ["custumer_status"] );
+		$user->setStatus ( ($_data["custumer_status"] ?? "") );
 		
 		$this->initCtrlParam ();
-		if ($_data ["custumer_dt_init"] != "") {
-			$dt = explode ( "/", $_data ["custumer_dt_init"] );
+		if (($_data["custumer_dt_init"] ?? "") != "") {
+			$dt = explode ( "/", ($_data["custumer_dt_init"] ?? "") );
 			$this->getDtHrInit ()->setDate ( $dt [2], $dt [1], $dt [0] );
 		}
-		if ($_data ["custumer_dt_end"] != "") {
-			$dt = explode ( "/", $_data ["custumer_dt_end"] );
+		if (($_data["custumer_dt_end"] ?? "") != "") {
+			$dt = explode ( "/", ($_data["custumer_dt_end"] ?? "") );
 			$this->getDtHrEnd ()->setDate ( $dt [2], $dt [1], $dt [0] );
 		}
-		$this->setOrderColumn ( $_data ['order_column'] );
-		$this->setOrderType ( $_data ['order_type'] );
+		$this->setOrderColumn ( ($_data['order_column'] ?? "") );
+		$this->setOrderType ( ($_data['order_type'] ?? "") );
 		
-		$this->message->setType ( $_data ["msg_type"] );
-		$this->message->setDesc ( $_data ["msg_txt"] );
+		$this->message->setType ( ($_data["msg_type"] ?? "") );
+		$this->message->setDesc ( ($_data["msg_txt"] ?? "") );
 		
 		$person->setAddress ( $address );
 		$person->setPhone ( $phone );

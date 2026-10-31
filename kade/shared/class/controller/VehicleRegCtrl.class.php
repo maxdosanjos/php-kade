@@ -135,39 +135,39 @@ class VehicleRegCtrl extends AbstractCtrl {
 		$vehicleContact = new VehicleContact ();
 		
 		// Safely read incoming form keys to avoid undefined index warnings
-		$type_person = isset($_data["type_person"]) ? $_data["type_person"] : '';
+		$type_person = isset($_data["type_person"]) ? ($_data["type_person"] ?? "") : '';
 		switch ($type_person) {
 			case Person::PF :
 				$person = new PersonIndividual ();
-				$person->setName ( $_data ["vehicle_name"] );
-				$person->setCpf ( $_data ["vehicle_cpf"] );
+				$person->setName ( ($_data["vehicle_name"] ?? "") );
+				$person->setCpf ( ($_data["vehicle_cpf"] ?? "") );
 				break;
 			case Person::PJ :
 				$person = new PersonEntity ();
-				$person->setName ( $_data ["vehicle_rsoc"] );
-				$person->setContact ( $_data ["vehicle_contact"] );
-				$person->setCnpj ( $_data ["vehicle_cnpj"] );
+				$person->setName ( ($_data["vehicle_rsoc"] ?? "") );
+				$person->setContact ( ($_data["vehicle_contact"] ?? "") );
+				$person->setCnpj ( ($_data["vehicle_cnpj"] ?? "") );
 				
 				break;
 			default :
 				$person = new Person ();
 		}
 		
-		$vehicleType->setId ( isset($_data["vehicle_type"]) ? $_data["vehicle_type"] : null );
+		$vehicleType->setId ( isset($_data["vehicle_type"]) ? ($_data["vehicle_type"] ?? "") : null );
 		
-		$phone->setPhoneByMask ( isset($_data["vehicle_phone"]) ? $_data["vehicle_phone"] : '' );
+		$phone->setPhoneByMask ( isset($_data["vehicle_phone"]) ? ($_data["vehicle_phone"] ?? "") : '' );
 		$person->setPhone ( $phone );
 		
-		$address->setCep ( isset($_data["vehicle_zipcode"]) ? $_data["vehicle_zipcode"] : '' );
-		$address->setStreet ( isset($_data["vehicle_address"]) ? $_data["vehicle_address"] : '' );
-		$address->setNeighborhood ( isset($_data["vehicle_neighborhood"]) ? $_data["vehicle_neighborhood"] : '' );
-		$address->setNumber ( isset($_data["vehicle_address_number"]) ? $_data["vehicle_address_number"] : '' );
-		$address->setComplement ( isset($_data["vehicle_complement"]) ? $_data["vehicle_complement"] : '' );
-		$address->setCity ( isset($_data["vehicle_city"]) ? $_data["vehicle_city"] : '' );
-		$address->setState ( isset($_data["vehicle_region"]) ? $_data["vehicle_region"] : '' );
+		$address->setCep ( isset($_data["vehicle_zipcode"]) ? ($_data["vehicle_zipcode"] ?? "") : '' );
+		$address->setStreet ( isset($_data["vehicle_address"]) ? ($_data["vehicle_address"] ?? "") : '' );
+		$address->setNeighborhood ( isset($_data["vehicle_neighborhood"]) ? ($_data["vehicle_neighborhood"] ?? "") : '' );
+		$address->setNumber ( isset($_data["vehicle_address_number"]) ? ($_data["vehicle_address_number"] ?? "") : '' );
+		$address->setComplement ( isset($_data["vehicle_complement"]) ? ($_data["vehicle_complement"] ?? "") : '' );
+		$address->setCity ( isset($_data["vehicle_city"]) ? ($_data["vehicle_city"] ?? "") : '' );
+		$address->setState ( isset($_data["vehicle_region"]) ? ($_data["vehicle_region"] ?? "") : '' );
 
 		$_ufs = $this->getListUf();
-		$regionKey = isset($_data["vehicle_region"]) ? $_data["vehicle_region"] : '';
+		$regionKey = isset($_data["vehicle_region"]) ? ($_data["vehicle_region"] ?? "") : '';
 		if ($regionKey !== '' && isset($_ufs[$regionKey])) {
 			$address->setStateNm ( $_ufs[$regionKey] );
 		} else {

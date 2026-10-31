@@ -357,10 +357,10 @@ class AccountRegCtrl extends AbstractCtrl {
 		$i = 0;
 		$length = 0;
 		
-		$account->setId ( $_data ["account_id"] );
+		$account->setId ( ($_data["account_id"] ?? "") );
 		
-		$person->setId ( $_data ["account_client_id"] );
-		$person->setName($_data["account_client_name"]);
+		$person->setId ( ($_data["account_client_id"] ?? "") );
+		$person->setName(($_data["account_client_name"] ?? ""));
 		if ($person->getId () > 0) {
 			$criteria = new Criteria ();
 			$criteria->eq ( "cli.user_person_id", $person->getId () );
@@ -371,31 +371,31 @@ class AccountRegCtrl extends AbstractCtrl {
 				$account->setClient ( $client );
 		}
 		
-		$length = sizeof ( $_data ["installment_id"] );
+		$length = sizeof ( ($_data["installment_id"] ?? "") );
 		$_installs = array ();
 		while ( $i < $length ) {
 			$installment = new Installment ();
-			$installment->setId ( $_data ["installment_id"] [$i] );
-			$installment->setValue ( $_data ["installment_value"] [$i] );
-			if ($_data ["installment_due_date"] [$i] != "") {
+			$installment->setId ( ($_data["installment_id"] ?? "") [$i] );
+			$installment->setValue ( ($_data["installment_value"] ?? "") [$i] );
+			if (($_data["installment_due_date"] ?? "") [$i] != "") {
 				$installment->setDueDate ( new DateTimeCustom ( "Now" ) );
-				$dt = explode ( "/", $_data ["installment_due_date"] [$i] );
+				$dt = explode ( "/", ($_data["installment_due_date"] ?? "") [$i] );
 				$installment->getDueDate ()->setDate ( $dt [2], $dt [1], $dt [0] );
 			}
 			
-			if ($_data ["installment_payment_date"] [$i] != "") {
+			if (($_data["installment_payment_date"] ?? "") [$i] != "") {
 				$installment->setPaymentDate ( new DateTimeCustom ( "Now" ) );
-				$dt = explode ( "/", $_data ["installment_payment_date"] [$i] );
+				$dt = explode ( "/", ($_data["installment_payment_date"] ?? "") [$i] );
 				$installment->getPaymentDate ()->setDate ( $dt [2], $dt [1], $dt [0] );
 			}
 			
-			$installment->setPaymentValue ( $_data ["installment_payment_value"] [$i] );
+			$installment->setPaymentValue ( ($_data["installment_payment_value"] ?? "") [$i] );
 			
 			$paymentMethod = new PaymentMethod();
-			$paymentMethod->setId(  $_data ["installment_payment_method"] [$i] );
+			$paymentMethod->setId(  ($_data["installment_payment_method"] ?? "") [$i] );
 			$installment->setPaymentMethod ( $paymentMethod );
 			
-			$installment->setStatus ( $_data ["installment_status"] [$i] );
+			$installment->setStatus ( ($_data["installment_status"] ?? "") [$i] );
 			
 			$_installs [] = $installment;
 			$i ++;

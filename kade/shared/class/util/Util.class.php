@@ -71,6 +71,33 @@ class Util {
 		}
 		return true;
 	}
+	/**
+	 * Cabeçalhos de download de CSV e BOM UTF-8 (para o Excel mostrar os acentos).
+	 */
+	public static function csvStart($filename) {
+		header ( "Content-Type: text/csv; charset=UTF-8" );
+		header ( "Content-Disposition: attachment; filename=" . preg_replace ( '/[^A-Za-z0-9_.-]/', '_', $filename ) );
+		header ( "Pragma: no-cache" );
+		header ( "Expires: 0" );
+		echo "\xEF\xBB\xBF";
+	}
+	/**
+	 * Uma linha de CSV separada por ";" (padrão do Excel em português), com aspas quando
+	 * preciso. Células que começam com = + - @ são prefixadas com ' para o Excel não as
+	 * executar como fórmula: nomes e contatos vêm de cadastro público e de SMS.
+	 */
+	public static function csvRow(array $cells) {
+		$out = array ();
+		foreach ( $cells as $cell ) {
+			$cell = ( string ) $cell;
+			if ($cell !== "" && strpos ( "=+-@\t\r", $cell [0] ) !== false)
+				$cell = "'" . $cell;
+			if (preg_match ( '/[;"\r\n]/', $cell ))
+				$cell = '"' . str_replace ( '"', '""', $cell ) . '"';
+			$out [] = $cell;
+		}
+		return implode ( ";", $out ) . "\r\n";
+	}
 	public static function mask($val, $mask) {
 		$maskared = '';
 		$k = 0;

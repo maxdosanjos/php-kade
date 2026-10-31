@@ -106,7 +106,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 					$person->setContact ( $_data["custumer_contact"] ?? '' );
 					$person->setCnpj ( $_data["custumer_cnpj"] ?? '' );
 				
-					if (isset($_data["custumer_ie_isento"]) && $_data["custumer_ie_isento"] == "on")
+					if (isset($_data["custumer_ie_isento"]) && ($_data["custumer_ie_isento"] ?? "") == "on")
 						$_data["custumer_ie"] = PersonEntity::ISENTO;
 				
 					$person->setIe ( $_data["custumer_ie"] ?? '' );
@@ -152,11 +152,11 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$user->setStatus ( User::PEND );
 		
 			if(($_data["custumer_status"] ?? '')!=""){
-				$user->setStatus ( $_data["custumer_status"] );
+				$user->setStatus ( ($_data["custumer_status"] ?? "") );
 			}
 		
 			if(($_data["custumer_obs"] ?? '')!="")
-				$user->setText ( $_data["custumer_obs"] );
+				$user->setText ( ($_data["custumer_obs"] ?? "") );
 		
 			$client->setUser ( $user );
 		

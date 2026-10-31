@@ -83,37 +83,29 @@ class VehicleQueryCtrl extends AbstractCtrl {
 				$this->message->setDesc ( 'Nenhum resultado encontrado' );
 			}else{
 				
-				header("Content-type: text/csv");
-				header("Content-Disposition: attachment; filename=resultado_busca_kade.csv");
-				header("Pragma: no-cache");
-				header("Expires: 0");
-				echo "Registro;Criado em;Tipo Veículo;CEP;Cidade;UF;Telefone;Contato;Status;Origem;Utilizado em;Usuário Utilizador\r";
-				$i = 0;
-				while($i < $length){
-					$vehicleTrav 	= $this->vehiclesTraveling[$i];
-					$vehicleType 	= $vehicleTrav->getVehicleType ( );
-					$address 	 	= $vehicleTrav->getAddress ( );
+				Util::csvStart ( "veiculos_kade.csv" );
+				echo Util::csvRow ( array ( "Registro", "Criado em", "Tipo Veículo", "CEP", "Cidade", "UF", "Telefone", "Contato", "Status", "Origem", "Utilizado em", "Usuário Utilizador" ) );
+				foreach ( $this->vehiclesTraveling as $vehicleTrav ) {
+					$vehicleType    = $vehicleTrav->getVehicleType ( );
+					$address        = $vehicleTrav->getAddress ( );
 					$vehicleContact = $vehicleTrav->getPersonContact ( );
-					$phone 			= $vehicleContact->getPhoneContact( );
+					$phone          = $vehicleContact->getPhoneContact( );
 					$vehTravUser    = $vehicleTrav->getUserUtilized();
-										
-					echo $vehicleTrav->getId().";";
-					echo $vehicleTrav->getDateHrProc()->format("d/m/Y H:i").";";
-					echo $vehicleType->getId()." - ".$vehicleType->getDescr().";";
-					echo $address->getCepMask().";";
-					echo $address->getCity().";";
-					echo $address->getState().";";
-					echo $phone->getPhoneMask().";";
-					echo $vehicleContact->getName().";";					
-					echo $vehicleTrav->getDescStatus().";";
-					echo $vehicleTrav->getDescSource();
-					if($vehTravUser!=null)
-					{
-						echo ";".$vehTravUser->getDateHrUsed()->format("d/m/Y H:i").";";
-						echo $vehTravUser->getUser()->getLogin()." - ".$vehTravUser->getUser()->getPerson ()->getName().";";
-					}
-					echo "\r";		
-					$i++;
+
+					echo Util::csvRow ( array (
+						$vehicleTrav->getId (),
+						$vehicleTrav->getDateHrProc ()->format ( "d/m/Y H:i" ),
+						$vehicleType->getId () . " - " . $vehicleType->getDescr (),
+						$address->getCepMask (),
+						$address->getCity (),
+						$address->getState (),
+						$phone->getPhoneMask (),
+						$vehicleContact->getName (),
+						$vehicleTrav->getDescStatus (),
+						$vehicleTrav->getDescSource (),
+						$vehTravUser != null ? $vehTravUser->getDateHrUsed ()->format ( "d/m/Y H:i" ) : "",
+						$vehTravUser != null ? $vehTravUser->getUser ()->getLogin () . " - " . $vehTravUser->getUser ()->getPerson ()->getName () : ""
+					) );
 				}
 			}		
 				
@@ -579,17 +571,17 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		$vehicleTraveling = new VehicleTraveling ();
 		$vehicleContact   = new VehicleContact ();
 		
-		/*switch ($_data ["type_person"]) {
+		/*switch (($_data["type_person"] ?? "")) {
 			case Person::PF :
 				$person = new PersonIndividual ();
-				$person->setName ( $_data ["vehicle_name"] );
-				$person->setCpf ( $_data ["vehicle_cpf"] );
+				$person->setName ( ($_data["vehicle_name"] ?? "") );
+				$person->setCpf ( ($_data["vehicle_cpf"] ?? "") );
 				break;
 			case Person::PJ :
 				$person = new PersonEntity ();
-				$person->setName ( $_data ["vehicle_rsoc"] );
-				$person->setContact ( $_data ["vehicle_contact"] );
-				$person->setCnpj ( $_data ["vehicle_cnpj"] );
+				$person->setName ( ($_data["vehicle_rsoc"] ?? "") );
+				$person->setContact ( ($_data["vehicle_contact"] ?? "") );
+				$person->setCnpj ( ($_data["vehicle_cnpj"] ?? "") );
 				
 				break;
 			default :
@@ -597,54 +589,54 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		}*/
 		
 		/*$person = new Person ();
-		$person->setName ( $_data ["vehicle_contact"] );*/
+		$person->setName ( ($_data["vehicle_contact"] ?? "") );*/
 		
-		$vehicleType->setId ( $_data ["vehicle_type"] );
+		$vehicleType->setId ( ($_data["vehicle_type"] ?? "") );
 		
-		$phone->setPhoneByMask ( $_data ["vehicle_phone"] );
+		$phone->setPhoneByMask ( ($_data["vehicle_phone"] ?? "") );
 		//$person->setPhone ( $phone );
 		
-		$address->setCep ( $_data ["vehicle_zipcode"] );
-		$address->setId ( $_data ["vehicle_address_id"] );
-		$address->setStreet ( $_data ["vehicle_address"] );
-		$address->setNumber ( $_data ["vehicle_address_number"] );
-		$address->setComplement ( $_data ["vehicle_complement"] );
-		$address->setCity ( $_data ["vehicle_city"] );
-		$address->setState ( $_data ["vehicle_region"] );
+		$address->setCep ( ($_data["vehicle_zipcode"] ?? "") );
+		$address->setId ( ($_data["vehicle_address_id"] ?? "") );
+		$address->setStreet ( ($_data["vehicle_address"] ?? "") );
+		$address->setNumber ( ($_data["vehicle_address_number"] ?? "") );
+		$address->setComplement ( ($_data["vehicle_complement"] ?? "") );
+		$address->setCity ( ($_data["vehicle_city"] ?? "") );
+		$address->setState ( ($_data["vehicle_region"] ?? "") );
 		$_ufs = $this->getListUf();		
-		$address->setStateNm ( $_ufs[$_data ["vehicle_region"]] );
+		$address->setStateNm ( ($_ufs[$_data["vehicle_region"] ?? ""] ?? "") );
 		
 		//$person->setAddress ( $address );
 		
 		//$vehicleContact->setPerson ( $person );
 		$vehicleContact->setPhoneContact ( $phone );
-		$vehicleContact->setName ( $_data ["vehicle_contact"] );
+		$vehicleContact->setName ( ($_data["vehicle_contact"] ?? "") );
 		$vehicleContact->setVehicleTraveling ( $vehicleTraveling );
 		
 		$vehicleTraveling->setVehicleType ( $vehicleType );
 		$vehicleTraveling->setAddress ( $address );
 		$vehicleTraveling->setPersonContact ( $vehicleContact );
 		$vehicleTraveling->setIp ( Util::getClientIP () );
-		$vehicleTraveling->setId ( $_data ["vehicle_id"] );
+		$vehicleTraveling->setId ( ($_data["vehicle_id"] ?? "") );
 		
-		if($_data["vehicle_status"]!="")
-			$vehicleTraveling->setStatus ( $_data ["vehicle_status"] );
+		if(($_data["vehicle_status"] ?? "")!="")
+			$vehicleTraveling->setStatus ( ($_data["vehicle_status"] ?? "") );
 		
 		$this->initCtrlParam( );
 		
-    	if($_data["vehicle_dt_init"]!=""){
-    		$dt = explode("/",$_data["vehicle_dt_init"]);
+    	if(($_data["vehicle_dt_init"] ?? "")!=""){
+    		$dt = explode("/",($_data["vehicle_dt_init"] ?? ""));
     		$this->getDtHrInit()->setDate($dt[2],$dt[1],$dt[0]);	
     	}
-    	if($_data["vehicle_dt_end"]!=""){
-    		$dt = explode("/",$_data["vehicle_dt_end"]);
+    	if(($_data["vehicle_dt_end"] ?? "")!=""){
+    		$dt = explode("/",($_data["vehicle_dt_end"] ?? ""));
     		$this->getDtHrEnd()->setDate($dt[2],$dt[1],$dt[0]);	
     	}
-    	$this->setOrderColumn($_data['order_column']);
-    	$this->setOrderType($_data['order_type']);  	 
+    	$this->setOrderColumn(($_data['order_column'] ?? ""));
+    	$this->setOrderType(($_data['order_type'] ?? ""));  	 
     	
-    	$this->message->setType ( $_data["msg_type"] );
-		$this->message->setDesc ( $_data["msg_txt"] );
+    	$this->message->setType ( ($_data["msg_type"] ?? "") );
+		$this->message->setDesc ( ($_data["msg_txt"] ?? "") );
 		
 		return $vehicleTraveling;
 	}
