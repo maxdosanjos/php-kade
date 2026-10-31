@@ -176,6 +176,7 @@
 				}
 				
 				$user = null;
+				$personDb = null;
 				if($personTypeDAO!=null)
 				{
 					$personDb = $personTypeDAO->getSingle ( $db, $criteria );
@@ -192,17 +193,21 @@
 				$criteria = null;
 				
 				
-				if($user==null){					throw new Exception("Nenhum usuário encontrado!");
-				} 		
-				$user->getPerson()->setEmail($person->getEmail ());
-				$this->sendMailConfirm ( $db, $user );
-					
+				// O link vai sempre para o e-mail do cadastro, e só se o e-mail digitado conferir.
+				// Antes ia para o e-mail digitado: quem soubesse o CPF/CNPJ de alguém recebia o
+				// link e trocava a senha da conta.
+				$registered = ($user != null && $personDb != null) ? trim ( ( string ) $personDb->getEmail () ) : "";
+				if ($registered != "" && mb_strtolower ( $registered, "UTF-8" ) === mb_strtolower ( trim ( $person->getEmail () ), "UTF-8" )) {
+					$user->getPerson ()->setEmail ( $registered );
+					$this->sendMailConfirm ( $db, $user );
+				}
+
 				$db->commit ();
 				$db = null;
-					
-				$person = $user->getPerson ();
+
+				// Mesma resposta com ou sem cadastro: não revela quais CPF/CNPJ e e-mails existem
 				$this->message->setType ( Message::SUCCESS );
-				$this->message->setDesc ( "Enviado com sucesso ao email " . $person->getEmail () . "  o link para redefinição de sua senha  " );
+				$this->message->setDesc ( "Se os dados conferirem com um cadastro, você vai receber em instantes o link para criar a nova senha no e-mail cadastrado. Confira também a caixa de spam." );
 				
 				
 			}catch(ValidationException $e){ 

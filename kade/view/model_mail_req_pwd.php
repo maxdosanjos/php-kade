@@ -12,6 +12,7 @@ $mailButton   = "Criar nova senha";
 $mailUrl      = $url;
 $mailLogin    = $user->getLogin();
 $mailNotes    = array(
+	"O link vale por 24 horas e só pode ser usado uma vez.",
 	"Não pediu a troca? Ignore esta mensagem: sua senha atual continua valendo.",
 );
 include(dirname(__FILE__)."/partials/mail.php");

@@ -359,7 +359,8 @@
 			else
 				throw new PDOException ( "Conexão Inválida" );
 
-			$stmt = $db->prepare ( "SELECT `user_person_id` FROM `link_confirm` WHERE `hash` = ?" );
+			// Link de nova senha vale 24 horas (migração 006); depois disso, é preciso pedir outro
+			$stmt = $db->prepare ( "SELECT `user_person_id` FROM `link_confirm` WHERE `hash` = ? AND `created_at` >= NOW() - INTERVAL 24 HOUR" );
 			$stmt->execute ( array ( $vua ) );
 			$objDAO = $stmt->fetchObject ();
 			if (! $objDAO || $objDAO->user_person_id <= 0)
