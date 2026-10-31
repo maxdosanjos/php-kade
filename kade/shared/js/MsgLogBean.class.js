@@ -27,13 +27,13 @@ var MsgLogBean = function() {
 		pagination = new Pagination();
 		pagination.init($("#msglog_query_open"));
 		
-		$("#button_search").button().click(function(e) {
+		$("#button_search").click(function(e) {
 			e.preventDefault();
 			$("#pag").val("1");
 			$("#msglog_query_open").submit();
 		});
 		
-		$("#button_reset").button().click(function(e) {
+		$("#button_reset").click(function(e) {
 			e.preventDefault();
 			$("#msglog_query_open .input_clear").val("");
 		});

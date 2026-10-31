@@ -429,16 +429,16 @@ var VehicleTravelingBean = function() {
 	};
 	
 	var formatGUIEventsBean = function() {
-		$("#button_save").button().click(function(e) {
+		$("#button_save").click(function(e) {
 			e.preventDefault();
 			$("#vehicle_form").submit();
 		});
 		
-		$("#button_back").button().click(function(e) {
+		$("#button_back").click(function(e) {
 			e.preventDefault();
 			window.location = System.CONTEXT;
 		});
-		$("#button_new").button().click(function(e) {
+		$("#button_new").click(function(e) {
 			e.preventDefault();
 			window.location = System.CONTEXT + "cad_veiculo.html";
 		});

@@ -199,12 +199,15 @@
 	outline: 3px solid rgb(255 138 0 / 0.5);
 	outline-offset: 2px;
 }
+/* Bloco e não flex: o asterisco que o webmask2 insere precisa ficar na mesma linha do texto */
 .k-label {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
+	display: block;
 	font: 500 14px var(--k-font-sans);
 	color: var(--k-color-ink);
+}
+.k-label .k-field {
+	display: block;
+	margin-top: 6px;
 }
 .k-field {
 	width: 100%;
@@ -215,6 +218,12 @@
 	background: #ffffff;
 	color: var(--k-color-ink);
 	font: 400 15px var(--k-font-sans);
+}
+/* Asterisco de campo obrigatório (inserido pelo webmask2 nos rótulos dos campos .required) */
+.k-req {
+	margin-left: 2px;
+	color: #b42318;
+	font-weight: 600;
 }
 /* O plugin de máscara (webmask) grava largura inline nos campos */
 .k-field {
@@ -320,16 +329,25 @@ summary::-webkit-details-marker {
 	color: #ffffff !important;
 }
 
-/* Diálogos do jQuery UI que recebem dialogClass: "k-dialog" */
-.k-dialog.ui-dialog {
+/*
+ * Tema global do jQuery UI (diálogos "Processando"/"Resultado", detalhes, calendário).
+ * O "body" no seletor ganha do jquery-ui.theme.css, carregado antes.
+ */
+body .ui-widget-overlay {
+	background: rgb(11 37 69 / 0.45);
+	opacity: 1;
+}
+body .ui-dialog {
 	padding: 0;
 	border: 1px solid var(--k-color-line);
 	border-radius: 16px;
+	background: #ffffff;
 	box-shadow: 0 24px 60px rgb(3 15 35 / 0.25);
 	font-family: var(--k-font-sans);
+	max-width: calc(100vw - 24px);
 	overflow: hidden;
 }
-.k-dialog .ui-dialog-titlebar {
+body .ui-dialog .ui-dialog-titlebar {
 	padding: 16px 20px;
 	border: 0;
 	border-bottom: 1px solid var(--k-color-line);
@@ -338,8 +356,83 @@ summary::-webkit-details-marker {
 	color: var(--k-color-kade-950);
 	font: 600 18px var(--k-font-display);
 }
-.k-dialog .ui-dialog-content {
+body .ui-dialog .ui-dialog-content {
 	padding: 20px;
+	color: var(--k-color-ink);
+	font: 400 15px/1.5 var(--k-font-sans);
+}
+body .ui-dialog .ui-dialog-buttonpane {
+	margin: 0;
+	padding: 12px 20px;
+	border-top: 1px solid var(--k-color-line);
+	background: var(--k-color-surface);
+}
+body .ui-dialog .ui-dialog-buttonpane button {
+	min-height: 40px;
+	margin: 0 0 0 8px;
+	padding: 0 18px;
+	border: 1px solid var(--k-color-kade-900);
+	border-radius: 10px;
+	background: var(--k-color-kade-900);
+	color: #ffffff;
+	font: 600 15px var(--k-font-sans);
+}
+body .ui-dialog .ui-dialog-buttonpane button .ui-button-text {
+	padding: 0;
+}
+/* Caixa de texto do diálogo "Resultado" (estilo inline antigo) */
+body .ui-dialog [id="dialog-result.messageText"] {
+	margin-top: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	font-size: 15px !important;
+}
+/* "Processando": o gif antigo dá lugar a um indicador simples */
+body .ui-dialog #img_dialog {
+	display: none;
+}
+body .ui-dialog [id="dialog-working.message"]::before {
+	content: "";
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin-right: 10px;
+	vertical-align: -3px;
+	border: 3px solid var(--k-color-kade-100);
+	border-top-color: var(--k-color-kade-900);
+	border-radius: 50%;
+	animation: k-spin 0.8s linear infinite;
+}
+@keyframes k-spin {
+	to { transform: rotate(360deg); }
+}
+body .ui-datepicker {
+	padding: 8px;
+	border: 1px solid var(--k-color-line);
+	border-radius: 12px;
+	background: #ffffff;
+	box-shadow: 0 12px 32px rgb(3 15 35 / 0.15);
+	font-family: var(--k-font-sans);
+}
+body .ui-datepicker .ui-datepicker-header {
+	border: 0;
+	background: #ffffff;
+	color: var(--k-color-kade-950);
+}
+body .ui-datepicker .ui-state-default {
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--k-color-ink);
+	text-align: center;
+}
+body .ui-datepicker .ui-state-hover {
+	background: var(--k-color-surface);
+}
+body .ui-datepicker .ui-state-active,
+body .ui-datepicker .ui-state-highlight {
+	background: var(--k-color-kade-900);
+	color: #ffffff;
 }
 
 /* Destaques: esconde a barra de rolagem do carrossel (a navegação é pelos botões) */

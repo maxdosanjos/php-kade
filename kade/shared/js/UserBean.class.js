@@ -20,7 +20,7 @@ var UserBean = function() {
 	this.initConfirmPwd = function(){
 		$("#tabs").tabs();
 		
-		$("#button_save").button().click(function(e) {
+		$("#button_save").click(function(e) {
 			e.preventDefault();
 			$("#form_confirm_pwd").submit();
 		});
@@ -38,7 +38,7 @@ var UserBean = function() {
 			viewFieldsPerson();
 		});
 		
-		$("#button_sender").button().click(function(e) {
+		$("#button_sender").click(function(e) {
 			e.preventDefault();
 			$("#form_new_password").submit();
 		});

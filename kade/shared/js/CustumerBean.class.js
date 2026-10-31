@@ -42,18 +42,18 @@ var CustumerBean = function() {
 			viewFieldIE();			
 		});
 		
-		$("#button_search").button().click(function(e) {
+		$("#button_search").click(function(e) {
 			e.preventDefault();
 			$("#pag").val("1");
 			$("#custumer_query_open").submit();
 		});
 		
-		$("#button_reset").button().click(function(e) {
+		$("#button_reset").click(function(e) {
 			e.preventDefault();
 			$("#custumer_query_open .input_clear").val("");
 		});
 		
-		$("#button_csv").button().click(function(e) {
+		$("#button_csv").click(function(e) {
 			$action  = $("#custumer_query_open").attr("action"); 
 			e.preventDefault();
 			$("#custumer_query_open").attr("action","../CustumerQueryCtrl.ctrlExt/exportCSV");
@@ -184,16 +184,16 @@ var CustumerBean = function() {
 	var formatGUIEventsBean = function() {
 		
 		
-		$("#button_save").button().click(function(e) {
+		$("#button_save").click(function(e) {
 			e.preventDefault();
 			$("#custumer_form").submit();
 		});
 		
-		$("#button_back").button().click(function(e) {
+		$("#button_back").click(function(e) {
 			e.preventDefault();
 			window.location = System.CONTEXT;
 		});
-		$("#button_new").button().click(function(e) {
+		$("#button_new").click(function(e) {
 			e.preventDefault();
 			window.location = System.CONTEXT + "cad_assinante/";
 		});

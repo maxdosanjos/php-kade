@@ -8,7 +8,7 @@ var MainExt = function() {
 	var checkChangesBeforeSave = false;
 	
 	var formatEventsLoadBanner = function(){
-		$("#button_save").button().click(function(e) {
+		$("#button_save").click(function(e) {
 			e.preventDefault();
 			$("#banner_form").submit();
 		});

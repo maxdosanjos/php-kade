@@ -1,6 +1,6 @@
 var ViewExt = function() {
 	this.initQuery = function() {
-		$("button.submit_login").button();
+		// Botões usam o visual novo (classes k-btn); nada a inicializar aqui
 	};
 
 };

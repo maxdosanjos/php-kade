@@ -203,17 +203,17 @@ var AccountBean = function() {
 	var formatGUIEventsBean = function(){
 		onEventMatchCodeClient();
 		
-		$("#button_save").button().click(function(e) {
+		$("#button_save").click(function(e) {
 			e.preventDefault();
 			$("#conta_form").submit();
 		});
-		$("#button_new").button().click(function(e) {
+		$("#button_new").click(function(e) {
 			e.preventDefault();
 			var url = 'action=edit&windowPopUp=true';
 			window.location = url;
 		});
 		
-		$("#button_cancel").button().click(function(e){
+		$("#button_cancel").click(function(e){
 			e.preventDefault();
 			if(confirm('Deseja realmente cancelar esta conta?'))
 			{
@@ -226,7 +226,7 @@ var AccountBean = function() {
 			}
 			
 		})
-		$("#button_ger_parc").button().click(function(e) {
+		$("#button_ger_parc").click(function(e) {
 			$action  = $("#conta_form").attr("action"); 
 			e.preventDefault();
 			$("#conta_form").attr("action","../AccountRegCtrl.ctrlExt/incParc");
@@ -399,18 +399,18 @@ var AccountBean = function() {
 		pagination = new Pagination();
 		pagination.init($("#conta_query_open"));
 		
-		$("#button_search").button().click(function(e) {
+		$("#button_search").click(function(e) {
 			e.preventDefault();
 			$("#pag").val("1");
 			$("#conta_query_open").submit();
 		});
 		
-		$("#button_reset").button().click(function(e) {
+		$("#button_reset").click(function(e) {
 			e.preventDefault();
 			$("#conta_query_open .input_clear").val("");
 		});
 		
-		$("#button_new").button().click(function(e) {
+		$("#button_new").click(function(e) {
 			e.preventDefault();
 			
 			var param = new Object(); 
