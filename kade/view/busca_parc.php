@@ -54,18 +54,18 @@ $pageDesc  = "Acompanhe as mensalidades da sua assinatura.";
 		<div class="k:border-b k:border-line k:px-5 k:py-4 k:text-[15px]">
 			<strong class="k:font-semibold"><?=$length?> <?=$length == 1 ? "parcela" : "parcelas"?></strong>
 		</div>
-		<div class="k:overflow-x-auto">
+		<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 			<table id="table_query_open" class="k-table">
 				<thead>
 					<tr>
-						<th class="column-order" lang="ins.account_id" title="Ordenar por conta">Conta <?=$ctrlInstQry->getImgOrder('ins.account_id');?></th>
-						<th class="column-order" lang="ins.id" title="Ordenar por parcela">Parcela <?=$ctrlInstQry->getImgOrder('ins.id');?></th>
-						<th class="column-order" lang="ins.due_date" title="Ordenar por vencimento">Vencimento <?=$ctrlInstQry->getImgOrder('ins.due_date');?></th>
-						<th class="column-order" lang="ins.value" title="Ordenar por valor">Valor <?=$ctrlInstQry->getImgOrder('ins.value');?></th>
-						<th class="column-order" lang="ins.payment_date" title="Ordenar por pagamento">Pago em <?=$ctrlInstQry->getImgOrder('ins.payment_date');?></th>
-						<th class="column-order" lang="ins.payment_value" title="Ordenar por valor pago">Valor pago <?=$ctrlInstQry->getImgOrder('ins.payment_value');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.account_id" title="Ordenar por conta">Conta <?=$ctrlInstQry->getImgOrder('ins.account_id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.id" title="Ordenar por parcela">Parcela <?=$ctrlInstQry->getImgOrder('ins.id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.due_date" title="Ordenar por vencimento">Vencimento <?=$ctrlInstQry->getImgOrder('ins.due_date');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.value" title="Ordenar por valor">Valor <?=$ctrlInstQry->getImgOrder('ins.value');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.payment_date" title="Ordenar por pagamento">Pago em <?=$ctrlInstQry->getImgOrder('ins.payment_date');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.payment_value" title="Ordenar por valor pago">Valor pago <?=$ctrlInstQry->getImgOrder('ins.payment_value');?></th>
 						<th>Forma</th>
-						<th class="column-order" lang="ins.status" title="Ordenar por status">Status <?=$ctrlInstQry->getImgOrder('ins.status');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="ins.status" title="Ordenar por status">Status <?=$ctrlInstQry->getImgOrder('ins.status');?></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">

@@ -156,7 +156,7 @@ $fieldClass = "k-focus k:min-h-[46px] k:w-full k:rounded-[10px] k:border k:borde
 			</div>
 			<?php } ?>
 		</div>
-		<div class="k-banner-track k:flex k:snap-x k:snap-mandatory k:gap-4 k:overflow-x-auto k:rounded-2xl k:scroll-smooth">
+		<div class="k-banner-track k-focus k:flex k:snap-x k:snap-mandatory k:gap-4 k:overflow-x-auto k:rounded-2xl k:scroll-smooth" tabindex="0" aria-label="Destaques (role para o lado)">
 			<?php foreach ($_banners as $i => $src) { ?>
 			<img src="<?=$src?>" alt="Destaque <?=$i + 1?> de <?=count($_banners)?>" loading="lazy" class="k:aspect-[11/3] k:w-full k:shrink-0 k:snap-center k:rounded-2xl k:border k:border-line k:bg-white k:object-cover">
 			<?php } ?>

@@ -134,18 +134,18 @@
 					</span>
 					<span class="k:text-[13px] k:text-muted">Clique em um registro para ver os detalhes</span>
 				</div>
-				<div class="k:overflow-x-auto">
+				<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 					<table id="table_query_open" class="k-table">
 						<thead>
 							<tr>
-								<th class="column-order" lang="vt.id" title="Ordenar por registro">Registro <?=$ctrlVehQry->getImgOrder('vt.id');?></th>
-								<th class="column-order" lang="vt.date_hr_proc" title="Ordenar por data">Criado em <?=$ctrlVehQry->getImgOrder('vt.date_hr_proc');?></th>
-								<th class="column-order" lang="vt.vehicle_type_id" title="Ordenar por tipo de veículo">Tipo de veículo <?=$ctrlVehQry->getImgOrder('vt.vehicle_type_id');?></th>
-								<th class="column-order" lang="ad.city" title="Ordenar por cidade">Cidade <?=$ctrlVehQry->getImgOrder('ad.city');?></th>
-								<th class="column-order" lang="ad.state" title="Ordenar por UF">UF <?=$ctrlVehQry->getImgOrder('ad.state');?></th>
-								<th class="column-order" lang="ad.cep" title="Ordenar por CEP">CEP <?=$ctrlVehQry->getImgOrder('ad.cep');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="vt.id" title="Ordenar por registro">Registro <?=$ctrlVehQry->getImgOrder('vt.id');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="vt.date_hr_proc" title="Ordenar por data">Criado em <?=$ctrlVehQry->getImgOrder('vt.date_hr_proc');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="vt.vehicle_type_id" title="Ordenar por tipo de veículo">Tipo de veículo <?=$ctrlVehQry->getImgOrder('vt.vehicle_type_id');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="ad.city" title="Ordenar por cidade">Cidade <?=$ctrlVehQry->getImgOrder('ad.city');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="ad.state" title="Ordenar por UF">UF <?=$ctrlVehQry->getImgOrder('ad.state');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="ad.cep" title="Ordenar por CEP">CEP <?=$ctrlVehQry->getImgOrder('ad.cep');?></th>
 								<? if($showSts) {?>
-								<th class="column-order" lang="vt.status" title="Ordenar por status">Status <?=$ctrlVehQry->getImgOrder('vt.status');?></th>
+								<th class="column-order k-focus" tabindex="0" data-col="vt.status" title="Ordenar por status">Status <?=$ctrlVehQry->getImgOrder('vt.status');?></th>
 								<? } ?>
 							</tr>
 						</thead>

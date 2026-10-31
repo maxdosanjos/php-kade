@@ -67,7 +67,7 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 			<strong class="k:font-semibold"><?=(int) $pagination->getTotalReg()?> <?=$pagination->getTotalReg() == 1 ? "mensagem" : "mensagens"?></strong>
 			<?php if ($pagination->getTotalReg() > 0) { ?><span class="k:text-muted"> · exibindo <?=$pagination->showDetailsPag();?></span><?php } ?>
 		</div>
-		<div class="k:overflow-x-auto">
+		<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 			<table id="table_query_open" class="k-table">
 				<thead>
 					<tr>

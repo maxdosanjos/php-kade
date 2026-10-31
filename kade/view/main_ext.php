@@ -44,7 +44,10 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		 <style type="text/css">
 		 	body{ overflow-x:hidden; overflow-y:auto; }
 		 </style>
-		<? $viewExtCtrl->includePage();
+		<main id="div_middle">
+			<? $viewExtCtrl->includePage(); ?>
+		</main>
+		<?
 		}else{
 		?>
 		<?php include(dirname(__FILE__)."/partials/header.php"); ?>

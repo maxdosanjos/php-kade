@@ -81,7 +81,7 @@ $pageDesc  = $isNew ? "Escolha o cliente e gere as parcelas." : "Clique em uma p
 		<?php } ?>
 
 		<section id="fieldset_installment" class="k:overflow-hidden k:rounded-xl k:border k:border-line" aria-label="Parcelas">
-			<div class="k:overflow-x-auto">
+			<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 				<table id="table_installment" class="k-table k:min-w-[520px]">
 					<thead>
 						<tr>
@@ -152,7 +152,7 @@ $pageDesc  = $isNew ? "Escolha o cliente e gere as parcelas." : "Clique em uma p
 			<select id="parc_payment_method_dtl" class="k-field required">
 				<option value=""></option>
 				<?php foreach ($paymentMethodList as $paymentMethod){?>
-				<option lang="<?=$h($paymentMethod->getEnabled())?>" value="<?=$h($paymentMethod->getId())?>"><?=$h($paymentMethod->getName())?></option>
+				<option data-enabled="<?=$h($paymentMethod->getEnabled())?>" value="<?=$h($paymentMethod->getId())?>"><?=$h($paymentMethod->getName())?></option>
 				<?php } ?>
 			</select>
 		</label>

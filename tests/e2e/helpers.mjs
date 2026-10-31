@@ -1,6 +1,9 @@
 // Apoio dos testes de navegador: abre o Chrome instalado (puppeteer-core) e audita páginas.
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import puppeteer from 'puppeteer-core';
+
+const AXE_PATH = createRequire(import.meta.url).resolve('axe-core/axe.min.js');
 
 export const BASE = (process.env.KADE_TEST_URL || 'http://kade.test').replace(/\/$/, '');
 export const ADMIN = [process.env.KADE_TEST_ADMIN_LOGIN || 'admin', process.env.KADE_TEST_ADMIN_PASSWORD || 'Teste@123'];
@@ -68,6 +71,18 @@ export async function login(page, [user, password]) {
 	await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle2' }), page.click('#form_login button[type=submit]')]);
 	if (page.url().includes('/login/'))
 		throw new Error(`Login de "${user}" falhou: confira KADE_TEST_*_LOGIN/PASSWORD`);
+}
+
+/**
+ * Acessibilidade com axe-core (WCAG 2 A/AA e boas práticas). Retorna as violações
+ * em texto curto: "regra: elemento (motivo)".
+ */
+export async function accessibility(page) {
+	await page.addScriptTag({ path: AXE_PATH });
+	return page.evaluate(async () => {
+		const result = await window.axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'best-practice'] });
+		return result.violations.flatMap((v) => v.nodes.slice(0, 3).map((n) => `${v.id}: ${n.target.join(' ')} (${v.help})`));
+	});
 }
 
 /**

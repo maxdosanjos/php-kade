@@ -38,7 +38,7 @@ $text   = ($code == 403)
 			<span class="k:font-display k:text-xl k:font-bold k:tracking-wide">KADE <span class="k:font-semibold k:text-muted">Caminhões</span></span>
 		</a>
 		<div class="k:flex k:w-full k:max-w-[520px] k:flex-col k:items-center k:gap-4 k:rounded-2xl k:border k:border-line k:bg-white k:p-8 k:md:p-10">
-			<span class="k:font-display k:text-6xl k:font-bold k:text-accent"><?=$code?></span>
+			<span class="k:font-display k:text-6xl k:font-bold k:text-accent-ink"><?=$code?></span>
 			<h1 class="k:font-display k:text-2xl k:font-bold k:text-kade-950"><?=$title?></h1>
 			<p class="k:text-base k:leading-relaxed k:text-muted"><?=$text?></p>
 			<div class="k:mt-2 k:flex k:flex-wrap k:justify-center k:gap-2.5">

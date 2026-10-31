@@ -86,12 +86,12 @@ $segLabel = "k:flex k:min-h-10 k:cursor-pointer k:items-center k:justify-center 
 	</form>
 
 	<section id="div_result" class="k:overflow-hidden k:rounded-2xl k:border k:border-line k:bg-white" aria-label="Clientes">
-		<div class="k:overflow-x-auto">
+		<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 			<table id="table_query_open" class="k-table k:min-w-[560px]">
 				<thead>
 					<tr>
-						<th class="column-order" lang="cli.user_person_id">Nº <?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></th>
-						<th class="column-order" lang="per.name">Nome / razão social <?=$ctrlCustQry->getImgOrder('per.name');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="cli.user_person_id">Nº <?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="per.name">Nome / razão social <?=$ctrlCustQry->getImgOrder('per.name');?></th>
 						<th>CPF / CNPJ</th>
 					</tr>
 				</thead>

@@ -166,17 +166,17 @@ $segLabel = "k:flex k:min-h-10 k:cursor-pointer k:items-center k:justify-center 
 			</span>
 			<span class="k:text-[13px] k:text-muted">Clique em um cliente para editar</span>
 		</div>
-		<div class="k:overflow-x-auto">
+		<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 			<table id="table_query_open" class="k-table">
 				<thead>
 					<tr>
-						<th class="column-order" lang="cli.user_person_id" title="Ordenar por número">Nº <?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></th>
-						<th class="column-order" lang="per.name" title="Ordenar por nome">Nome / razão social <?=$ctrlCustQry->getImgOrder('per.name');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="cli.user_person_id" title="Ordenar por número">Nº <?=$ctrlCustQry->getImgOrder('cli.user_person_id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="per.name" title="Ordenar por nome">Nome / razão social <?=$ctrlCustQry->getImgOrder('per.name');?></th>
 						<th>CPF / CNPJ</th>
-						<th class="column-order" lang="addr.city" title="Ordenar por cidade">Cidade <?=$ctrlCustQry->getImgOrder('addr.city');?></th>
-						<th class="column-order" lang="addr.state" title="Ordenar por UF">UF <?=$ctrlCustQry->getImgOrder('addr.state');?></th>
-						<th class="column-order" lang="usr.date_cad" title="Ordenar por data de cadastro">Cadastro <?=$ctrlCustQry->getImgOrder('usr.date_cad');?></th>
-						<th class="column-order" lang="usr.status" title="Ordenar por status">Status <?=$ctrlCustQry->getImgOrder('usr.status');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="addr.city" title="Ordenar por cidade">Cidade <?=$ctrlCustQry->getImgOrder('addr.city');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="addr.state" title="Ordenar por UF">UF <?=$ctrlCustQry->getImgOrder('addr.state');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="usr.date_cad" title="Ordenar por data de cadastro">Cadastro <?=$ctrlCustQry->getImgOrder('usr.date_cad');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="usr.status" title="Ordenar por status">Status <?=$ctrlCustQry->getImgOrder('usr.status');?></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">

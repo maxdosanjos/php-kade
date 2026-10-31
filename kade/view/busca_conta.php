@@ -88,15 +88,15 @@ $pageActions = '<button type="button" id="button_new" class="k-btn k-btn-primary
 			</span>
 			<span class="k:text-[13px] k:text-muted">Clique em uma conta para ver as parcelas</span>
 		</div>
-		<div class="k:overflow-x-auto">
+		<div class="k-focus k:overflow-x-auto" tabindex="0" role="region" aria-label="Tabela (role para o lado se precisar)">
 			<table id="table_query_open" class="k-table">
 				<thead>
 					<tr>
-						<th class="column-order" lang="acc.id" title="Ordenar por número">Nº <?=$ctrlAcctQry->getImgOrder('acc.id');?></th>
-						<th class="column-order" lang="acc.date_hr_proc" title="Ordenar por data">Criada em <?=$ctrlAcctQry->getImgOrder('acc.date_hr_proc');?></th>
-						<th class="column-order" lang="acc.client_user_person_id" title="Ordenar por cliente">Cliente <?=$ctrlAcctQry->getImgOrder('acc.client_user_person_id');?></th>
-						<th class="column-order" lang="acc.validate_month" title="Ordenar por parcelas">Parcelas <?=$ctrlAcctQry->getImgOrder('acc.validate_month');?></th>
-						<th class="column-order" lang="acc.status" title="Ordenar por status">Status <?=$ctrlAcctQry->getImgOrder('acc.status');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="acc.id" title="Ordenar por número">Nº <?=$ctrlAcctQry->getImgOrder('acc.id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="acc.date_hr_proc" title="Ordenar por data">Criada em <?=$ctrlAcctQry->getImgOrder('acc.date_hr_proc');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="acc.client_user_person_id" title="Ordenar por cliente">Cliente <?=$ctrlAcctQry->getImgOrder('acc.client_user_person_id');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="acc.validate_month" title="Ordenar por parcelas">Parcelas <?=$ctrlAcctQry->getImgOrder('acc.validate_month');?></th>
+						<th class="column-order k-focus" tabindex="0" data-col="acc.status" title="Ordenar por status">Status <?=$ctrlAcctQry->getImgOrder('acc.status');?></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">

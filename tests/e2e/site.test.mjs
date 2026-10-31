@@ -4,7 +4,7 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ADMIN, BASE, USER, audit, launch, login, openPage, siteIsUp } from './helpers.mjs';
+import { ADMIN, BASE, USER, accessibility, audit, launch, login, openPage, siteIsUp } from './helpers.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const up = await siteIsUp();
@@ -39,10 +39,12 @@ async function checkPage(context, url, viewport) {
 	const page = await openPage(context, viewport);
 	await page.goto(BASE + url, { waitUntil: 'networkidle2' });
 	const result = await audit(page);
+	const a11y = await accessibility(page);
 	const problems = page.problems;
 	await page.close();
 
 	assert.deepEqual(problems, [], `${url}: erros no navegador`);
+	assert.deepEqual(a11y, [], `${url}: problemas de acessibilidade (axe-core)`);
 	assert.equal(result.h1, 1, `${url}: deve ter exatamente um <h1> (tem ${result.h1})`);
 	assert.deepEqual(result.imgsWithoutAlt, [], `${url}: imagens sem alt`);
 	assert.deepEqual(result.unlabeled, [], `${url}: campos sem rótulo`);
@@ -117,6 +119,16 @@ describe('fluxos', { skip }, () => {
 		await page.waitForFunction(() => document.querySelectorAll('#tbody_installment input[name="installment_value[]"]').length === 6, { timeout: 10000 });
 		const values = await page.$$eval('#tbody_installment input[name="installment_value[]"]', (els) => els.map((e) => e.value));
 		assert.ok(values.every((v) => Number(v) === 70), `valores das parcelas: ${values}`);
+		assert.deepEqual(page.problems, []);
+		await page.close();
+	});
+
+	test('tabela ordena pelo teclado (Tab + Enter no cabeçalho)', async () => {
+		const page = await openPage(sessions.admin);
+		await page.goto(BASE + '/view_custumers/', { waitUntil: 'networkidle2' });
+		await page.focus('th[data-col="per.name"]');
+		await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle2' }), page.keyboard.press('Enter')]);
+		assert.equal(await page.$eval('#order_column', (el) => el.value), 'per.name');
 		assert.deepEqual(page.problems, []);
 		await page.close();
 	});

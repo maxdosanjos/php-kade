@@ -60,7 +60,7 @@ var AccountBean = function() {
 						$("#parc_payment_date_dtl").attr("readonly","true").addClass("readonly");
 						$("#parc_payment_method_dtl").attr("readonly","true").addClass("readonly");
 						
-						$("#parc_payment_method_dtl option[lang = 0]").show();
+						$("#parc_payment_method_dtl option[data-enabled='0']").show();
 						
 						$("#parc_payment_date_dtl").datepicker( "destroy" );
 						
@@ -80,7 +80,7 @@ var AccountBean = function() {
 							$("#parc_payment_value_dtl").val("");
 						}
 						
-						$("#parc_payment_method_dtl option[lang = 0]").hide();
+						$("#parc_payment_method_dtl option[data-enabled='0']").hide();
 						
 						$("#parc_payment_date_dtl").datepicker(System.getDatePickerOp());
 						

@@ -73,13 +73,20 @@ var Pagination = function() {
 				$("#order_type").val("DESC");
 			else
 				$("#order_type").val("ASC");
-			$("#order_column").val($(this).attr("lang"));
+			$("#order_column").val($(this).attr("data-col"));
 			form.submit();
+		});
+		// Ordenação também pelo teclado (Enter ou espaço no cabeçalho)
+		$(document).on('keydown', "th.column-order", function (event) {
+			if (event.which == 13 || event.which == 32) {
+				event.preventDefault();
+				$(this).click();
+			}
 		});
 		
 		$(document).on('click',"div.nav_pag_right a, div.nav_pag_left a", function (event) {
 			event.preventDefault();
-			$("#pag").val($(this).attr("lang"));
+			$("#pag").val($(this).attr("data-pag"));
 			form.submit();
 		});
 		$("input:submit").click(function() {
