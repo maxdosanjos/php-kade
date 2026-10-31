@@ -54,6 +54,13 @@ ErrorDocument 404 /error.php
     Require all denied
 </FilesMatch>
 
+# Pastas que só o PHP usa não são servidas direto: views e parciais mostravam erro
+# fatal com o caminho do servidor e der/ entregava o dump do banco. REDIRECT_STATUS
+# vazio = requisição original; as rotas *.ctrlExt, reescritas internamente para
+# shared/class/controller/, continuam funcionando.
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^(view|der|shared/class|shared/css/src)(/|$) - [R=404,L,NC]
+
 # /shared/ só tem arquivos: um arquivo ausente ali vira 404 (antes renderizava a home inteira)
 RewriteCond %{REQUEST_URI} !^/shared/
 RewriteCond %{REQUEST_FILENAME} !-f
