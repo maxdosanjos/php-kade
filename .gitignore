@@ -2,3 +2,8 @@
 .env.*
 !.env.example
 node_modules/
+
+# Ferramentas de desenvolvimento (Composer e PHPUnit)
+vendor/
+.phpunit.result.cache
+phpunit.xml
