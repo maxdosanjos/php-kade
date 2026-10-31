@@ -128,6 +128,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		exit ();
 	}
 	public function onExpiredRegisters() {
+		$crontabExpired = "";
 		$prop = Properties::getGroup ( "job_msg_expired" );
 		
 		$file_cron_exp = dirname ( dirname ( dirname ( __FILE__ ) ) ) . "/" . $prop ["file_job_expired"];
@@ -253,7 +254,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		
 		try {
 			$address = new Address ();
-			$address->setState ( $_POST ["maps_state"] );
+			$address->setState ( ($_POST ["maps_state"] ?? "") );
 			$this->selectedUf = $address->getState ();
 
 			$criteria = new Criteria ();

@@ -15,6 +15,8 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		private $orderType   = null; // tipo da ordenação
 		private $orderColumn = null; // coluna a ser ordenada
 		private $pagination  = null;
+		private $dtHrInit    = null; // período da busca
+		private $dtHrEnd     = null;
 		
 		public function __construct() {
 			parent::__construct ();
@@ -87,7 +89,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		 * @method String Retorna a imagem de acordo com a ordenação
 		 */
 		public function getImgOrder($columnBD) {
-			if ($this->getOrderColumn () == trim ( $columnBD )) {
+			if ($this->getOrderColumn () == trim((string) $columnBD)) {
 				if ($this->getOrderType () == "DESC")
 					return "&#x25BC;";
 				return "&#x25B2;";
@@ -118,7 +120,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		 * @return void
 		 */
 		public function setOrderColumn($orderColumn = "log.date_hr") {
-			$this->orderColumn = trim ( $orderColumn );
+			$this->orderColumn = trim((string) $orderColumn);
 		}
 		/**
 		 * Setter: orderType
@@ -128,7 +130,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 		 * @return void
 		 */
 		public function setOrderType($orderType = "DESC") {
-			$this->orderType = strtoupper ( trim ( $orderType ) );
+			$this->orderType = strtoupper ( trim((string) $orderType) );
 		}
 		/**
 		 * * Parametros para busca **

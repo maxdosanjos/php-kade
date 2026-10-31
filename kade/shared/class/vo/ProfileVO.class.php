@@ -16,7 +16,7 @@ class Profile {
 
 	public function setId($id){
 		$maxlength = 4;
-		$id = trim($id);
+		$id = trim((string) $id);
 		if(mb_strlen($id) > $maxlength){
 			$name = mb_substr($id,0,$maxlength);
 		}								
@@ -29,7 +29,7 @@ class Profile {
 
 	public function setDescr($descr){
 		$maxlength = 45;
-		$descr = trim($descr);
+		$descr = trim((string) $descr);
 		if(mb_strlen($descr) > $maxlength){
 			$name = mb_substr($descr,0,$maxlength);
 		}								

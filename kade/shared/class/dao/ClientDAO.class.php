@@ -274,6 +274,7 @@ class ClientDAO{
 	}
 	
 	public function insert($dbConfig, Client $obj) {
+		$personDb = null;
 		$inTransaction = false;
 		
 		if($dbConfig instanceof DBConfig){

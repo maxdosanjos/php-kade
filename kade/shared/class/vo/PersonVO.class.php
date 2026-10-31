@@ -29,7 +29,7 @@ class Person {
 
 	public function setName($name){
 		$maxlength = 255;
-		$name = trim($name);
+		$name = trim((string) $name);
 		if(mb_strlen($name) > $maxlength){
 			$name = mb_substr($name,0,$maxlength);
 		}
@@ -43,7 +43,7 @@ class Person {
 
 	public function setEmail($email){
 		$maxlength = 255;
-		$email = trim($email);
+		$email = trim((string) $email);
 		if(mb_strlen($email) > $maxlength){
 			$email = mb_substr($email,0,$maxlength);
 		}
@@ -55,7 +55,7 @@ class Person {
 	}
 
 	public function setType($type){
-		$type = trim($type);
+		$type = trim((string) $type);
 		$_list = array_keys(Person::listType());
 		if(in_array($type,$_list))
 			$this->type = $type;

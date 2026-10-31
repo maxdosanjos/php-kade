@@ -49,7 +49,7 @@ class InstallmentQueryCtrl extends AbstractCtrl {
 	}
 	public function onSearchArray() {
 		try {
-			$this->installmentDAO = installmentDAO::getInstance ();
+			$this->installmentDAO = InstallmentDAO::getInstance ();
 			
 			$this->installmentParam = $this->getRequestBean ( $_POST );
 			
@@ -97,7 +97,7 @@ class InstallmentQueryCtrl extends AbstractCtrl {
 	 * @method String Retorna a imagem de acordo com a ordenação
 	 */
 	public function getImgOrder($columnBD) {
-		if ($this->getOrderColumn () == trim ( $columnBD )) {
+		if ($this->getOrderColumn () == trim((string) $columnBD)) {
 			if ($this->getOrderType () == "ASC")
 				return "&#x25BC;";
 			return "&#x25B2;";
@@ -128,7 +128,7 @@ class InstallmentQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderColumn($orderColumn = "ins.id") {
-		$this->orderColumn = trim ( $orderColumn );
+		$this->orderColumn = trim((string) $orderColumn);
 	}
 	/**
 	 * Setter: orderType
@@ -138,7 +138,7 @@ class InstallmentQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderType($orderType = "DESC") {
-		$this->orderType = strtoupper ( trim ( $orderType ) );
+		$this->orderType = strtoupper ( trim((string) $orderType) );
 	}
 	public function getInstallments() {
 		return $this->installments;

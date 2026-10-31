@@ -20,7 +20,7 @@ class Phone {
 
 	public function setDdi($ddi){
 		$maxlength = 3;
-		$ddi = trim($ddi);
+		$ddi = trim((string) $ddi);
 		if(mb_strlen($ddi) > $maxlength){
 			$ddi = mb_substr($ddi,0,$maxlength);
 		}
@@ -33,7 +33,7 @@ class Phone {
 
 	public function setDdd($ddd){
 		$maxlength = 3;
-		$ddd = trim($ddd);
+		$ddd = trim((string) $ddd);
 		if(mb_strlen($ddd) > $maxlength){
 			$ddd = mb_substr($ddd,0,$maxlength);
 		}
@@ -46,7 +46,7 @@ class Phone {
 
 	public function setPhone($phone){
 		$maxlength = 11;
-		$phone = trim($phone);
+		$phone = trim((string) $phone);
 		$phone = preg_replace ("([^0-9])", "", $phone);
 		if(mb_strlen($phone) > $maxlength){
 			$phone = mb_substr($phone,0,$maxlength);
@@ -59,7 +59,7 @@ class Phone {
 	}
 	
 	public function setPhoneByMask($phone){
-		$phone = trim($phone);		
+		$phone = trim((string) $phone);		
 		$this->setDdi("55");		
 		$this->setDdd(mb_substr($phone,1,2));		
 		$this->setPhone(mb_substr($phone,4,11));

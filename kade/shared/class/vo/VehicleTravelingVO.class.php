@@ -42,7 +42,7 @@ class VehicleTraveling {
 	}
 	public function setIp($ip) {
 		$maxlength = 15;
-		$ip = trim ( $ip );
+		$ip = trim((string) $ip);
 		if (strlen ( $ip ) > $maxlength) {
 			$name = substr ( $ip, 0, $maxlength );
 		}
@@ -70,7 +70,7 @@ class VehicleTraveling {
 		return $this->dateHrProc;
 	}
 	public function setSource($source) {
-		$source = trim ( $source );
+		$source = trim((string) $source);
 		$_list = array_keys ( VehicleTraveling::listSource () );
 		if (in_array ( $source, $_list ))
 			$this->source = $source;
@@ -90,7 +90,7 @@ class VehicleTraveling {
 		return $list [$this->source];
 	}
 	public function setStatus($status) {
-		$status = trim ( $status );
+		$status = trim((string) $status);
 		$_list = array_keys ( VehicleTraveling::listStatus () );
 		if (in_array ( $status, $_list ))
 			$this->status = $status;

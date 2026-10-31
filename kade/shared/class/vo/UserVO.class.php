@@ -26,7 +26,7 @@ class User {
 
 	public function setLogin($login){
 		$maxlength = 20;
-		$login = trim($login);
+		$login = trim((string) $login);
 		if(mb_strlen($login) > $maxlength){
 			$name = mb_substr($login,0,$maxlength);
 		}				
@@ -39,7 +39,7 @@ class User {
 
 	public function setPassword($password){
 		$maxlength = 40;
-		$password = trim($password);
+		$password = trim((string) $password);
 		if(mb_strlen($password) > $maxlength){
 			$name = mb_substr($password,0,$maxlength);
 		}						
@@ -51,7 +51,7 @@ class User {
 	}
 
 	public function setStatus($status){
-		$status = trim($status);
+		$status = trim((string) $status);
 		$_list = array_keys(User::listStatus());
 		if(in_array($status,$_list))
 			$this->status = $status;
@@ -71,7 +71,7 @@ class User {
 
 	public function setText($text){
 		$maxlength = 65535;
-		$text = trim($text);
+		$text = trim((string) $text);
 		if(mb_strlen($text) > $maxlength){
 			$name = mb_substr($text,0,$maxlength);
 		}								
@@ -90,7 +90,7 @@ class User {
 		return $this->dateCad;
 	}
 
-	public function setUserAlt(UserVO $userAlt){
+	public function setUserAlt(User $userAlt){
 		$this->userAlt = $userAlt;
 	}
 
@@ -180,11 +180,9 @@ class User {
 	public function toString(){
 		return "User [
 				login => ".$this->getLogin().", 
-				password => ".$this->getPassword().", 
 				status => ".$this->getStatus().", 
 				text => ".$this->getText().", 
 				dateCad => ".$this->getDateCad().", 
-				type => ".$this->getType().", 
 				userAlt => ".$this->getUserAlt()."]";
 	}
 }

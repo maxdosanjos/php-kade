@@ -304,6 +304,7 @@
 			header("Location:/");
 		}
 		public function onLogin(){
+			$url = "Location:/";
 			$invalid = "Usuário ou senha inválidos.";
 			try
 			{

@@ -25,6 +25,7 @@ class DBConfig {
 	public function setStrConnection($strConnection)
 	{
 		$this->strConnection = $strConnection;
+		return $this;
 	}
 	
 	public function getStrConnection()
@@ -58,7 +59,7 @@ class DBConfig {
 	 */
 	public function setUser($user)
 	{
-		$this->user = substr(trim($user),0,200); return $this;
+		$this->user = substr(trim((string) $user),0,200); return $this;
 	}
 
 	/**
@@ -81,7 +82,7 @@ class DBConfig {
 	 */
 	public function setPassword($pass)
 	{
-		$this->password = substr(trim($pass),0,200); return $this;
+		$this->password = substr(trim((string) $pass),0,200); return $this;
 	}
 
 	/**
@@ -104,7 +105,7 @@ class DBConfig {
 	 */
 	public function setHost($host)
 	{
-		$this->host = substr(trim($host),0,200); return $this;
+		$this->host = substr(trim((string) $host),0,200); return $this;
 	}
 
 	/**
@@ -127,7 +128,7 @@ class DBConfig {
 	 */
 	public function setDatabase($db)
 	{
-		$this->database = substr(trim($db),0,200); return $this;
+		$this->database = substr(trim((string) $db),0,200); return $this;
 	}
 
 	/**
@@ -171,7 +172,7 @@ class DBConfig {
 	 */
 	public function setSGBD($SGBD)
 	{
-		$this->SGBD = trim($SGBD); return $this;
+		$this->SGBD = trim((string) $SGBD); return $this;
 	}
 	
 	/**

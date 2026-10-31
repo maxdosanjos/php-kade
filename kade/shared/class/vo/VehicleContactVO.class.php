@@ -14,7 +14,7 @@ class VehicleContact{
 	
 	public function setName($name){
 		$maxlength = 255;
-		$name = trim($name);
+		$name = trim((string) $name);
 		if(mb_strlen($name) > $maxlength){
 			$name = mb_substr($name,0,$maxlength);
 		}

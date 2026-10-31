@@ -40,7 +40,7 @@ class Account {
 	}
 
 	public function setStatus($status){
-		$status = trim($status);
+		$status = trim((string) $status);
 		$_list = array_keys(Installment::listStatus());
 		if(in_array($status,$_list))
 			$this->status = $status;
@@ -131,7 +131,6 @@ class Account {
 				id => ".$this->getId().", 
 				dtHrProc => ".$this->getDtHrProc().", 
 				status => ".$this->getStatus().", 
-				cliente => ".$this->getCliente().", 
 				validateMonth => ".$this->getValidateMonth()."]";
 	}
 	

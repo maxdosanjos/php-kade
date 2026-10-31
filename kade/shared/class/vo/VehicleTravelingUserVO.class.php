@@ -42,7 +42,7 @@ class VehicleTravelingUser {
 		return $this->dateHrUsed;
 	}
 	public function setStatus($status){
-		$status = trim($status);
+		$status = trim((string) $status);
 		$_list = array_keys(VehicleTraveling::listStatus());
 		if(in_array($status,$_list))
 			$this->status = $status;
@@ -57,7 +57,7 @@ class VehicleTravelingUser {
  	}
 	public function getDescStatus(){
  		$list = VehicleTravelingUser::listStatus();
- 		return $list[$this->type]; 
+ 		return $list[$this->status] ?? ""; 
  	} 
 
 	public function toString(){

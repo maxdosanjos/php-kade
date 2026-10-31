@@ -274,7 +274,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 	 * @method String Retorna a imagem de acordo com a ordenação
 	 */
 	public function getImgOrder($columnBD) {
-		if ($this->getOrderColumn () == trim ( $columnBD )) {
+		if ($this->getOrderColumn () == trim((string) $columnBD)) {
 			if ($this->getOrderType () == "DESC")
 				return "&#x25BC;";
 			return "&#x25B2;";
@@ -305,7 +305,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderColumn($orderColumn = "cli.user_person_id") {
-		$this->orderColumn = trim ( $orderColumn );
+		$this->orderColumn = trim((string) $orderColumn);
 	}
 	/**
 	 * Setter: orderType
@@ -315,7 +315,7 @@ class CustumerQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderType($orderType = "DESC") {
-		$this->orderType = strtoupper ( trim ( $orderType ) );
+		$this->orderType = strtoupper ( trim((string) $orderType) );
 	}
 	/**
 	 * * Parametros para busca **

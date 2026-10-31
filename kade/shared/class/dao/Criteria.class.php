@@ -212,7 +212,7 @@ class Criteria {
 	 * @param tableName
 	 */
 	public function setTableName($tableName){
-		if(trim($tableName)!=""){
+		if(trim((string) $tableName)!=""){
 			$this->tableName = $this->applySeparator($tableName);
 		}
 	}
@@ -414,8 +414,8 @@ class Criteria {
 				$arg1 = $arg1->format(self::$DEFAULT_TIMEFORMAT);
 				$arg2 = $arg2->format(self::$DEFAULT_TIMEFORMAT);
 			}else if($fieldType == self::FIELD_CHAR){
-				$arg1 = trim($arg1);
-				$arg2 = trim($arg2);
+				$arg1 = trim((string) $arg1);
+				$arg2 = trim((string) $arg2);
 			}else if($fieldType == self::FIELD_INT){
 				$arg1 = intval($arg1);
 				$arg2 = intval($arg2);

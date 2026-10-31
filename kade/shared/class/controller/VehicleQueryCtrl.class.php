@@ -151,7 +151,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
      * @method String Retorna a imagem de acordo com a ordenação
      */
     public function getImgOrder($columnBD){
-		if($this->getOrderColumn()==trim($columnBD))
+		if($this->getOrderColumn()==trim((string) $columnBD))
 		{
 			if($this->getOrderType()== "DESC")
 				return "&#x25BC;";  
@@ -181,7 +181,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderColumn($orderColumn="vt.id"){
-		$this->orderColumn = trim($orderColumn);
+		$this->orderColumn = trim((string) $orderColumn);
 	}
 	/**
 	 * Setter: orderType
@@ -189,7 +189,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderType($orderType="DESC"){
-		$this->orderType = strtoupper(trim($orderType));
+		$this->orderType = strtoupper(trim((string) $orderType));
 	}
 	/*** Parametros para busca ***/
     public function getDtHrInit(){
@@ -205,6 +205,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     	$this->dtHrEnd = $dtHrEnd;
     }      
     public function setStsCancel(){
+			$db = null;
 			$inTransaction = false;
     	try {
     		$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();    			
@@ -268,6 +269,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     	echo json_encode($vehJsonArr);
 	}
 	public function setStsUtilized(){
+		$db = null;
 		$inTransaction = false;
     	try {
     		$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();    			
@@ -322,6 +324,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
     	echo json_encode($vehJsonArr);
     }
 	public function onViewDetail(){
+		$db = null;
 		$vehicleTrav = null;
 		$inTransaction = false;
 		

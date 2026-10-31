@@ -16,7 +16,7 @@ class PersonIndividual extends Person  {
 	}
 
 	public function setCpf($cpf){
-		$cpf = trim($cpf);
+		$cpf = trim((string) $cpf);
 		$cpf = preg_replace("/[\-\.]/i","",$cpf);
 		$maxlength = 11;
 		if(mb_strlen($cpf) > $maxlength){
@@ -30,7 +30,7 @@ class PersonIndividual extends Person  {
 	}
 
 	public function setGender($gender){
-		$gender = trim($gender);
+		$gender = trim((string) $gender);
 		$_list = array_keys(PersonIndividual::listGender());
 		if(in_array($gender,$_list))
 			$this->gender = $gender;

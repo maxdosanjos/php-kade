@@ -69,7 +69,7 @@ class Installment {
 	}
 
 	public function setStatus($status){
-		$status = trim($status);
+		$status = trim((string) $status);
 		$_list = array_keys(Installment::listStatus());
 		if(in_array($status,$_list))
 			$this->status = $status;

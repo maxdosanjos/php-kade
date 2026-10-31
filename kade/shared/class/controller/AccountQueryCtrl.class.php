@@ -32,6 +32,8 @@ class AccountQueryCtrl extends AbstractCtrl {
 	private $orderType   = null; // tipo da ordenação
 	private $orderColumn = null; // coluna a ser ordenada
 	private $pagination  = null;
+	private $dtHrInit    = null; // período da busca
+	private $dtHrEnd     = null;
 	
 	public function __construct() {
 		parent::__construct ();
@@ -144,7 +146,7 @@ class AccountQueryCtrl extends AbstractCtrl {
 	 * @method String Retorna a imagem de acordo com a ordenação
 	 */
 	public function getImgOrder($columnBD) {
-		if ($this->getOrderColumn () == trim ( $columnBD )) {
+		if ($this->getOrderColumn () == trim((string) $columnBD)) {
 			if ($this->getOrderType () == "DESC")
 				return "&#x25BC;";
 			return "&#x25B2;";
@@ -175,7 +177,7 @@ class AccountQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderColumn($orderColumn = "acc.id") {
-		$this->orderColumn = trim ( $orderColumn );
+		$this->orderColumn = trim((string) $orderColumn);
 	}
 	/**
 	 * Setter: orderType
@@ -185,7 +187,7 @@ class AccountQueryCtrl extends AbstractCtrl {
 	 * @return void
 	 */
 	public function setOrderType($orderType = "DESC") {
-		$this->orderType = strtoupper ( trim ( $orderType ) );
+		$this->orderType = strtoupper ( trim((string) $orderType) );
 	}
 	/**
 	 * * Parametros para busca **

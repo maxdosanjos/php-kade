@@ -70,6 +70,7 @@
 		}
 		
 		public function updateStatus($dbConfig,User $user){
+			$sqlText = "";
 				
 			if($dbConfig instanceof DBConfig){
 				$db        =  DataBase::getInstance($dbConfig);
@@ -102,6 +103,7 @@
 		}
 		
 		public function confirmLink($dbConfig,$vua){
+			$db = null;
 			try
 			{
 				$inTransaction = false;
@@ -162,6 +164,7 @@
 		}
 		
 		public function confirmUserByLink($dbConfig,$vua){
+			$db = null;
 			try
 			{
 				$inTransaction = false;
@@ -205,6 +208,7 @@
 		}
 		
 		public function confirmLinkPwd($dbConfig,$vua){
+			$db = null;
 			try
 			{
 				$inTransaction = false;
@@ -242,6 +246,7 @@
 		}
 	
 		public function getSingle($dbConfig, Criteria $criteria) {
+			$person = null;
 			$user = null;
 			
 			if($dbConfig instanceof DBConfig){

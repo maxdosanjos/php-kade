@@ -1,7 +1,7 @@
 <?
 class Util {
 	public static function bigIntval($value) {
-		$value = trim ( $value );
+		$value = trim((string) $value);
 		if (ctype_digit ( $value )) {
 			return $value;
 		}
@@ -25,7 +25,7 @@ class Util {
 			} elseif (strpos ( $ip, ',' ) !== false) {
 				$ips = explode ( ',', $ip );
 				foreach ( $ips as $ip ) {
-					$ip = trim ( $ip );
+					$ip = trim((string) $ip);
 					if (self::validateIP ( $ip )) {
 						return $ip;
 					}
@@ -33,7 +33,7 @@ class Util {
 			} elseif (strpos ( $ip, ';' ) !== false) {
 				$ips = explode ( ';', $ip );
 				foreach ( $ips as $ip ) {
-					$ip = trim ( $ip );
+					$ip = trim((string) $ip);
 					if (self::validateIP ( $ip )) {
 						return $ip;
 					}

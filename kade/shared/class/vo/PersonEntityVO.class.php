@@ -13,7 +13,7 @@ class PersonEntity extends Person  {
 	}
 
 	public function setCnpj($cnpj){
-		$cnpj = trim($cnpj);
+		$cnpj = trim((string) $cnpj);
 		$cnpj = preg_replace("/[\-\.\/\\\]/i","",$cnpj);
 		$maxlength = 14;
 		if(mb_strlen($cnpj) > $maxlength){
@@ -41,7 +41,7 @@ class PersonEntity extends Person  {
 
 	public function setContact($contact){
 		$maxlength = 255;
-		$contact = trim($contact);
+		$contact = trim((string) $contact);
 		if(mb_strlen($contact) > $maxlength){
 			$contact = mb_substr($contact,0,$maxlength);
 		}
@@ -55,7 +55,6 @@ class PersonEntity extends Person  {
 	public function toString(){
 		return "PersonEntity [
 				cnpj => ".$this->getCnpj().", 
-				corporateName => ".$this->getCorporateName().", 
 				ie => ".$this->getIe().", 
 				contact => ".$this->getContact()."]";
 	}

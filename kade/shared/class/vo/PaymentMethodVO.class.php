@@ -18,7 +18,7 @@ class PaymentMethod {
 
 	public function setName($name){
 		$maxlength = 45;
-		$name = trim($name);
+		$name = trim((string) $name);
 		if(mb_strlen($name) > $maxlength){
 			$name = mb_substr($name,0,$maxlength);
 		}
@@ -31,7 +31,7 @@ class PaymentMethod {
 
 	public function setDescr($descr){
 		$maxlength = 100;
-		$descr = trim($descr);
+		$descr = trim((string) $descr);
 		if(mb_strlen($descr) > $maxlength){
 			$descr = mb_substr($descr,0,$maxlength);
 		}
@@ -68,7 +68,7 @@ class PaymentMethod {
 		$output["enabled"] = $this->getEnabled();
 		$output["descr"]   = iconv ( "UTF-8", "UTF-8",$this->getDescr());
 		
-		return output;
+		return $output;
 	}
 }
 ?>

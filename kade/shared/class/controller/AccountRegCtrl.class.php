@@ -22,6 +22,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 class AccountRegCtrl extends AbstractCtrl {
 	private $accountEdit = null;
 	private $accountDAO = null;
+	private $clientEdit = null;
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
@@ -45,6 +46,7 @@ class AccountRegCtrl extends AbstractCtrl {
 		}
 	}
 	public function onCancelCont() {
+		$db = null;
 		$output = array (
 				"result" => 0,
 				"message" => "",
@@ -260,6 +262,7 @@ class AccountRegCtrl extends AbstractCtrl {
 		}
 	}
 	public function onSaveInter() {
+		$db = null;
 		$output = array (
 				"result" => 0,
 				"message" => "",

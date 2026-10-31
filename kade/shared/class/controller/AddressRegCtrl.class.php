@@ -29,7 +29,7 @@ class AddressRegCtrl extends AbstractCtrl {
 		);
 		
 		$address = new Address ();
-		$address->setCep ( $_REQUEST ["zipcode"] );
+		$address->setCep ( ($_REQUEST ["zipcode"] ?? "") );
 		try {
 			
 			$addressDAO = AddressDAO::getInstance ();

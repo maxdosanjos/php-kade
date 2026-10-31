@@ -352,7 +352,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 		}
 		
 		$buffer = ob_get_clean();
-		if (trim($buffer) !== '') {
+		if (trim((string) $buffer) !== '') {
 			// Unexpected output (warnings/notices) detected - log and return a safe JSON error
 			error_log("Unexpected output in onSaveWeb(): " . $buffer);
 			header ( "Content-type: application/json; charset=UTF-8" );

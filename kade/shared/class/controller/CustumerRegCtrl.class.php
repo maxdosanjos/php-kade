@@ -163,6 +163,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			return $client;
 		}
 	public function validateBean(Client $obj, $validateLogin = true) {
+		$person = null;
 		$e = new ValidationException ( "Dados incompletos!" );
 		
 		$user = $obj->getUser ();
@@ -306,6 +307,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$person->getPhone ()->setId ( $currentPerson->getPhone ()->getId () );
 	}
 	public function onSaveInter() {
+			$db = null;
 			ob_start();
 			$output = array (
 					"result" => 0,
@@ -439,7 +441,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 		}
 		
 			$buffer = ob_get_clean();
-			if (trim($buffer) !== '') {
+			if (trim((string) $buffer) !== '') {
 				// Unexpected output (warnings/notices) detected - log and return a safe JSON error
 				error_log("Unexpected output in onSaveInter(): " . $buffer);
 				header ( "Content-type: application/json; charset=UTF-8" );
@@ -469,6 +471,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 		return $_result;
 	}
 	public function onSaveWeb() {
+		$db = null;
 		$output = array (
 				"result" => 0,
 				"message" => "",
@@ -583,7 +586,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 		}
 		
 		$buffer = ob_get_clean();
-		if (trim($buffer) !== '') {
+		if (trim((string) $buffer) !== '') {
 			// Unexpected output (warnings/notices) detected - log and return a safe JSON error
 			error_log("Unexpected output in onSaveWeb(): " . $buffer);
 			header ( "Content-type: application/json; charset=UTF-8" );

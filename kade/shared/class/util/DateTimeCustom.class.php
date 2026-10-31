@@ -43,7 +43,7 @@ class DateTimeCustom extends DateTime {
     }
     public function __construct($time = "now"){
     	date_default_timezone_set ( "America/Sao_Paulo" );
-    	parent::__construct($time);
+    	parent::__construct($time ?? "now");
     }
     
     public function addDaysWithoutWeekends(DateTime $date, $total){
@@ -176,15 +176,9 @@ class DateTimeCustom extends DateTime {
     
 	/**
 	 * @date 14/02/2013
-	 * Os próximos dois métodos foram portados da transação HELPDESK.
+	 * Portado da transação HELPDESK. (O diffDT que vinha junto dependia das classes
+	 * Date/Time de lá, que não existem aqui, e foi removido.)
 	 */
-    public function diffDT(Date $date1, Time $time1, Date $date2, Time $time2){
-    	$timestamp1     = mktime($time1->getHour(),$time1->getMinute(),$time1->getSecond(),$date1->getMonth(),$date1->getDay(),$date1->getYear());
-    	$timestamp2     = mktime($time2->getHour(),$time2->getMinute(),$time2->getSecond(),$date2->getMonth(),$date2->getDay(),$date2->getYear());
-    	
-    	$diff = ($timestamp1 - $timestamp2);
-    	return $diff;
-    }
     public function formatDiffDT($diff)
     {
         // Verificando se o numero tem sinal
@@ -332,7 +326,7 @@ class DateTimeCustom extends DateTime {
     		if($seconds > 0){
     			$output .= $seconds." segundo(s) ";
     		}
-    		return trim($output);
+    		return trim((string) $output);
     	}
     }
     

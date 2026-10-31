@@ -78,7 +78,7 @@ class Properties {
 			}
 			$lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			foreach ($lines as $line) {
-				$line = trim($line);
+				$line = trim((string) $line);
 				if ($line === "" || strpos($line, "#") === 0) {
 					continue;
 				}
