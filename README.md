@@ -82,6 +82,10 @@ O dump em `kade/der` é antigo. As migrações em [kade/der/migrations](kade/der
 | `003_collation_unica.sql` | Coloca banco e tabelas em `utf8mb4_unicode_ci` (havia mistura, que quebrava joins e comparações) |
 | `004_indice_mapa.sql` | Recria procedures e gatilhos do índice do mapa (contagem dupla corrigida) e recalcula os totais |
 | `005_parcelas.sql` | Parcelas sem forma de pagamento até serem pagas, status padrão e formas de pagamento iniciais |
+| `006_validade_links.sql` | Data de criação dos links enviados por e-mail; o link de nova senha vence em 24 horas |
+| `007_tentativas_login.sql` | Tabela `login_attempt`, usada no limite de tentativas de login |
+
+O código novo depende das migrações: rode-as **antes** de publicar os arquivos.
 
 ```bash
 mysqldump -u USUARIO -p --routines --triggers kadecaminh > backup_antes_migracoes.sql
@@ -148,17 +152,28 @@ Páginas principais: `cad_veiculo`, `cad_assinante`, `busca_veiculo`, `login`, `
 - Arquivos em **UTF-8 sem BOM**. Um BOM ou qualquer saída antes do `header()`/`json_encode` quebra as respostas.
 - **Não renomeie** `name`/`id` de campos de formulário: o JavaScript em `shared/js/` depende deles.
 
-## Verificação antes de um commit
+## Testes
+
+As ferramentas de teste são só de desenvolvimento (`composer install` e `npm ci` na raiz); nada disso vai para o servidor.
+
+| Comando | O que verifica | Precisa de |
+|---|---|---|
+| `composer test:unit` | Regras isoladas: datas, valores, CSV, escape do `Criteria`, paginação, senhas, CPF/CNPJ/e-mail, formatação | Só PHP |
+| `composer test:http` | O site de verdade: rotas e 404, arquivos internos bloqueados, permissões 401/403, login (bloqueio por tentativas, sessão, cookie), injeção de SQL, XSS, upload, CSV, cabeçalhos de segurança, nova senha pelo e-mail (Mailpit) | Site em `KADE_TEST_URL`, banco DEV do `.env` |
+| `composer test` | As duas suítes acima | Idem |
+| `npm run test:e2e` | No Chrome: todas as páginas no computador e no celular, sem erro de JavaScript, sem rolagem lateral, acessibilidade (axe-core, WCAG 2 A/AA) e fluxos (mapa, login, nova senha, imagens da home, parcelas, ordenação pelo teclado) | Site em `KADE_TEST_URL` e Chrome instalado (`CHROME_PATH` para outro caminho) |
+| `composer analyse` | Análise estática (PHPStan): classes, métodos e variáveis inexistentes | Só PHP |
+
+Os testes HTTP e de navegador entram com um administrador e um cliente comum, ambos ativos. Os padrões ficam em [phpunit.xml.dist](phpunit.xml.dist) (`KADE_TEST_ADMIN_LOGIN`, `KADE_TEST_USER_LOGIN` e senhas); para mudar só na sua máquina, copie para `phpunit.xml` ou defina as variáveis no ambiente. Se o site não responder, essas suítes são puladas.
+
+Antes de um commit:
 
 ```bash
-# sintaxe de todos os arquivos PHP
-find kade -name "*.php" -exec php -l {} \; | grep -v "No syntax errors"
-
-# charset das respostas
-curl -I http://kade.test/
+composer test && composer analyse && npm run test:e2e
+npm run build:css   # se mudou classes do Tailwind
 ```
 
-Depois, teste manualmente os fluxos principais: cadastro de assinante, cadastro de veículo, busca por CEP e login. Não faça commit de credenciais reais.
+Não faça commit de credenciais reais.
 
 ## Problemas comuns
 
@@ -175,7 +190,10 @@ Depois, teste manualmente os fluxos principais: cadastro de assinante, cadastro 
 Regras atuais:
 
 - Cada controller declara quem pode chamar cada ação com `guardAction()` (público, usuário logado ou administrador); sem permissão, a resposta é 401/403 em JSON.
-- Senhas com bcrypt (`password_hash`); links de confirmação e de nova senha usam tokens aleatórios de uso único.
+- Senhas com bcrypt (`password_hash`); links de confirmação e de nova senha usam tokens aleatórios de uso único. O link de nova senha vale 24 horas e só é enviado ao e-mail do cadastro, se o e-mail digitado conferir; a resposta é a mesma com ou sem cadastro.
+- Login: 10 senhas erradas para o mesmo login em 15 minutos bloqueiam esse login por 15 minutos (tabela `login_attempt`). A mensagem de erro é a mesma para login inexistente e senha errada, e o id da sessão muda a cada login.
+- `view/`, `der/`, `shared/class/` e `shared/css/src/` não são servidos direto pelo Apache (404).
+- Cabeçalhos: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e HSTS (só em HTTPS); sem `X-Powered-By`. O cookie de sessão é `HttpOnly`, `SameSite=Lax` e `Secure` em HTTPS, e todas as ações que alteram dados leem só `POST`.
 - Consultas montadas pelo `Criteria` escapam valores e só aceitam nomes de coluna válidos em `ORDER BY`; o restante usa prepared statements.
 - Usuário comum só altera o próprio cadastro e só cancela veículos que cadastrou.
 - Tudo o que vem do usuário ou de SMS é escapado nas views (`htmlspecialchars`); exportações CSV neutralizam fórmulas.
