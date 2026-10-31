@@ -310,6 +310,26 @@ summary::-webkit-details-marker {
 	color: #8a4b00;
 }
 
+/* Status de usuário e de contas/parcelas */
+.k-badge.CHEK,
+.k-badge.PAID {
+	background: #e7f6ec;
+	color: #1a6b35;
+}
+.k-badge.PEND,
+.k-badge.UNPAID {
+	background: var(--k-color-accent-soft);
+	color: #8a4b00;
+}
+.k-badge.BLCK {
+	background: #fdecec;
+	color: #a12a2a;
+}
+.k-badge.CANC {
+	background: #eef0f3;
+	color: var(--k-color-ink-soft);
+}
+
 /* Paginação gerada por Pagination::getPagByNumber (links .pag_number com estilo inline) */
 .k-pager a,
 .k-pager span {

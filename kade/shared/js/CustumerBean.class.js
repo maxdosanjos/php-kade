@@ -21,7 +21,6 @@ var CustumerBean = function() {
 	var formatGUIEventsQuery = function(){		
 		viewFieldsPerson();
 		
-		System.zebra("tbody_query"); 
 		
 		pagination = new Pagination();
 		pagination.init($("#custumer_query_open"));
@@ -75,14 +74,14 @@ var CustumerBean = function() {
 				if(ident > 0)
 				{			
 					var param = new Object(); 
-					param.width = 640;
-					param.height = 620;
+					param.width = 920;
+					param.height = 820;
 					param.fullscreen = 'no';
 					param.top = 100;
 					param.left = 100;
-					param.resizable = 'no';
+					param.resizable = 'yes';
 					param.toolbar = 'yes';
-					param.scrollbars='no';
+					param.scrollbars='yes';
 					
 					System.openDefaultWindow('/alter_custumer/action=edit&custumer_person_id='+ident+'&windowPopUp=true','Gerenciamento de Clientes',param,true);
 				}
