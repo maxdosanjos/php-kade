@@ -45,48 +45,56 @@
 			}
 		}
 		public function onConfirmNewPwd(){
+			$db = null;
+			$inTransaction = false;
+			$linkValid = false;
+			// O usuário é identificado pelo hash do link, nunca por um id enviado pelo navegador
+			$vua = isset($_POST["vua"]) ? trim($_POST["vua"]) : "";
+			$password = $_POST["custumer_password"] ?? "";
 			try
 			{
-				$person = new Person();
-				$person->setId($_REQUEST["custumer_person_id"]);
-				
-				$user = new User();
-				$user->setPerson( $person );
-				
-				$user->setLogin($_REQUEST["custumer_login"]);
-				$user->setPassword($_REQUEST["custumer_password"]);
-				
-				if($user->getPerson()->getId() <= 0){
-					throw new Exception("Usuário inválido!");
-				}elseif($user->getLogin() =="" || strlen ( $user->getLogin () ) < 5){
-					throw new Exception("Login: Número de caracteres insuficiente! Mínimo = 5");
-				}elseif($user->getPassword() =="" || strlen ( $user->getPassword () ) < 5){
+				if(User::isLogged()){
+					throw new Exception ( "Não pode ser realizado com o usuário logado! Clique em 'Sair' para redefinir a senha" );
+				}
+
+				$this->userDAO = UserDAO::getInstance ();
+				$db = DataBase::getInstance ( $this->getDbConfig () );
+				$this->userDAO->findLinkPersonId($db,$vua);
+				$linkValid = true;
+
+				if($password =="" || strlen ( $password ) < 5){
 					throw new Exception("Senha: Número de caracteres insuficiente! Mínimo = 5");
 				}
-				
-				$this->userDAO = UserDAO::getInstance ();				
-				$db = DataBase::getInstance ( $this->getDbConfig () );
-				$this->userDAO->updatePwd($db,$user);
+
+				$inTransaction = $db->beginTransaction ();
+				$this->userDAO->resetPwdByLink($db,$vua,$password);
+				$db->commit ();
 				$db = null;
-				
+
 				$this->message->setType ( Message::SUCCESS );
 				$this->message->setDesc ( "Senha redefinida com sucesso" );
-			} catch ( PDOException $e ) {			
+			} catch ( PDOException $e ) {
+				if ($db != null && $inTransaction)
+					$db->rollback ();
 				$db = null;
+				$linkValid = false;
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );				
+				$this->message->setDesc ( "A url informada já foi utilizada ou está inválida. Solicite uma nova senha novamente." );
 			} catch ( Exception $e ) {
+				$db = null;
 				$this->message->setType ( Message::ERR );
 				$this->message->setDesc ( $e->getMessage () );
 			}
-			
+
 			$_SESSION["msg_type"] = $this->message->getType();
 			$_SESSION["msg_txt"] = $this->message->getDesc();
-			
-			if($this->message->getType() == Message::ERR)
-				$url = "Location:/request_new_password/";
-			else
+
+			if($this->message->getType() != Message::ERR)
 				$url = "Location:/login/";
+			elseif($linkValid)
+				$url = "Location:/confirm_new_pwd/vua=".$vua;
+			else
+				$url = "Location:/request_new_password/";
 				
 			header($url);			
 			

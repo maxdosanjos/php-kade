@@ -34,22 +34,22 @@
 			
 			try
 			{
-				$sql = "DELETE 
+				$sql = "DELETE
 						  FROM `link_confirm`
-						 WHERE user_person_id = '" . $user->getPerson()->getId(). "'";
-				$out = $db->exec ( $sql );	
-				
+						 WHERE user_person_id = ?";
+				$stmt = $db->prepare ( $sql );
+				$stmt->execute ( array ( $user->getPerson()->getId() ) );
+
 				$sql = "INSERT INTO `link_confirm`
 							(   `user_person_id`
 							  , `hash`
 							 )
 						VALUES
-							(
-							   '" . $user->getPerson()->getId(). "'
-							 , '" . $md5 . "'
-							 )";
-				
-				$out = $db->exec ( $sql );				
+							( ?, ? )";
+
+				$stmt = $db->prepare ( $sql );
+				$stmt->execute ( array ( $user->getPerson()->getId(), $md5 ) );
+				$out = $stmt->rowCount ();
 				if($dbConfig instanceof DBConfig){
 					$db->commit ();
 					$db		   = null;
@@ -110,9 +110,9 @@
 						SELECT 	    `user_person_id`
 								  , `hash`
 						  FROM 	link_confirm link
-						 WHERE  hash = '".$vua."'
+						 WHERE  hash = ?
 						";
-				
+
 
 				if($dbConfig instanceof DBConfig){
 					$db        =  DataBase::getInstance($dbConfig);
@@ -121,19 +121,22 @@
 					$db = $dbConfig;
 				else
 					throw new PDOException("Conexão Inválida");
-				
-				
-				$result = $db->query ( $sql );		
-				
-				$phone = null;		
+
+
+				$result = $db->prepare ( $sql );
+				$result->execute ( array ( $vua ) );
+
+				$phone = null;
 				$objDAO = $result->fetchObject();
-				if($objDAO->user_person_id!=null)
+				if($objDAO && $objDAO->user_person_id!=null)
 				{
-					$sql = " DELETE 
+					$sql = " DELETE
 							   FROM link_confirm
-							  WHERE hash = '".$vua."'
+							  WHERE hash = ?
 						";
-					$out = $db->exec ( $sql );		
+					$stmt = $db->prepare ( $sql );
+					$stmt->execute ( array ( $vua ) );
+					$out = $stmt->rowCount ();
 					if($out == 0)
 						throw new PDOException("Erro ao confirmar usuário!");
 					
@@ -206,7 +209,8 @@
 			{
 				$inTransaction = false;
 				
-				$user_person_id = $this->confirmLink($dbConfig,$vua);
+				// Apenas valida o link; o hash só é consumido em resetPwdByLink
+				$user_person_id = $this->findLinkPersonId($dbConfig,$vua);
 				if($user_person_id > 0)
 				{
 					$criteria = new Criteria();
@@ -342,18 +346,62 @@
 				throw new PDOException("Erro ao criar Usuário!");
 		}
 		
+		/**
+		 * Retorna o person_id associado ao hash sem consumir o link
+		 */
+		public function findLinkPersonId($dbConfig, $vua) {
+			if (! preg_match ( "/^[a-f0-9]{32}$/", ( string ) $vua ))
+				throw new PDOException ( "URL inválida para confirmação" );
+
+			if ($dbConfig instanceof DBConfig)
+				$db = DataBase::getInstance ( $dbConfig );
+			else if ($dbConfig instanceof DataBase)
+				$db = $dbConfig;
+			else
+				throw new PDOException ( "Conexão Inválida" );
+
+			$stmt = $db->prepare ( "SELECT `user_person_id` FROM `link_confirm` WHERE `hash` = ?" );
+			$stmt->execute ( array ( $vua ) );
+			$objDAO = $stmt->fetchObject ();
+			if (! $objDAO || $objDAO->user_person_id <= 0)
+				throw new PDOException ( "URL inválida para confirmação" );
+
+			return ( int ) $objDAO->user_person_id;
+		}
+
+		/**
+		 * Redefine a senha do usuário dono do hash e consome o link.
+		 * O controle de transação fica a cargo de quem chama.
+		 */
+		public function resetPwdByLink(DataBase $db, $vua, $password) {
+			$person = new Person ();
+			$person->setId ( $this->findLinkPersonId ( $db, $vua ) );
+
+			$user = new User ();
+			$user->setPerson ( $person );
+			$user->setPassword ( $password );
+			$this->updatePwd ( $db, $user );
+
+			$stmt = $db->prepare ( "DELETE FROM `link_confirm` WHERE `hash` = ?" );
+			$stmt->execute ( array ( $vua ) );
+			if ($stmt->rowCount () == 0)
+				throw new PDOException ( "URL inválida para confirmação" );
+		}
+
 		public function updatePwd($dbConfig, User $obj) {
-			$sql = "UPDATE `user` 
-					   SET  `password` = MD5('" . $obj->getPassword () . "')
-					 WHERE  `person_id` = '" . $obj->getPerson()->getId() . "'
+			$sql = "UPDATE `user`
+					   SET  `password` = MD5(?)
+					 WHERE  `person_id` = ?
 					";
 			if ($dbConfig instanceof DBConfig)
 				$db = DataBase::getInstance ( $dbConfig );
 			else if ($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
-				throw new PDOException ( "Conexão Inválida" );			
-			$out = $db->exec ( $sql );			
+				throw new PDOException ( "Conexão Inválida" );
+			$stmt = $db->prepare ( $sql );
+			$stmt->execute ( array ( $obj->getPassword (), $obj->getPerson()->getId() ) );
+			$out = $stmt->rowCount ();
 			if ($dbConfig instanceof DBConfig)
 				$db = null;			
 			/*if($out == 0)

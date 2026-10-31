@@ -41,7 +41,7 @@
 						<li><a id="tab_new_pwd" href="#tabs-1">Nova Senha</a></li>
 					</ul>
 					<div id="tabs-1">
-						<input type="hidden" id="custumer_person_id" name="custumer_person_id" size="16" maxlength="20" class="" value="<?=$user->getPerson()->getId()?>"/>
+						<input type="hidden" id="vua" name="vua" value="<?=htmlspecialchars($_REQUEST["vua"] ?? "", ENT_QUOTES, "UTF-8")?>"/>
 						<div class="div_input">
 							<label for="custumer_login"  class="label_input" alt="Login" title="Login">Login: </label>
 							<input type="text" id="custumer_login" name="custumer_login" size="16" maxlength="20" class="mask.login required readonly" value="<?=$user->getLogin()?>" alt="Login" title="Login" readonly="true"/>
