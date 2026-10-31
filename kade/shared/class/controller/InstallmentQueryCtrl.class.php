@@ -36,6 +36,8 @@ class InstallmentQueryCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array(), AbstractCtrl::ACCESS_USER);
 		$this->setPagination ( new Pagination ( 0 ) ); // inicia com o numero total de registros
 		
 		switch ($this->getAction ()) {

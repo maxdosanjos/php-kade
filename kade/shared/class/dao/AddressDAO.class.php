@@ -195,7 +195,8 @@ class AddressDAO {
 			throw new PDOException ( "Conexão inválida" );
 		}
 		// Validate required keys exist before attempting to build DBConfig
-		$requiredKeys = array('user','password','host','port','database');
+		// Senha pode ser vazia (ex.: root local do Laragon); as demais chaves são obrigatórias
+		$requiredKeys = array('user','host','port','database');
 		foreach ($requiredKeys as $rk) {
 			if (!isset($data[$rk]) || $data[$rk] === '') {
 				throw new PDOException("Conexão CEP não configurada (missing {$rk})");

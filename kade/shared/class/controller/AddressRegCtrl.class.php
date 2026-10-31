@@ -10,6 +10,8 @@ class AddressRegCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array(), AbstractCtrl::ACCESS_PUBLIC);
 		
 		switch ($this->getAction ()) {
 			case "searchCEP" :

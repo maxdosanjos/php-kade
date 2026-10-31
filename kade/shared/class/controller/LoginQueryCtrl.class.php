@@ -23,6 +23,8 @@
 		public function __construct() {
 			parent::__construct ();
 			$this->setAction ( $_REQUEST ["action"] ?? null );
+
+			$this->guardAction(array(), AbstractCtrl::ACCESS_PUBLIC);
 			
 			$this->message->setType ( $_SESSION["msg_type"] ?? "" );
 			$this->message->setDesc ( $_SESSION["msg_txt"] ?? "" );
@@ -372,11 +374,10 @@
 			return $this->isRequestNewPwd;
 		}
 		private function sendMailConfirm($dbConfig, User $user) {
-			$md5 = md5 ( date ( "dmYHis" . microtime () ) );
-			
-			$url = $_SERVER ["HTTP_HOST"] . "/confirm_new_pwd/vua=" . $md5;
-			if (! eregi ( "http://", $url ))
-				$url = "http://" . $url;
+			// Token aleatório (antes md5 da data, previsível) e URL base confiável (antes HTTP_HOST,
+			// que permitia envenenar o link do e-mail com um cabeçalho Host falso)
+			$md5 = $this->newToken ();
+			$url = $this->getBaseUrl () . "/confirm_new_pwd/vua=" . $md5;
 			
 			$userDAO = UserDAO::getInstance ();
 			$userDAO->registerLinkConfirm ( $dbConfig, $user, $md5 );

@@ -4,6 +4,7 @@ require_once (dirname ( dirname ( __FILE__ ) ) . "/util/DateTimeCustom.class.php
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/AddressVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/MapsExtVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/VehicleTravelingVO.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/UserVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/MapsExtDAO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/VehicleTravelingDAO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/VehicleTypeDAO.class.php");
@@ -19,6 +20,7 @@ class MapsExtCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+		$this->guardAction(array("loadBanner" => AbstractCtrl::ACCESS_ADMIN, "expiredRegisters" => AbstractCtrl::ACCESS_ADMIN), AbstractCtrl::ACCESS_PUBLIC);
 		
 		/* Expirando msgs */
 		$this->onExpiredRegisters ();
@@ -50,15 +52,24 @@ class MapsExtCtrl extends AbstractCtrl {
 		$_validationException = array ();
 		
 		$fieldFile = "banner_file";
-		$file = $_FILES [$fieldFile];
+		$file = $_FILES [$fieldFile] ?? null;
 		try {
-			if ($file ["error"] > 0) {
-				throw new Exception ( "Erro no upload: " . $file ["error"] );
+			// Só administrador troca banner (antes qualquer visitante podia)
+			if (! User::isUserSuper ())
+				throw new Exception ( "Acesso negado." );
+			// banner_id vai para o nome do arquivo: só 1, 2 ou 3 (antes permitia "../")
+			$bannerId = ( int ) ($_POST ["banner_id"] ?? 0);
+			if ($bannerId < 1 || $bannerId > 3)
+				throw new Exception ( "Banner inválido." );
+			if ($file == null || $file ["error"] > 0) {
+				throw new Exception ( "Erro no upload: " . ($file ["error"] ?? "arquivo não enviado") );
 			}
-			if (eregi ( ".jpg$", $file ["name"] ) && $file["size"] <= 1024000 && ($file["type"] == "image/gif" || $file["type"] == "image/jpeg" || $file["type"] == "image/pjpeg")) {
-				
+			// Confere o conteúdo do arquivo, não o tipo informado pelo navegador
+			$imageInfo = @getimagesize ( $file ["tmp_name"] );
+			if (preg_match ( '/\.jpe?g$/i', $file ["name"] ) && $file["size"] <= 1024000 && $imageInfo !== false && $imageInfo [2] === IMAGETYPE_JPEG) {
+
 				$dir = dirname ( dirname ( dirname ( __FILE__ ) ) );
-				if (move_uploaded_file ( $file ["tmp_name"], $dir . "/images/banner_slider" . $_POST ["banner_id"] . ".jpg" )) {
+				if (move_uploaded_file ( $file ["tmp_name"], $dir . "/images/banner_slider" . $bannerId . ".jpg" )) {
 					$this->message->setType ( Message::SUCCESS );
 					$this->message->setDesc ( "Upload realizado com sucesso!" );
 				} else {

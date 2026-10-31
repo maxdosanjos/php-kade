@@ -164,6 +164,10 @@ class Properties {
 			self::env("SMTP_AUTH", false),
 			FILTER_VALIDATE_BOOLEAN
 		);
+		// Remetente dos e-mails (precisa ser do domínio do SMTP para não cair em spam)
+		self::$data["smtp_kadecaminhoes.from"] = self::env("SMTP_FROM");
+		// URL pública do site, usada nos links enviados por e-mail (ex.: https://www.kadecaminhoes.com.br)
+		self::$data["app.url"] = self::env("APP_URL");
 		$host = $_SERVER["HTTP_HOST"] ?? "localhost";
 		if ($host === "localhost" || $host === "kade.test") {
 			Properties::set("INSTANCE", self::DEV);

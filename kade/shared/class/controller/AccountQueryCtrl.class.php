@@ -37,6 +37,8 @@ class AccountQueryCtrl extends AbstractCtrl {
 		parent::__construct ();
 		$this->initCtrlParam ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array(), AbstractCtrl::ACCESS_ADMIN);
 		$this->setPagination ( new Pagination ( 0 ) ); // inicia com o numero total de registros
 	
 		switch ($this->getAction ()) {

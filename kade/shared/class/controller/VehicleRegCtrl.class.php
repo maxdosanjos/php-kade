@@ -22,6 +22,8 @@ class VehicleRegCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array(), AbstractCtrl::ACCESS_PUBLIC);
 		
 		
 		switch ($this->getAction ()) {
@@ -311,7 +313,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			if(eregi('cpf_UNIQUE', $e->getMessage()))
+			if(stripos ( $e->getMessage(), 'cpf_UNIQUE' ) !== false)
 			{
 				$newItem = array(
 	    			"name" => htmlentities("CPF"),
@@ -322,7 +324,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 				
 			
 				$this->message->setDesc ( "Dados inválidos!" );
-			}else if(eregi('cnpj_UNIQUE', $e->getMessage()))
+			}else if(stripos ( $e->getMessage(), 'cnpj_UNIQUE' ) !== false)
 			{
 				$newItem = array(
 	    			"name" => htmlentities("CNPJ"),

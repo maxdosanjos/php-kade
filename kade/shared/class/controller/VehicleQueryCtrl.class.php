@@ -39,6 +39,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		parent::__construct ();
 		$this->initCtrlParam( );
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+		$this->guardAction(array("exportCSV" => AbstractCtrl::ACCESS_ADMIN), AbstractCtrl::ACCESS_USER);
 		
 		if($this->typeView == ""){
 			$this->typeView = VehicleQueryCtrl::SEARCH_BY_ULT;
@@ -219,8 +220,18 @@ class VehicleQueryCtrl extends AbstractCtrl {
     		if($this->vehTravParam->getId() > 0){
 				
 				$db = DataBase::getInstance ( $this->getDbConfig () );
+
+				// Só o administrador ou quem cadastrou o veículo cancela (antes qualquer usuário cancelava qualquer id)
+				if (! User::isUserSuper ()) {
+					$stmt = $db->prepare ( "SELECT person_id FROM vehicle_contact WHERE vehicle_traveling_id = ?" );
+					$stmt->execute ( array ( ( int ) $this->vehTravParam->getId () ) );
+					$owner = $stmt->fetchColumn ();
+					if ($owner === false || ( int ) $owner !== ( int ) User::getLogged ()->getPerson ()->getId ())
+						throw new Exception ( "Você só pode cancelar registros cadastrados por você." );
+				}
+
 				$inTransaction = $db->beginTransaction ();
-				
+
     			$this->vehTravParam->setStatus( VehicleTraveling::CANCEL );
     			$this->vehicleTravelingDAO->setStatus($db,$this->vehTravParam);
 				

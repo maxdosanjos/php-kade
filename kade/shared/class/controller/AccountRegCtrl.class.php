@@ -25,6 +25,8 @@ class AccountRegCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array(), AbstractCtrl::ACCESS_ADMIN);
 		
 		switch ($this->getAction ()) {
 			case "saveInter" :
@@ -94,7 +96,7 @@ class AccountRegCtrl extends AbstractCtrl {
 				$db->rollback ();
 			$db = null;
 			
-			if (eregi ( 'fk_account_client1', $e->getMessage () )) {
+			if (stripos ( $e->getMessage (), 'fk_account_client1' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "Cód.Cliente" ),
 						"id" => htmlentities ( "account_client_id" ),
@@ -312,7 +314,7 @@ class AccountRegCtrl extends AbstractCtrl {
 				$db->rollback ();
 			$db = null;
 			
-			if (eregi ( 'fk_account_client1', $e->getMessage () )) {
+			if (stripos ( $e->getMessage (), 'fk_account_client1' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "Cód.Cliente" ),
 						"id" => htmlentities ( "account_client_id" ),

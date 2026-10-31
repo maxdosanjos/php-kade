@@ -21,6 +21,8 @@ class CustumerRegCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
+
+		$this->guardAction(array("save" => AbstractCtrl::ACCESS_PUBLIC, "getCaptcha" => AbstractCtrl::ACCESS_PUBLIC, "saveInter" => AbstractCtrl::ACCESS_USER), AbstractCtrl::ACCESS_ADMIN);
 		
 		switch ($this->getAction ()) {
 			case "save" :
@@ -238,11 +240,10 @@ class CustumerRegCtrl extends AbstractCtrl {
 		}
 	}
 	private function sendMailConfirm($dbConfig, Client $custumer) {
-		$md5 = md5 ( date ( "dmYHis" . microtime () ) );
-		
-		$url = $_SERVER ["HTTP_HOST"] . "/confirm_user/vua=" . $md5;
-		if (! eregi ( "http://", $url ))
-			$url = "http://" . $url;
+		// Token aleatório (antes md5 da data, previsível) e URL base confiável (antes HTTP_HOST,
+		// que permitia envenenar o link do e-mail com um cabeçalho Host falso)
+		$md5 = $this->newToken ();
+		$url = $this->getBaseUrl () . "/confirm_user/vua=" . $md5;
 		
 		$userDAO = UserDAO::getInstance ();
 		$userDAO->registerLinkConfirm ( $dbConfig, $custumer->getUser (), $md5 );
@@ -260,6 +261,28 @@ class CustumerRegCtrl extends AbstractCtrl {
 		$to [] = new EmailAddress ( $person->getEmail (), $person->getName () );
 		
 		$mail->sendPHPMail ( $from, $to, $subject, $content, "text/html", array (), array (), true );
+	}
+	/**
+	 * Define de quem é o cadastro a alterar sem confiar nos ids do formulário:
+	 * usuário comum só altera o próprio (antes podia mandar o id de outra pessoa);
+	 * endereço e telefone sempre vêm do cadastro salvo dessa pessoa.
+	 */
+	private function bindOwnedIds($db, Client $custumer) {
+		$person = $custumer->getUser ()->getPerson ();
+		$personId = User::isUserSuper () ? ( int ) $person->getId () : ( int ) User::getLogged ()->getPerson ()->getId ();
+
+		$criteria = new Criteria ();
+		$criteria->eq ( "cli.user_person_id", $personId );
+		$current = ClientDAO::getInstance ()->getSingle ( $db, $criteria );
+		if ($current == null || $current->getUser () == null)
+			throw new Exception ( "Cadastro não encontrado." );
+
+		$currentPerson = $current->getUser ()->getPerson ();
+		$person->setId ( $personId );
+		if ($person->getAddress () != null && $currentPerson->getAddress () != null)
+			$person->getAddress ()->setId ( $currentPerson->getAddress ()->getId () );
+		if ($person->getPhone () != null && $currentPerson->getPhone () != null)
+			$person->getPhone ()->setId ( $currentPerson->getPhone ()->getId () );
 	}
 	public function onSaveInter() {
 			ob_start();
@@ -313,13 +336,14 @@ class CustumerRegCtrl extends AbstractCtrl {
 			}
 		
 			$this->clientDAO = ClientDAO::getInstance ();
-		
+
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			$inTransaction = $db->beginTransaction ();
+			$this->bindOwnedIds ( $db, $custumer );
 			$this->clientDAO->update ( $db, $custumer );
-		
+
 			$userLogged = User::getLogged ();
-		
+
 			if ($userLogged != null && $custumer->getUser ()->getPerson ()->getId () == $userLogged->getPerson ()->getId ()) {
 				$criteria = new Criteria ();
 				$criteria->eq ( "usr.person_id", $userLogged->getPerson ()->getId () );
@@ -327,7 +351,8 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$userLogged = $userDAO->getSingle ( $db, $criteria );
 				if ($userLogged == null || ($userLogged != null && $userLogged->getLogin () == ""))
 					throw new Exception ( "Usuário inválido!!" );
-			
+
+				$userLogged->setPassword ( "" );
 				$_SESSION ["user"] = serialize ( $userLogged );
 			}
 		
@@ -351,7 +376,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			if (eregi ( 'login_UNIQUE', $e->getMessage () )) {
+			if (stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
@@ -360,7 +385,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$_validationException [] = $newItem;
 				
 				$this->message->setDesc ( "Dados inválidos!" );
-			} else if (eregi ( 'cpf_UNIQUE', $e->getMessage () )) {
+			} else if (stripos ( $e->getMessage (), 'cpf_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "CPF" ),
 						"id" => htmlentities ( "custumer_cpf" ),
@@ -369,7 +394,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$_validationException [] = $newItem;
 				
 				$this->message->setDesc ( "Dados inválidos!" );
-			} else if (eregi ( 'cnpj_UNIQUE', $e->getMessage () )) {
+			} else if (stripos ( $e->getMessage (), 'cnpj_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "CNPJ" ),
 						"id" => htmlentities ( "custumer_cnpj" ),
@@ -493,7 +518,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			if (eregi ( 'login_UNIQUE', $e->getMessage () )) {
+			if (stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
@@ -502,7 +527,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$_validationException [] = $newItem;
 				
 				$this->message->setDesc ( "Dados inválidos!" );
-			} else if (eregi ( 'cpf_UNIQUE', $e->getMessage () )) {
+			} else if (stripos ( $e->getMessage (), 'cpf_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "CPF" ),
 						"id" => htmlentities ( "custumer_cpf" ),
@@ -511,7 +536,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 				$_validationException [] = $newItem;
 				
 				$this->message->setDesc ( "Dados inválidos!" );
-			} else if (eregi ( 'cnpj_UNIQUE', $e->getMessage () )) {
+			} else if (stripos ( $e->getMessage (), 'cnpj_UNIQUE' ) !== false) {
 				$newItem = array (
 						"name" => htmlentities ( "CNPJ" ),
 						"id" => htmlentities ( "custumer_cnpj" ),
