@@ -1,13 +1,15 @@
 {
   "name": "php-kade",
   "private": true,
-  "description": "Build do CSS (Tailwind) das views do KADE Caminhões",
+  "description": "Build do CSS (Tailwind) e testes de navegador do KADE Caminhões",
   "scripts": {
     "build:css": "tailwindcss -i kade/shared/css/src/app.css -o kade/shared/css/app.css --minify",
-    "watch:css": "tailwindcss -i kade/shared/css/src/app.css -o kade/shared/css/app.css --watch"
+    "watch:css": "tailwindcss -i kade/shared/css/src/app.css -o kade/shared/css/app.css --watch",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e/*.test.mjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "puppeteer-core": "^24.43.1",
     "tailwindcss": "^4.3.3"
   }
 }
