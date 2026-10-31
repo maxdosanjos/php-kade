@@ -53,12 +53,12 @@ class PersonDAO {
 			
 			// Atualizar pessoa
 			$sql = "UPDATE `person` 
-					   SET  `name`			= '".$obj->getName()."'
-						  , `email`			= '".$obj->getEmail()."'
-						  , `type`			= '".$obj->getType()."'
-						  , `address_id`	= '".$obj->getAddress()->getId()."'
-						  , `phone_id` 		= '".$obj->getPhone()->getId()."'
-					 WHERE `id` 			= '".$obj->getId()."'";
+					   SET  `name`			= '" . Criteria::escapeString($obj->getName()) . "'
+						  , `email`			= '" . Criteria::escapeString($obj->getEmail()) . "'
+						  , `type`			= '" . Criteria::escapeString($obj->getType()) . "'
+						  , `address_id`	= '" . Criteria::escapeString($obj->getAddress()->getId()) . "'
+						  , `phone_id` 		= '" . Criteria::escapeString($obj->getPhone()->getId()) . "'
+					 WHERE `id` 			= '" . Criteria::escapeString($obj->getId()) . "'";
 				 
 			$out = $db->exec($sql);			
 			// Atualizar pessoa Fisica/Juridica				
@@ -126,11 +126,11 @@ class PersonDAO {
 				 )
 			VALUES 
 				(
-				   '".$obj->getName()."'
-				 , '".$obj->getEmail()."'
-				 , '".$obj->getType()."'
-				 , '".$obj->getAddress()->getId()."'
-				 , '".$obj->getPhone()->getId()."'
+				   '" . Criteria::escapeString($obj->getName()) . "'
+				 , '" . Criteria::escapeString($obj->getEmail()) . "'
+				 , '" . Criteria::escapeString($obj->getType()) . "'
+				 , '" . Criteria::escapeString($obj->getAddress()->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getPhone()->getId()) . "'
 				 )";
 				 
 			$out = $db->exec($sql);

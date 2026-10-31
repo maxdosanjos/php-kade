@@ -26,8 +26,8 @@
 						 )
 					VALUES 
 						(
-						   '" . $user->getPerson ()->getId() . "'
-						 , '" . $profile->getId () . "'
+						   '" . Criteria::escapeString($user->getPerson ()->getId()) . "'
+						 , '" . Criteria::escapeString($profile->getId ()) . "'
 						 )";
 			if ($dbConfig instanceof DBConfig)
 				$db = DataBase::getInstance ( $dbConfig );
@@ -64,7 +64,7 @@
 					  FROM 	user_profile uprf
 				INNER JOIN  profile prf
 					    ON  prf.id = uprf.profile_id
-					 WHERE  uprf.user_person_id = '".$user->getPerson()->getId()."'
+					 WHERE  uprf.user_person_id = '" . Criteria::escapeString($user->getPerson()->getId()) . "'
 					   AND	prf.enabled 		= '1'
 					";			
 			$result = $db->query ( $sql );		

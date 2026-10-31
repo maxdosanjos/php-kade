@@ -30,16 +30,16 @@ class InstallmentDAO {
 		try {
 			$fieldsPayment = "";
 			if($obj->getStatus() == Installment::PAID){
-				$fieldsPayment = ",`payment_value` 	   = '".$obj->getPaymentValue()."'
-								  ,`payment_date`  	   = '".$obj->getPaymentDate()->format("Y-m-d")."'
-								  ,`payment_method_id` = '".$obj->getPaymentMethod()->getId()."'";
+				$fieldsPayment = ",`payment_value` 	   = '" . Criteria::escapeString($obj->getPaymentValue()) . "'
+								  ,`payment_date`  	   = '" . Criteria::escapeString($obj->getPaymentDate()->format("Y-m-d")) . "'
+								  ,`payment_method_id` = '" . Criteria::escapeString($obj->getPaymentMethod()->getId()) . "'";
 			}
 			//Atualizar Parcelas
 			$sql = "UPDATE `installment`
-					   SET `status` 		=  '".$obj->getStatus()."'
+					   SET `status` 		=  '" . Criteria::escapeString($obj->getStatus()) . "'
 					   	    ".$fieldsPayment."
-				 	 WHERE `account_id`		=  '".$obj->getAccount()->getId()."'
-				 	   AND `id`				=  '".$obj->getId()."'
+				 	 WHERE `account_id`		=  '" . Criteria::escapeString($obj->getAccount()->getId()) . "'
+				 	   AND `id`				=  '" . Criteria::escapeString($obj->getId()) . "'
 				 ";
 	
 			$out = $db->exec($sql);	
@@ -79,10 +79,10 @@ class InstallmentDAO {
 				)
 					VALUES
 				(
-				   '".$obj->getAccount()->getId()."'
-				 , '".$obj->getId()."'
-				 , '".$obj->getValue()."'
-				 , '".$obj->getDueDate()->format("Y-m-d")."'
+				   '" . Criteria::escapeString($obj->getAccount()->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getValue()) . "'
+				 , '" . Criteria::escapeString($obj->getDueDate()->format("Y-m-d")) . "'
 				 )";
 			
 			$out = $db->exec($sql);				

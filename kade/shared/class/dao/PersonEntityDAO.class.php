@@ -14,9 +14,9 @@ class PersonEntityDAO {
 	}
 	public function update($dbConfig, PersonEntity $obj) {
 		$sql = "UPDATE `person_entity` 
-					SET `ie`	   = '" . $obj->getIe () . "'
-					  , `contact`  = '" . $obj->getContact () . "'
-				 WHERE `person_id` =  '" . $obj->getId () . "'";
+					SET `ie`	   = '" . Criteria::escapeString($obj->getIe ()) . "'
+					  , `contact`  = '" . Criteria::escapeString($obj->getContact ()) . "'
+				 WHERE `person_id` =  '" . Criteria::escapeString($obj->getId ()) . "'";
 		
 		if ($dbConfig instanceof DBConfig)
 			$db = DataBase::getInstance ( $dbConfig );
@@ -38,10 +38,10 @@ class PersonEntityDAO {
 					 )
 				VALUES 
 					(
-					   '" . $obj->getId () . "'
-					 , '" . $obj->getCnpj () . "'
-					 , '" . $obj->getIe () . "'
-					 , '" . $obj->getContact () . "'
+					   '" . Criteria::escapeString($obj->getId ()) . "'
+					 , '" . Criteria::escapeString($obj->getCnpj ()) . "'
+					 , '" . Criteria::escapeString($obj->getIe ()) . "'
+					 , '" . Criteria::escapeString($obj->getContact ()) . "'
 					 )";
 		
 		if ($dbConfig instanceof DBConfig)

@@ -74,10 +74,10 @@ class VehicleContactDAO {
 					 )
 				VALUES 
 					(
-					   '".$obj->getPerson()->getId()."'					 
-					 , '".$obj->getVehicleTraveling()->getId()."'
-					 , '".$obj->getPhoneContact()->getId()."'
-					 , '".$obj->getName()."'
+					   '" . Criteria::escapeString($obj->getPerson()->getId()) . "'					 
+					 , '" . Criteria::escapeString($obj->getVehicleTraveling()->getId()) . "'
+					 , '" . Criteria::escapeString($obj->getPhoneContact()->getId()) . "'
+					 , '" . Criteria::escapeString($obj->getName()) . "'
 					 )";			
 			$out = $db->exec($sql);
 			

@@ -257,8 +257,9 @@ class Criteria {
 	 * na consulta
 	 */
 	public function setLimit($start,$length){
-		$this->limit[0] = $start;
-		$this->limit[1] = abs($length);
+		// Sempre inteiros: os valores podem vir da requisição (paginação)
+		$this->limit[0] = max(0, (int) $start);
+		$this->limit[1] = abs((int) $length);
 	}
 		
 	/**
@@ -493,6 +494,10 @@ class Criteria {
 	 * @param ordem Tipo de Ordenação
 	 */
 	public function addOrder($name,$order){
+		// A coluna costuma vir da requisição (ordenação clicável); só aceita "coluna" ou "alias.coluna"
+		$name = trim((string) $name);
+		if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/', $name))
+			return;
 		$this->order[] = array($this->applySeparator($name),self::getOrderName($order));
 	}
 	
@@ -681,7 +686,27 @@ class Criteria {
 			
 			return $_tmp;
 		}	
-		return (is_string($obj) && !$this->isFunction($obj)) && $obj != "?"?"'".$obj."'":$obj;
+		// Textos sempre entre aspas e escapados. Antes, um valor no formato "nome(...)" ia
+		// cru para o SQL e as aspas não eram escapadas: qualquer filtro permitia injeção.
+		if (is_string($obj) && $obj !== "?")
+			return "'".self::escapeString($obj)."'";
+		return $obj;
+	}
+
+	/**
+	 * Escapa um texto para uso entre aspas simples no MySQL (equivalente ao
+	 * mysqli_real_escape_string; seguro porque a conexão usa charset utf8mb4).
+	 */
+	public static function escapeString($value){
+		return strtr((string) $value, array(
+			"\\"   => "\\\\",
+			"\0"   => "\\0",
+			"\n"   => "\\n",
+			"\r"   => "\\r",
+			"'"    => "\\'",
+			"\""   => "\\\"",
+			"\x1a" => "\\Z"
+		));
 	}
 	
 	public function addArrayQuotesIfString(array $obj){

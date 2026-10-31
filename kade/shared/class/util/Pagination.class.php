@@ -24,7 +24,8 @@
 		{
 			$this->setPagCurrent((!empty($_REQUEST['pag'])) ? $_REQUEST['pag']: 1);			
 			$this->setEndLimit((!empty($_REQUEST['reg_per_pag'])) ? $_REQUEST['reg_per_pag']: 10);
-			if($totalReg != null)
+			// !== e não !=: com 0 resultados (0 == null) o início da página ficava nulo e o SQL saía com "LIMIT ,10"
+			if($totalReg !== null)
 				$this->loadInfo($totalReg);
 		}
 		/**
@@ -34,6 +35,8 @@
 		{
 			$this->setTotalReg($totalReg);
 			$this->totalPag    	  = ceil($this->totalReg/$this->getEndLimit());
+			// Página pedida além da última (ou zero) volta para um valor válido
+			$this->currentPag     = max(1, min($this->currentPag, max(1, $this->totalPag)));
 			$this->startPag    	  = 1;
 			$this->previousPag 	  = max(1,$this->currentPag-1);
 			$this->nextPag 	   	  = min($this->totalPag,$this->currentPag+1);
@@ -137,7 +140,8 @@
 		 */
 		public function setEndLimit($endLimit)
 		{
-			$this->endLimit = abs(intval($endLimit));
+			// Entre 1 e 100 registros por página: o valor vem da requisição
+			$this->endLimit = max(1, min(100, abs(intval($endLimit))));
 		}
 		/**
 		 * @method String Método para exibir a paginação por numeros

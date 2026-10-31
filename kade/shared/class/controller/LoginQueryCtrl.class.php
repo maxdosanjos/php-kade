@@ -291,43 +291,57 @@
 			}
 		}
 		public function onLogof(){
-			$_SESSION ["user"] = null;
+			$_SESSION = array ();
+			if (session_status () === PHP_SESSION_ACTIVE)
+				session_destroy ();
 			header("Location:/");
 		}
-		public function onLogin(){			
-			try 
+		public function onLogin(){
+			$invalid = "Usuário ou senha inválidos.";
+			try
 			{
-				$this->userParam = $this->getRequestBean($_REQUEST);
-				if($this->userParam==null || $this->userParam->getLogin()=="" || $this->userParam->getPassword()=="")
-					throw new Exception ( "Usuário ou senha inválida!" );
-					
-				$criteria = new Criteria();				
+				$this->userParam = $this->getRequestBean($_POST);
+				if($this->userParam->getLogin()=="" || $this->userParam->getPassword()=="")
+					throw new Exception ( $invalid );
+
+				// Busca só pelo login; a senha é conferida no PHP (bcrypt ou MD5 legado)
+				$criteria = new Criteria();
 				$criteria->eq("usr.login",$this->userParam->getLogin());
-				$criteria->eq("usr.password","MD5('".$this->userParam->getPassword()."')");
 				$criteria->eq("usr.status",User::CHEK);
-				
+
 				$this->userDAO = UserDAO::getInstance ();
-				
-			
 				$user = $this->userDAO->getSingle($this->getDbConfig (),$criteria);
-				if($user==null || ( $user!=null && $user->getLogin() =="") )
-					throw new Exception ( "Usuário ou senha inválida!!" );
-					
+				if($user==null || $user->getLogin()=="" || !UserDAO::verifyPassword($this->userParam->getPassword(), $user->getPassword()))
+					throw new Exception ( $invalid );
+
+				// Senha ainda em MD5: regrava em bcrypt agora que temos a senha correta
+				if (UserDAO::needsRehash($user->getPassword())) {
+					$upgrade = new User();
+					$upgrade->setPerson($user->getPerson());
+					$upgrade->setPassword($this->userParam->getPassword());
+					$this->userDAO->updatePwd($this->getDbConfig (), $upgrade);
+				}
+
+				// Novo id de sessão no login (evita fixação de sessão) e sem o hash da senha na sessão
+				session_regenerate_id(true);
+				$user->setPassword("");
 				$_SESSION ["user"] = serialize($user);
-				
+
 				if($this->resetLastPage){
 					$_SESSION["last_page"] = "";
 				}
-				
-				
-				if($_SESSION["last_page"]!=""){
-					$url = "Location:/".$_SESSION["last_page"]."/";
-					$_SESSION["last_page"] = "";
-				}else
-					$url = "Location:/";				
-			} catch ( PDOException $e ) {			
+
+				$lastPage = $_SESSION["last_page"] ?? "";
+				$_SESSION["last_page"] = "";
+				// last_page é sempre um nome de página interno; nada de redirecionar para fora do site
+				if(preg_match('/^[a-z_]+$/', $lastPage))
+					$url = "Location:/".$lastPage."/";
+				else
+					$url = "Location:/";
+			} catch ( PDOException $e ) {
+				error_log ( "onLogin: ".$e->getMessage () );
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );				
+				$this->message->setDesc ( "Não foi possível entrar agora. Tente novamente em instantes." );
 			} catch ( Exception $e ) {
 				$this->message->setType ( Message::ERR );
 				$this->message->setDesc ( $e->getMessage () );
@@ -347,12 +361,10 @@
 		
 		public function getRequestBean(array $_data){
 			$user = new User();
-			$user->setLogin($_data["user_login"]);
-			$user->setPassword($_data["user_password"]);
-			
-			$this->resetLastPage = false;
-			if($_data["user_rup"] == "ok")
-				$this->resetLastPage = true;
+			$user->setLogin($_data["user_login"] ?? "");
+			$user->setPassword($_data["user_password"] ?? "");
+
+			$this->resetLastPage = (($_data["user_rup"] ?? "") == "ok");
 			
 			return $user;
 		}

@@ -21,12 +21,12 @@ class PersonIndividualDAO {
 		
 		$dateBirth = "NULL";
 		if($obj->getDateBirth()!=null)
-			$dateBirth = "'".$obj->getDateBirth()->format("Y-m-d")."'";
+			$dateBirth = "'" . Criteria::escapeString($obj->getDateBirth()->format("Y-m-d")) . "'";
 		
 		$sql = "UPDATE `person_individual` 
-				   SET `gender`		=  '".$obj->getGender()."'
+				   SET `gender`		=  '" . Criteria::escapeString($obj->getGender()) . "'
 					 , `dateBirth`	= ".$dateBirth."
-			  WHERE `person_id`		= '".$obj->getId()."'";
+			  WHERE `person_id`		= '" . Criteria::escapeString($obj->getId()) . "'";
 			
 		if($dbConfig instanceof DBConfig)
 			$db        =  DataBase::getInstance($dbConfig);
@@ -43,7 +43,7 @@ class PersonIndividualDAO {
 		
 		$dateBirth = "NULL";
 		if($obj->getDateBirth()!=null)
-			$dateBirth = "'".$obj->getDateBirth()->format("Y-m-d")."'";
+			$dateBirth = "'" . Criteria::escapeString($obj->getDateBirth()->format("Y-m-d")) . "'";
 		
 		$sql = "INSERT INTO `person_individual` 
 					(   `person_id`
@@ -53,9 +53,9 @@ class PersonIndividualDAO {
 					 )
 				VALUES 
 					(
-					   '".$obj->getId()."'
-					 , '".$obj->getCpf()."'
-					 , '".$obj->getGender()."'
+					   '" . Criteria::escapeString($obj->getId()) . "'
+					 , '" . Criteria::escapeString($obj->getCpf()) . "'
+					 , '" . Criteria::escapeString($obj->getGender()) . "'
 					 , ".$dateBirth."
 					 )";
 			

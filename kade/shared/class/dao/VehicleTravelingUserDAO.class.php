@@ -31,9 +31,9 @@ class VehicleTravelingUserDAO {
 				 )
 			VALUES 
 				(
-				   '" . $obj->getVehicleTraveling ()->getId () . "'
-				 , '" . $obj->getUser ()->getPerson ()->getId() . "'
-				 , '" . $obj->getStatus () . "'
+				   '" . Criteria::escapeString($obj->getVehicleTraveling ()->getId ()) . "'
+				 , '" . Criteria::escapeString($obj->getUser ()->getPerson ()->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getStatus ()) . "'
 				 )";
 		
 		$out = $db->exec ( $sql );

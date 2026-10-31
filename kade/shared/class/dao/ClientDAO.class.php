@@ -168,7 +168,7 @@ class ClientDAO{
 		$result = $db->query ( $sql );		
 		
 		$objDAO = $result->fetchObject();
-		if($objDAO->user_person_id != null)
+		if($objDAO && $objDAO->user_person_id != null)
 		{		
 			$critUser = new Criteria();
 			$critUser->eq("usr.person_id",$objDAO->user_person_id);
@@ -208,13 +208,13 @@ class ClientDAO{
 			case Person::PF :
 				$sql .= " INNER JOIN  person_individual pf
 								ON  pf.person_id = cli.user_person_id
-							 WHERE  pf.cpf 		 = '" . $obj->getUser()->getPerson()->getCpf(). "'
+							 WHERE  pf.cpf 		 = '" . Criteria::escapeString($obj->getUser()->getPerson()->getCpf()) . "'
 							";
 				break;
 			case Person::PJ :
 				$sql .= " INNER JOIN  person_entity pj
 								ON  pj.person_id = cli.user_person_id
-							 WHERE  pj.cnpj 	 = '" . $obj->getUser()->getPerson()->getCnpj(). "'
+							 WHERE  pj.cnpj 	 = '" . Criteria::escapeString($obj->getUser()->getPerson()->getCnpj()) . "'
 							";
 				
 				break;
@@ -393,7 +393,7 @@ class ClientDAO{
 				 )
 			VALUES 
 				(
-				   '".$user->getPerson()->getId()."'
+				   '" . Criteria::escapeString($user->getPerson()->getId()) . "'
 				 )";
 				 
 			$out = $db->exec($sql);			

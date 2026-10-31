@@ -112,7 +112,7 @@ class VehicleTravelingDAO {
 					 , '" . addslashes($request["body"]) . "'
 					 , '" . $server["HTTP_X_REAL_IP"] . "'
 					 , '" . $server["SCRIPT_URI"]. "'
-					 , '" . $message->getType () . "'
+					 , '" . Criteria::escapeString($message->getType ()) . "'
 					 , '" . addslashes($json[0]->message) . "'
 					 )";
 		if ($dbConfig instanceof DBConfig)
@@ -145,14 +145,15 @@ class VehicleTravelingDAO {
 		else
 			throw new PDOException("Conexão Inválida");
 			
+		$user_ultilized = "";
 		if($obj->getStatus() == VehicleTraveling::UTILIZED){
-			$user_ultilized = ", `user_person_id_ut` = '".User::getLogged()->getPerson()->getId()."'";
+			$user_ultilized = ", `user_person_id_ut` = ".(int) User::getLogged()->getPerson()->getId();
 		}
 		
 		$sql = "UPDATE `vehicle_traveling` 
-				   SET `status` = '".$obj->getStatus()."'
+				   SET `status` = '" . Criteria::escapeString($obj->getStatus()) . "'
 						".$user_ultilized."
-				 WHERE `id` = '".$obj->getId()."'";
+				 WHERE `id` = '" . Criteria::escapeString($obj->getId()) . "'";
 		
 			
 			
@@ -163,7 +164,7 @@ class VehicleTravelingDAO {
 			$out = $db->exec($sql);		
 
 			if($obj->getStatus() == VehicleTraveling::UTILIZED || $obj->getStatus() == VehicleTraveling::CANCEL || $obj->getStatus() == VehicleTraveling::EXPIRED){
-				$sql = 'call remove_idx_traveling_city('.$obj->getAddress()->getId().');';
+				$sql = 'call remove_idx_traveling_city('.(int) $obj->getAddress()->getId().');';
 				$out = $db->exec($sql);
 			}
 			if($dbConfig instanceof DBConfig){
@@ -212,11 +213,11 @@ class VehicleTravelingDAO {
 				 )
 			VALUES 
 				(
-				   '".$obj->getVehicleType()->getId()."'
-				 , '".$obj->getDateHrProc()->format("Y-m-d H:i:s")."'
-				 , '".$obj->getSource()."'				 
-				 , '".$obj->getAddress()->getId()."'
-				 , '".$obj->getIp()."'
+				   '" . Criteria::escapeString($obj->getVehicleType()->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getDateHrProc()->format("Y-m-d H:i:s")) . "'
+				 , '" . Criteria::escapeString($obj->getSource()) . "'				 
+				 , '" . Criteria::escapeString($obj->getAddress()->getId()) . "'
+				 , '" . Criteria::escapeString($obj->getIp()) . "'
 				 )";
 				 
 			$out = $db->exec($sql);
@@ -233,7 +234,7 @@ class VehicleTravelingDAO {
 			$vehicleContactDAO->insert($db, $vehicleContact);
 			
 			//Indices
-			$sql = 'call add_idx_traveling_city('.$obj->getAddress()->getId().');';
+			$sql = 'call add_idx_traveling_city('.(int) $obj->getAddress()->getId().');';
 			$out = $db->exec($sql);
 			if($out == 0)
 				throw new PDOException("Erro ao registrar Veículo!");
@@ -309,7 +310,7 @@ class VehicleTravelingDAO {
 		
 		$result = $db->query ( $sql );
 		$objDAO = $result->fetchObject();
-		if($objDAO->id==null)
+		if(!$objDAO || $objDAO->id==null)
 			throw new PDOException ( "Registro não encontrado" );
 			
 		$person = null;

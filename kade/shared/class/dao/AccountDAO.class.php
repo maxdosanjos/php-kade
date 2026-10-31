@@ -139,8 +139,8 @@ class AccountDAO {
 		try {
 			//Atualizar Conta
 			$sql = "UPDATE `account`
-					   SET `status` =  '".$obj->getStatus()."'
-				 	 WHERE `id`		=  '".$obj->getId()."'
+					   SET `status` =  '" . Criteria::escapeString($obj->getStatus()) . "'
+				 	 WHERE `id`		=  '" . Criteria::escapeString($obj->getId()) . "'
 				 ";
 				
 			$out = $db->exec($sql);				
@@ -186,8 +186,8 @@ class AccountDAO {
 				)
 					VALUES
 				(
-				   '".$obj->getValidateMonth()."'
-				 , '".$obj->getClient()->getUser()->getPerson()->getId()."'
+				   '" . Criteria::escapeString($obj->getValidateMonth()) . "'
+				 , '" . Criteria::escapeString($obj->getClient()->getUser()->getPerson()->getId()) . "'
 				 )";
 			
 			$out = $db->exec($sql);

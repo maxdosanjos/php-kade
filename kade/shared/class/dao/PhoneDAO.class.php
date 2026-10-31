@@ -20,9 +20,9 @@ class PhoneDAO {
 					 )
 				VALUES 
 					(
-					   '".$obj->getPhone()."'
-					 , '".$obj->getDdd()."'
-					 , '".$obj->getDdi()."'
+					   '" . Criteria::escapeString($obj->getPhone()) . "'
+					 , '" . Criteria::escapeString($obj->getDdd()) . "'
+					 , '" . Criteria::escapeString($obj->getDdi()) . "'
 					 )";
 		if($dbConfig instanceof DBConfig)
 			$db        =  DataBase::getInstance($dbConfig);
@@ -45,10 +45,10 @@ class PhoneDAO {
 	}
 	public function update($dbConfig, Phone $obj) {
 		$sql = "UPDATE 	`phone` 
-				   SET  `phone` = '".$obj->getPhone()."'
-					  , `ddd`	= '".$obj->getDdd()."'
-					  , `ddi`	= '".$obj->getDdi()."'
-				 WHERE `id`		= '".$obj->getId()."'";
+				   SET  `phone` = '" . Criteria::escapeString($obj->getPhone()) . "'
+					  , `ddd`	= '" . Criteria::escapeString($obj->getDdd()) . "'
+					  , `ddi`	= '" . Criteria::escapeString($obj->getDdi()) . "'
+				 WHERE `id`		= '" . Criteria::escapeString($obj->getId()) . "'";
 		if($dbConfig instanceof DBConfig)
 			$db        =  DataBase::getInstance($dbConfig);
 		else if($dbConfig instanceof DataBase)
@@ -89,7 +89,7 @@ class PhoneDAO {
 		
 		$phone = null;		
 		$objDAO = $result->fetchObject();
-		if($objDAO->id!=null){
+		if($objDAO && $objDAO->id!=null){
 			$phone = new Phone();
 			$phone->setId($objDAO->id);
 			$phone->setPhone($objDAO->phone);

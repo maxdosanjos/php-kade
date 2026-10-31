@@ -25,14 +25,14 @@ class AddressDAO {
 					 )
 				VALUES 
 					(
-					   '" . $obj->getCep () . "'
-					 , '" . $obj->getStreet () . "'
-					 , '" . $obj->getNumber () . "'
-					 , '" . $obj->getComplement () . "'
-					 , '" . $obj->getNeighborhood () . "'
-					 , '" . $obj->getCity () . "'
-					 , '" . $obj->getState () . "'
-					 , '" . $obj->getStateNm () . "'
+					   '" . Criteria::escapeString($obj->getCep ()) . "'
+					 , '" . Criteria::escapeString($obj->getStreet ()) . "'
+					 , '" . Criteria::escapeString($obj->getNumber ()) . "'
+					 , '" . Criteria::escapeString($obj->getComplement ()) . "'
+					 , '" . Criteria::escapeString($obj->getNeighborhood ()) . "'
+					 , '" . Criteria::escapeString($obj->getCity ()) . "'
+					 , '" . Criteria::escapeString($obj->getState ()) . "'
+					 , '" . Criteria::escapeString($obj->getStateNm ()) . "'
 					 )";
 		if ($dbConfig instanceof DBConfig)
 			$db = DataBase::getInstance ( $dbConfig );
@@ -55,15 +55,15 @@ class AddressDAO {
 	}
 	public function update($dbConfig, Address $obj) {
 		$sql = "UPDATE  `address` 
-				   SET  `cep`			 = '" . $obj->getCep () . "'
-					  , `street`		 = '" . $obj->getStreet () . "'
-					  , `number`		 = '" . $obj->getNumber () . "'
-					  , `complement`	 = '" . $obj->getComplement () . "'
-					  , `neighborhood`   = '" . $obj->getNeighborhood () . "'
-					  , `city`			 = '" . $obj->getCity () . "'
-					  , `state`			 = '" . $obj->getState () . "'
-					  , `state_nm`		 = '" . $obj->getStateNm () . "'
-				WHERE 	`id`		     = '" . $obj->getId () . "'";
+				   SET  `cep`			 = '" . Criteria::escapeString($obj->getCep ()) . "'
+					  , `street`		 = '" . Criteria::escapeString($obj->getStreet ()) . "'
+					  , `number`		 = '" . Criteria::escapeString($obj->getNumber ()) . "'
+					  , `complement`	 = '" . Criteria::escapeString($obj->getComplement ()) . "'
+					  , `neighborhood`   = '" . Criteria::escapeString($obj->getNeighborhood ()) . "'
+					  , `city`			 = '" . Criteria::escapeString($obj->getCity ()) . "'
+					  , `state`			 = '" . Criteria::escapeString($obj->getState ()) . "'
+					  , `state_nm`		 = '" . Criteria::escapeString($obj->getStateNm ()) . "'
+				WHERE 	`id`		     = '" . Criteria::escapeString($obj->getId ()) . "'";
 		if ($dbConfig instanceof DBConfig)
 			$db = DataBase::getInstance ( $dbConfig );
 		else if ($dbConfig instanceof DataBase)
@@ -131,7 +131,7 @@ class AddressDAO {
 			throw new PDOException("CEP inválido");
 		}
 		// Try local DB lookup first (stored procedure 'procurar_cep')
-		$sql = "CALL procurar_cep('" . $cepDigits . "');";
+		$sql = "CALL procurar_cep('" . Criteria::escapeString($cepDigits) . "');";
 		$db = null;
 		// Attempt DB lookup inside try/catch so connection failures fall back to external API		try {
 			if ($dbConfig instanceof DBConfig)

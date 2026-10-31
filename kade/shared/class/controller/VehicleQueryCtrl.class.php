@@ -23,7 +23,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 	
 	private $vehicleTypeDAO      = null;
 	private $vehicleTravelingDAO = null;
-	private $vehiclesTraveling   = null;
+	private $vehiclesTraveling   = array();
 	/*** Parametros para busca ***/
 	private $dtHrInit			 = null;
 	private $dtHrEnd			 = null; 

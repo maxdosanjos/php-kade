@@ -81,12 +81,12 @@
 			try
 			{
 				if($user->getText()!=""){
-					$sqlText = ", text = '".$user->getText()."'";
+					$sqlText = ", text = '" . Criteria::escapeString($user->getText()) . "'";
 				}
 				$sql = " UPDATE user
-								SET status 	  = '".$user->getStatus()."'
+								SET status 	  = '" . Criteria::escapeString($user->getStatus()) . "'
 								".$sqlText."
-							  WHERE person_id = '".$user->getPerson()->getId()."'
+							  WHERE person_id = '" . Criteria::escapeString($user->getPerson()->getId()) . "'
 						";
 				$out = $db->exec ( $sql );
 				if($dbConfig instanceof DBConfig){
@@ -179,7 +179,7 @@
 						
 					$sql = " UPDATE user
 								SET status 	  = '".User::CHEK."'
-							  WHERE person_id = '".$user_person_id."'
+							  WHERE person_id = '" . Criteria::escapeString($user_person_id) . "'
 						";
 					$out = $db->exec ( $sql );		
 					if($out == 0)
@@ -273,7 +273,7 @@
 			
 			$phone = null;		
 			$objDAO = $result->fetchObject();
-			if($objDAO->person_id > 0)
+			if($objDAO && $objDAO->person_id > 0)
 			{		
 				$user = new User ();
 				$user->setLogin ( $objDAO->login );
@@ -317,29 +317,28 @@
 		}
 			
 		public function insert($dbConfig, User $obj) {
-			$sql = "INSERT INTO `user` 
+			$sql = "INSERT INTO `user`
 						(   `person_id`
 						  , `login`
 						  , `password`
 						  , `status`
 						 )
-					VALUES 
-						(
-						   '" . $obj->getPerson()->getId() . "'
-						 , '" . $obj->getLogin () . "'
-						 , MD5('" . $obj->getPassword () . "')
-						 , '" . $obj->getStatus () . "'
-						 )";
+					VALUES ( ?, ?, ?, ? )";
 			if ($dbConfig instanceof DBConfig)
 				$db = DataBase::getInstance ( $dbConfig );
 			else if ($dbConfig instanceof DataBase)
 				$db = $dbConfig;
 			else
 				throw new PDOException ( "Conexão Inválida" );
-				
-				// echo $sql;
-			
-			$out = $db->exec ( $sql );			
+
+			$stmt = $db->prepare ( $sql );
+			$stmt->execute ( array (
+				$obj->getPerson()->getId(),
+				$obj->getLogin (),
+				self::hashPassword ( $obj->getPassword () ),
+				$obj->getStatus ()
+			) );
+			$out = $stmt->rowCount ();
 			if ($dbConfig instanceof DBConfig)
 				$db = null;			
 			if($out == 0)
@@ -390,7 +389,7 @@
 
 		public function updatePwd($dbConfig, User $obj) {
 			$sql = "UPDATE `user`
-					   SET  `password` = MD5(?)
+					   SET  `password` = ?
 					 WHERE  `person_id` = ?
 					";
 			if ($dbConfig instanceof DBConfig)
@@ -400,12 +399,35 @@
 			else
 				throw new PDOException ( "Conexão Inválida" );
 			$stmt = $db->prepare ( $sql );
-			$stmt->execute ( array ( $obj->getPassword (), $obj->getPerson()->getId() ) );
+			$stmt->execute ( array ( self::hashPassword ( $obj->getPassword () ), $obj->getPerson()->getId() ) );
 			$out = $stmt->rowCount ();
 			if ($dbConfig instanceof DBConfig)
 				$db = null;			
 			/*if($out == 0)
 				throw new PDOException("Erro ao atualizar senha do Usuário!");*/
+		}
+
+		/**
+		 * Gera o hash para gravar no banco (bcrypt via password_hash).
+		 */
+		public static function hashPassword($password) {
+			return password_hash ( ( string ) $password, PASSWORD_DEFAULT );
+		}
+
+		/**
+		 * Confere a senha digitada com o hash salvo. Aceita o MD5 legado (32 hex)
+		 * para não obrigar ninguém a trocar de senha; quem chama deve regravar
+		 * com hashPassword() quando needsRehash() for verdadeiro.
+		 */
+		public static function verifyPassword($password, $storedHash) {
+			$storedHash = ( string ) $storedHash;
+			if (preg_match ( '/^[a-f0-9]{32}$/i', $storedHash ))
+				return hash_equals ( strtolower ( $storedHash ), md5 ( ( string ) $password ) );
+			return password_verify ( ( string ) $password, $storedHash );
+		}
+
+		public static function needsRehash($storedHash) {
+			return preg_match ( '/^[a-f0-9]{32}$/i', ( string ) $storedHash ) || password_needs_rehash ( ( string ) $storedHash, PASSWORD_DEFAULT );
 		}
 		
 		
