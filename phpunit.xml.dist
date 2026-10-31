@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Rodar com "composer test" (precisa de short_open_tag=1, que o script já passa).
+  - unit: não precisa de servidor nem de banco.
+  - http: chama o site em KADE_TEST_URL e usa o banco DEV do .env; é pulado se o site não responder.
+  Copie para phpunit.xml para mudar as variáveis abaixo só na sua máquina.
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnWarning="true"
+         failOnRisky="true">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="http">
+            <directory>tests/Http</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <!-- Site local (Laragon) -->
+        <env name="KADE_TEST_URL" value="http://kade.test" force="false"/>
+        <!-- Contas usadas nos testes: um administrador e um cliente comum, ambos ativos (CHEK) -->
+        <env name="KADE_TEST_ADMIN_LOGIN" value="admin" force="false"/>
+        <env name="KADE_TEST_ADMIN_PASSWORD" value="Teste@123" force="false"/>
+        <env name="KADE_TEST_USER_LOGIN" value="clienteteste" force="false"/>
+        <env name="KADE_TEST_USER_PASSWORD" value="Teste@123" force="false"/>
+        <!-- API do Mailpit; os testes de e-mail são pulados se ele não responder -->
+        <env name="KADE_TEST_MAILPIT" value="http://localhost:8025" force="false"/>
+    </php>
+</phpunit>

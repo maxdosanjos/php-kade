@@ -1,0 +1,22 @@
+{
+    "name": "kade/php-kade",
+    "description": "KADE Caminhões: testes automatizados (o site não usa dependências do Composer)",
+    "type": "project",
+    "license": "proprietary",
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kade\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit",
+        "test:unit": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit --testsuite unit",
+        "test:http": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit --testsuite http"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
