@@ -85,7 +85,7 @@
 			} catch ( Exception $e ) {
 				$db = null;
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->userMessage ( $e ) );
 			}
 
 			$_SESSION["msg_type"] = $this->message->getType();
@@ -212,21 +212,21 @@
 				
 				$_validationException = $e->toArray ( true );
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );		
+				$this->message->setDesc ( $this->userMessage ( $e ) );		
 			}catch ( PDOException $e ) {				
 				if ($db != null && $inTransaction)
 					$db->rollback ();
 				$db = null;
 				
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			}catch ( Exception $e ) {
 				if ($db != null && $inTransaction)
 					$db->rollback ();
 				$db = null;
 				
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->userMessage ( $e ) );
 			}
 			
 			
@@ -346,7 +346,7 @@
 				$this->message->setDesc ( "Não foi possível entrar agora. Tente novamente em instantes." );
 			} catch ( Exception $e ) {
 				$this->message->setType ( Message::ERR );
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->userMessage ( $e ) );
 			}
 			
 			if($this->message->getType() == Message::ERR)

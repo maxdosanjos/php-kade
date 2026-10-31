@@ -368,7 +368,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( PDOException $e ) {
 			
 			if ($db != null && $inTransaction)
@@ -376,7 +376,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			if (stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false) {
+			if ((stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false || stripos ( $e->getMessage (), "for key 'user.PRIMARY'" ) !== false)) {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
@@ -404,7 +404,9 @@ class CustumerRegCtrl extends AbstractCtrl {
 				
 				$this->message->setDesc ( "Dados inválidos!" );
 			} else {
-				$this->message->setDesc ( $e->getMessage () );
+				// Não exibe o erro do banco ao usuário (expunha SQL e nomes de tabelas)
+				error_log ( "CustumerRegCtrl: ".$e->getMessage () );
+				$this->message->setDesc ( "Não foi possível salvar agora. Tente novamente em instantes." );
 			}
 		} catch ( Exception $e ) {
 			if ($db != null && $inTransaction)
@@ -412,7 +414,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 			$buffer = ob_get_clean();
@@ -510,7 +512,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( PDOException $e ) {
 			
 			if ($db != null && $inTransaction)
@@ -518,7 +520,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			if (stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false) {
+			if ((stripos ( $e->getMessage (), 'login_UNIQUE' ) !== false || stripos ( $e->getMessage (), "for key 'user.PRIMARY'" ) !== false)) {
 				$newItem = array (
 						"name" => htmlentities ( "Login" ),
 						"id" => htmlentities ( "custumer_login" ),
@@ -546,7 +548,9 @@ class CustumerRegCtrl extends AbstractCtrl {
 				
 				$this->message->setDesc ( "Dados inválidos!" );
 			} else {
-				$this->message->setDesc ( $e->getMessage () );
+				// Não exibe o erro do banco ao usuário (expunha SQL e nomes de tabelas)
+				error_log ( "CustumerRegCtrl: ".$e->getMessage () );
+				$this->message->setDesc ( "Não foi possível salvar agora. Tente novamente em instantes." );
 			}
 		} catch ( Exception $e ) {
 			if ($db != null && $inTransaction)
@@ -554,7 +558,7 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$buffer = ob_get_clean();

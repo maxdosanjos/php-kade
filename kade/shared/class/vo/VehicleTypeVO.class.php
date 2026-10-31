@@ -18,8 +18,8 @@ class VehicleType {
 	public function setDescr($descr){
 		$maxlength = 50;
 		$descr = trim($descr);
-		if(strlen($descr) > $descr){
-			$descr = substr($descr,0,$maxlength);
+		if(mb_strlen($descr) > $descr){
+			$descr = mb_substr($descr,0,$maxlength);
 		}
 		$this->descr = $descr;
 	}

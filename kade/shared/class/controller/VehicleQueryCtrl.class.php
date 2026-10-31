@@ -120,10 +120,10 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		if($this->message->getType ( ) == Message::ERR){
@@ -259,14 +259,14 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			$db = null;
     		$this->vehTravParam = null;
     		$this->message->setType ( Message::ERR );
-    		$this->message->setDesc ( $e->getMessage () );
+    		$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
     	} catch ( Exception $e ) {
 			if ($db!=null && $inTransaction)
 				$db->rollback ();
 			$db = null;
     		$this->vehTravParam = null;
     		$this->message->setType ( Message::ERR );
-    		$this->message->setDesc ( $e->getMessage () );
+    		$this->message->setDesc ( $this->userMessage ( $e ) );
     	}
     	
     	$vehJsonArr = array();
@@ -288,8 +288,9 @@ class VehicleQueryCtrl extends AbstractCtrl {
 				$vehicleTravelingUser = new VehicleTravelingUser();
 				$vehicleTravelingUser->setUser(User::getLogged());
 				$vehicleTravelingUser->setVehicleTraveling($this->vehTravParam);
-					
-				
+				// Sem isto o histórico ficava com o padrão do banco (ONLY_VIEW)
+				$vehicleTravelingUser->setStatus(VehicleTraveling::UTILIZED);
+
 				// Criar Utilizador da informação
 				$vehicleTravUserDAO = VehicleTravelingUserDAO::getInstance ();
 				$vehicleTravUserDAO->insert ( $db, $vehicleTravelingUser );
@@ -312,14 +313,14 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			$db = null;
     		$this->vehTravParam = null;
     		$this->message->setType ( Message::ERR );
-    		$this->message->setDesc ( $e->getMessage () );
+    		$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
     	} catch ( Exception $e ) {
 			if ($db!=null && $inTransaction)
 				$db->rollback ();
 			$db = null;
     		$this->vehTravParam = null;
     		$this->message->setType ( Message::ERR );
-    		$this->message->setDesc ( $e->getMessage () );
+    		$this->message->setDesc ( $this->userMessage ( $e ) );
     	}
     	
     	$vehJsonArr = array();
@@ -383,13 +384,13 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			$db = null;
 			$vehicleTrav = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			if ($db!=null && $inTransaction)
 				$db->rollback ();
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}	
 		
 		$vehJsonArr = array();
@@ -525,10 +526,10 @@ class VehicleQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {			
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}		
 	}
 	public function getTypeVechicles() {
@@ -552,7 +553,7 @@ class VehicleQueryCtrl extends AbstractCtrl {
 			$db = null;
 			
 			/*
-			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $e->getMessage () );
+			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			 */
 			
 			return $_result;

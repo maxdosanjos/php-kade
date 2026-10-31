@@ -17,8 +17,8 @@ class Profile {
 	public function setId($id){
 		$maxlength = 4;
 		$id = trim($id);
-		if(strlen($id) > $maxlength){
-			$name = substr($id,0,$maxlength);
+		if(mb_strlen($id) > $maxlength){
+			$name = mb_substr($id,0,$maxlength);
 		}								
 		$this->id = $id;
 	}
@@ -30,8 +30,8 @@ class Profile {
 	public function setDescr($descr){
 		$maxlength = 45;
 		$descr = trim($descr);
-		if(strlen($descr) > $maxlength){
-			$name = substr($descr,0,$maxlength);
+		if(mb_strlen($descr) > $maxlength){
+			$name = mb_substr($descr,0,$maxlength);
 		}								
 		$this->descr = $descr;
 		

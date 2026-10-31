@@ -90,7 +90,7 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( PDOException $e ) {
 			if ($db != null && $inTransaction)
 				$db->rollback ();
@@ -106,18 +106,18 @@ class AccountRegCtrl extends AbstractCtrl {
 				
 				$this->message->setDesc ( "Dados inválidos!" );
 			} else {
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			}
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			if ($db != null && $inTransaction)
 				$db->rollback ();
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$output ["result"] = $this->message->getType ();
@@ -224,10 +224,10 @@ class AccountRegCtrl extends AbstractCtrl {
 		} catch ( ValidationException $e ) {
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$output ["result"] = $this->message->getType ();
@@ -308,7 +308,7 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( PDOException $e ) {
 			if ($db != null && $inTransaction)
 				$db->rollback ();
@@ -324,18 +324,18 @@ class AccountRegCtrl extends AbstractCtrl {
 				
 				$this->message->setDesc ( "Dados inválidos!" );
 			} else {
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			}
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			if ($db != null && $inTransaction)
 				$db->rollback ();
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$output ["result"] = $this->message->getType ();
@@ -488,7 +488,7 @@ class AccountRegCtrl extends AbstractCtrl {
 			$db = null;
 				
 			/*
-			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $e->getMessage () );
+			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			*/
 				
 			return $_result;

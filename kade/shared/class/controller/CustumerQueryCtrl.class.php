@@ -66,10 +66,10 @@ class CustumerQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$output ["error"] = iconv ( "UTF-8", "UTF-8", str_replace ( "\\n", "<br/>", $this->message->getDesc () ) );			
@@ -179,10 +179,10 @@ class CustumerQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 	}
 	public function exportCSV() {
@@ -256,10 +256,10 @@ class CustumerQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		if($this->message->getType ( ) == Message::ERR){

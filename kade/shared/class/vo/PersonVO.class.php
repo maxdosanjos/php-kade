@@ -30,8 +30,8 @@ class Person {
 	public function setName($name){
 		$maxlength = 255;
 		$name = trim($name);
-		if(strlen($name) > $maxlength){
-			$name = substr($name,0,$maxlength);
+		if(mb_strlen($name) > $maxlength){
+			$name = mb_substr($name,0,$maxlength);
 		}
 		$this->name = $name;
 		
@@ -44,8 +44,8 @@ class Person {
 	public function setEmail($email){
 		$maxlength = 255;
 		$email = trim($email);
-		if(strlen($email) > $maxlength){
-			$email = substr($email,0,$maxlength);
+		if(mb_strlen($email) > $maxlength){
+			$email = mb_substr($email,0,$maxlength);
 		}
 		$this->email = $email;
 	}

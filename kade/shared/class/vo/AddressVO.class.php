@@ -25,8 +25,8 @@ class Address {
 		$cep = trim((string)$cep);
 		$cep = preg_replace("/[\-\.]/i","",$cep);
 		$maxlength = 8;
-		if(strlen($cep) > $maxlength){
-			$cep = substr($cep,0,$maxlength);
+		if(mb_strlen($cep) > $maxlength){
+			$cep = mb_substr($cep,0,$maxlength);
 		}
 		$this->cep = $cep;
 	}
@@ -38,8 +38,8 @@ class Address {
 	public function setStreet($street){
 		$maxlength = 255;
 		$street = trim((string)$street);
-		if(strlen($street) > $maxlength){
-			$street = substr($street,0,$maxlength);
+		if(mb_strlen($street) > $maxlength){
+			$street = mb_substr($street,0,$maxlength);
 		}
 		
 		$_arr = explode(" ",$street);
@@ -47,7 +47,7 @@ class Address {
 		$i = 0;
 		$length = sizeof($_arr);
 		while ($i < $length) {
-					if(strlen($_arr[$i]) > 2)
+					if(mb_strlen($_arr[$i]) > 2)
 						$_arr[$i] = ucwords($_arr[$i]);
 			$i++;
 		}	
@@ -62,8 +62,8 @@ class Address {
 	public function setNumber($number){
 		$maxlength = 5;
 		$number = trim((string)$number);
-		if(strlen($number) > $maxlength){
-			$number = substr($number,0,$maxlength);
+		if(mb_strlen($number) > $maxlength){
+			$number = mb_substr($number,0,$maxlength);
 		}
 		$this->number = $number;
 	}
@@ -76,8 +76,8 @@ class Address {
 		$complement = trim((string)$complement);
 		$maxlength = 255;
 		$complement = trim((string)$complement);
-		if(strlen($complement) > $maxlength){
-			$complement = substr($complement,0,$maxlength);
+		if(mb_strlen($complement) > $maxlength){
+			$complement = mb_substr($complement,0,$maxlength);
 		}
 		
 		$_arr = explode(" ",$complement);
@@ -85,7 +85,7 @@ class Address {
 		$i = 0;
 		$length = sizeof($_arr);
 		while ($i < $length) {
-			if(strlen($_arr[$i]) > 2)
+			if(mb_strlen($_arr[$i]) > 2)
 				$_arr[$i] = ucwords($_arr[$i]);
 			$i++;
 		}
@@ -101,8 +101,8 @@ class Address {
 			$neighborhood = trim((string)$neighborhood);
 		$maxlength = 72;
 			$neighborhood = trim((string)$neighborhood);
-		if(strlen($neighborhood) > $maxlength){
-			$neighborhood = substr($neighborhood,0,$maxlength);
+		if(mb_strlen($neighborhood) > $maxlength){
+			$neighborhood = mb_substr($neighborhood,0,$maxlength);
 		}
 		
 		$_arr = explode(" ",$neighborhood);
@@ -110,7 +110,7 @@ class Address {
 		$i = 0;
 		$length = sizeof($_arr);
 		while ($i < $length) {
-			if(strlen($_arr[$i]) > 2)
+			if(mb_strlen($_arr[$i]) > 2)
 				$_arr[$i] = ucwords($_arr[$i]);
 			$i++;
 		}
@@ -126,8 +126,8 @@ class Address {
 			$city = trim((string)$city);
 		$maxlength = 60;
 			$city = trim((string)$city);
-		if(strlen($city) > $maxlength){
-			$city = substr($city,0,$maxlength);
+		if(mb_strlen($city) > $maxlength){
+			$city = mb_substr($city,0,$maxlength);
 		}
 		
 		$_arr = explode(" ",$city);
@@ -135,7 +135,7 @@ class Address {
 		$i = 0;
 		$length = sizeof($_arr);
 		while ($i < $length) {
-			if(strlen($_arr[$i]) > 2)
+			if(mb_strlen($_arr[$i]) > 2)
 				$_arr[$i] = ucwords($_arr[$i]);
 			$i++;
 		}
@@ -151,8 +151,8 @@ class Address {
 			$state = trim((string)$state);
 		$maxlength = 2;
 			$state = strtoupper(trim((string)$state));
-		if(strlen($state) > $maxlength){
-			$state = substr($state,0,$maxlength);
+		if(mb_strlen($state) > $maxlength){
+			$state = mb_substr($state,0,$maxlength);
 		}
 		$this->state = $state;
 	}
@@ -164,8 +164,8 @@ class Address {
 			$stateNm = trim((string)$stateNm);
 		$maxlength = 72;
 			$stateNm = trim((string)$stateNm);
-		if(strlen($stateNm) > $maxlength){
-			$stateNm = substr($stateNm,0,$maxlength);
+		if(mb_strlen($stateNm) > $maxlength){
+			$stateNm = mb_substr($stateNm,0,$maxlength);
 		}
 		$this->stateNm = $stateNm;
 	}
@@ -177,7 +177,7 @@ class Address {
 	public function getCepMask(){
 		//echo $this->cep;
 		if($this->cep!="" && $this->cep!="0")
-			return substr($this->cep,0,5)."-".substr($this->cep,5);
+			return mb_substr($this->cep,0,5)."-".mb_substr($this->cep,5);
 		return "";
 	}
 

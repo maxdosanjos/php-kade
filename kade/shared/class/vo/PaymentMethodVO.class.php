@@ -19,8 +19,8 @@ class PaymentMethod {
 	public function setName($name){
 		$maxlength = 45;
 		$name = trim($name);
-		if(strlen($name) > $maxlength){
-			$name = substr($name,0,$maxlength);
+		if(mb_strlen($name) > $maxlength){
+			$name = mb_substr($name,0,$maxlength);
 		}
 		$this->name = $name;
 	}
@@ -32,8 +32,8 @@ class PaymentMethod {
 	public function setDescr($descr){
 		$maxlength = 100;
 		$descr = trim($descr);
-		if(strlen($descr) > $maxlength){
-			$descr = substr($descr,0,$maxlength);
+		if(mb_strlen($descr) > $maxlength){
+			$descr = mb_substr($descr,0,$maxlength);
 		}
 		$this->descr = $descr;
 	}

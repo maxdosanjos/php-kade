@@ -19,8 +19,8 @@ class PersonIndividual extends Person  {
 		$cpf = trim($cpf);
 		$cpf = preg_replace("/[\-\.]/i","",$cpf);
 		$maxlength = 11;
-		if(strlen($cpf) > $maxlength){
-			$cpf = substr($cpf,0,$maxlength);
+		if(mb_strlen($cpf) > $maxlength){
+			$cpf = mb_substr($cpf,0,$maxlength);
 		}
 		$this->cpf = $cpf;
 	}

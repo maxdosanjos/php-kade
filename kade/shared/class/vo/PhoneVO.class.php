@@ -21,8 +21,8 @@ class Phone {
 	public function setDdi($ddi){
 		$maxlength = 3;
 		$ddi = trim($ddi);
-		if(strlen($ddi) > $maxlength){
-			$ddi = substr($ddi,0,$maxlength);
+		if(mb_strlen($ddi) > $maxlength){
+			$ddi = mb_substr($ddi,0,$maxlength);
 		}
 		$this->ddi = $ddi;
 	}
@@ -34,8 +34,8 @@ class Phone {
 	public function setDdd($ddd){
 		$maxlength = 3;
 		$ddd = trim($ddd);
-		if(strlen($ddd) > $maxlength){
-			$ddd = substr($ddd,0,$maxlength);
+		if(mb_strlen($ddd) > $maxlength){
+			$ddd = mb_substr($ddd,0,$maxlength);
 		}
 		$this->ddd = $ddd;
 	}
@@ -48,8 +48,8 @@ class Phone {
 		$maxlength = 11;
 		$phone = trim($phone);
 		$phone = preg_replace ("([^0-9])", "", $phone);
-		if(strlen($phone) > $maxlength){
-			$ddd = substr($phone,0,$maxlength);
+		if(mb_strlen($phone) > $maxlength){
+			$phone = mb_substr($phone,0,$maxlength);
 		}
 		$this->phone = $phone;
 	}
@@ -61,11 +61,16 @@ class Phone {
 	public function setPhoneByMask($phone){
 		$phone = trim($phone);		
 		$this->setDdi("55");		
-		$this->setDdd(substr($phone,1,2));		
-		$this->setPhone(substr($phone,4,11));
+		$this->setDdd(mb_substr($phone,1,2));		
+		$this->setPhone(mb_substr($phone,4,11));
 	}
 	public function getPhoneMask(){
-		return "(".$this->getDdd().") ".substr($this->getPhone(),0,4)."-".substr($this->getPhone(),4,11);
+		$phone = (string) $this->getPhone();
+		if ($phone === "")
+			return "";
+		// Celular tem 9 dígitos (99999-9999); fixo, 8 (9999-9999)
+		$split = mb_strlen($phone) >= 9 ? 5 : 4;
+		return "(".$this->getDdd().") ".mb_substr($phone,0,$split)."-".mb_substr($phone,$split);
 	}
 
 	public function toString(){

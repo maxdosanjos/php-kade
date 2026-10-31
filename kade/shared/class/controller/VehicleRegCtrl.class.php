@@ -106,14 +106,14 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$db = null;
 				
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			if ($db!=null && $inTransaction)
 				$db->rollback ();
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}	
 
 	
@@ -231,7 +231,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			/*
-			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $e->getMessage () );
+			 * $this->message->setType ( Message::ERR ); $this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			 */
 			
 			return $_result;
@@ -305,7 +305,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			
 			$_validationException = $e->toArray ( true );
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		} catch ( PDOException $e ) {
 			
 			if ($db!=null && $inTransaction)
@@ -336,7 +336,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			
 				$this->message->setDesc ( "Dados inválidos!" );
 			}else{
-				$this->message->setDesc ( $e->getMessage () );
+				$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			}
 		} catch ( Exception $e ) {
 			if ($db!=null && $inTransaction)
@@ -344,7 +344,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$db = null;
 			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$buffer = ob_get_clean();

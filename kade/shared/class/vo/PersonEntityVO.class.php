@@ -16,8 +16,8 @@ class PersonEntity extends Person  {
 		$cnpj = trim($cnpj);
 		$cnpj = preg_replace("/[\-\.\/\\\]/i","",$cnpj);
 		$maxlength = 14;
-		if(strlen($cnpj) > $maxlength){
-			$cnpj = substr($cnpj,0,$maxlength);
+		if(mb_strlen($cnpj) > $maxlength){
+			$cnpj = mb_substr($cnpj,0,$maxlength);
 		}
 		$this->cnpj = $cnpj;
 	}
@@ -29,8 +29,8 @@ class PersonEntity extends Person  {
 
 	public function setIe($ie){
 		$maxlength = 18;
-		if(strlen($ie) > $maxlength){
-			$ie = substr($ie,0,$maxlength);
+		if(mb_strlen($ie) > $maxlength){
+			$ie = mb_substr($ie,0,$maxlength);
 		}
 		$this->ie = $ie;
 	}
@@ -42,8 +42,8 @@ class PersonEntity extends Person  {
 	public function setContact($contact){
 		$maxlength = 255;
 		$contact = trim($contact);
-		if(strlen($contact) > $maxlength){
-			$contact = substr($contact,0,$maxlength);
+		if(mb_strlen($contact) > $maxlength){
+			$contact = mb_substr($contact,0,$maxlength);
 		}
 		$this->contact = $contact;
 	}

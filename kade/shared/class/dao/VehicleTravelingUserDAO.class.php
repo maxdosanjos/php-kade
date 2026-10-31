@@ -34,11 +34,13 @@ class VehicleTravelingUserDAO {
 				   '" . Criteria::escapeString($obj->getVehicleTraveling ()->getId ()) . "'
 				 , '" . Criteria::escapeString($obj->getUser ()->getPerson ()->getId()) . "'
 				 , '" . Criteria::escapeString($obj->getStatus ()) . "'
-				 )";
+				 )
+			ON DUPLICATE KEY UPDATE `status` = VALUES(`status`)";
+		// A chave inclui data/hora em segundos: ver o detalhe e marcar como utilizado no mesmo segundo colidia
 		
 		$out = $db->exec ( $sql );
-		if ($out == 0)
-			throw new PDOException ( "Erro ao registrar Utilizador da infomação!" );
+		if ($out === false)
+			throw new PDOException ( "Erro ao registrar Utilizador da informação!" );
 		
 		if ($dbConfig instanceof DBConfig) {
 			$db = null;

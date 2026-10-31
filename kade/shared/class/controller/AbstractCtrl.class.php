@@ -68,6 +68,23 @@ abstract class AbstractCtrl {
 	}
 
 	/**
+	 * Mensagem para o usuário quando o banco falha. O detalhe (SQL, nomes de tabelas)
+	 * vai só para o log; antes era exibido na tela.
+	 */
+	protected function dbErrorMessage(PDOException $e) {
+		error_log ( get_class ( $this ) . ": " . $e->getMessage () );
+		return "Não foi possível concluir a operação agora. Tente novamente em instantes.";
+	}
+
+	/**
+	 * Mensagem de uma exceção para exibir ao usuário: as de validação aparecem como estão;
+	 * erro de banco (PDOException, que também é Exception) vira a mensagem genérica.
+	 */
+	protected function userMessage(Exception $e) {
+		return ($e instanceof PDOException) ? $this->dbErrorMessage ( $e ) : $e->getMessage ();
+	}
+
+	/**
 	 * Token de link (confirmação de cadastro, nova senha): 32 caracteres hexadecimais aleatórios.
 	 */
 	protected function newToken() {

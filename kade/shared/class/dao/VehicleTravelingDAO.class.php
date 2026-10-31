@@ -161,12 +161,8 @@ class VehicleTravelingDAO {
 		//echo $sql;
 		try {
 		
-			$out = $db->exec($sql);		
-
-			if($obj->getStatus() == VehicleTraveling::UTILIZED || $obj->getStatus() == VehicleTraveling::CANCEL || $obj->getStatus() == VehicleTraveling::EXPIRED){
-				$sql = 'call remove_idx_traveling_city('.(int) $obj->getAddress()->getId().');';
-				$out = $db->exec($sql);
-			}
+			// O índice do mapa (idx_traveling_city) é mantido pelos gatilhos de vehicle_traveling (migração 004)
+			$out = $db->exec($sql);
 			if($dbConfig instanceof DBConfig){
 					$db->commit ();
 					$db		   = null;
@@ -233,13 +229,9 @@ class VehicleTravelingDAO {
 			$vehicleContactDAO = VehicleContactDAO::getInstance ();
 			$vehicleContactDAO->insert($db, $vehicleContact);
 			
-			//Indices
-			$sql = 'call add_idx_traveling_city('.(int) $obj->getAddress()->getId().');';
-			$out = $db->exec($sql);
-			if($out == 0)
-				throw new PDOException("Erro ao registrar Veículo!");
-			
-			
+			// O índice do mapa é atualizado pelo gatilho ao_inserir (migração 004)
+
+
 			if($dbConfig instanceof DBConfig){
 					$db->commit ();
 					$db		   = null;

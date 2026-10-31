@@ -52,7 +52,7 @@ class AddressRegCtrl extends AbstractCtrl {
 			$dbConfigCep = null;
 		} catch ( PDOException $e ) {
 			$this->message->setType ( Message::WARN );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 			
 			/*
 			 * if ($db->inTransaction()) $db->rollback ();

@@ -80,7 +80,7 @@ class MapsExtCtrl extends AbstractCtrl {
 			}
 		} catch ( Exception $e ) {			
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		$output ["result"] = $this->message->getType ();
@@ -152,13 +152,13 @@ class MapsExtCtrl extends AbstractCtrl {
 				$db->rollback ();
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			if ($db != null && $inTransaction)
 				$db->rollback ();
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 		
 		/*

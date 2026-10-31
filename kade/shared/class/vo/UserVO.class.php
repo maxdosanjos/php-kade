@@ -27,8 +27,8 @@ class User {
 	public function setLogin($login){
 		$maxlength = 20;
 		$login = trim($login);
-		if(strlen($login) > $maxlength){
-			$name = substr($login,0,$maxlength);
+		if(mb_strlen($login) > $maxlength){
+			$name = mb_substr($login,0,$maxlength);
 		}				
 		$this->login = $login;
 	}
@@ -40,8 +40,8 @@ class User {
 	public function setPassword($password){
 		$maxlength = 40;
 		$password = trim($password);
-		if(strlen($password) > $maxlength){
-			$name = substr($password,0,$maxlength);
+		if(mb_strlen($password) > $maxlength){
+			$name = mb_substr($password,0,$maxlength);
 		}						
 		$this->password = $password;
 	}
@@ -72,8 +72,8 @@ class User {
 	public function setText($text){
 		$maxlength = 65535;
 		$text = trim($text);
-		if(strlen($text) > $maxlength){
-			$name = substr($text,0,$maxlength);
+		if(mb_strlen($text) > $maxlength){
+			$name = mb_substr($text,0,$maxlength);
 		}								
 		$this->text = $text;
 	}

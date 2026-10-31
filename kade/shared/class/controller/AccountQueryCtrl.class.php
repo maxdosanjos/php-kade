@@ -86,10 +86,10 @@ class AccountQueryCtrl extends AbstractCtrl {
 		} catch ( PDOException $e ) {
 			$db = null;
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
 		} catch ( Exception $e ) {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $e->getMessage () );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 		}
 	}
 	public function getRequestBean(array $_data){
