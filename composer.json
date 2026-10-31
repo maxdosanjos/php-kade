@@ -1,9 +1,10 @@
 {
     "name": "kade/php-kade",
-    "description": "KADE Caminhões: testes automatizados (o site não usa dependências do Composer)",
+    "description": "KADE Caminhões: testes e análise estática (o site não usa dependências do Composer)",
     "type": "project",
     "license": "proprietary",
     "require-dev": {
+        "phpstan/phpstan": "^2",
         "phpunit/phpunit": "^9.6"
     },
     "autoload-dev": {
@@ -14,7 +15,8 @@
     "scripts": {
         "test": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit",
         "test:unit": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit --testsuite unit",
-        "test:http": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit --testsuite http"
+        "test:http": "@php -d short_open_tag=1 vendor/phpunit/phpunit/phpunit --testsuite http",
+        "analyse": "@php -d short_open_tag=1 -d memory_limit=1G vendor/phpstan/phpstan/phpstan.phar analyse --debug --no-progress"
     },
     "config": {
         "sort-packages": true

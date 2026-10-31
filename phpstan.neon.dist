@@ -1,0 +1,16 @@
+# Análise estática das classes do site: "composer analyse".
+# Nível 1: classes, métodos e propriedades inexistentes, número de argumentos e
+# variáveis possivelmente indefinidas. Ao subir de nível, corrija o que aparecer
+# em vez de ignorar.
+parameters:
+    level: 1
+    paths:
+        - kade/shared/class
+        - kade/index.php
+        - kade/error.php
+    excludePaths:
+        - kade/shared/class/mail/PHPMailer6
+    scanFiles:
+        - kade/shared/class/mail/PHPMailer6/PHPMailer.php
+        - kade/shared/class/mail/PHPMailer6/SMTP.php
+        - kade/shared/class/mail/PHPMailer6/Exception.php
