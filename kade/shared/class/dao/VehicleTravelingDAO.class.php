@@ -91,13 +91,27 @@ class VehicleTravelingDAO {
 		return $_logs;
 	}
 	public function registerLogSMS($dbConfig,Message $message,$request,$server){
-		$json = json_decode($message->getDesc ());
-		if($json[0]->message == ""){
-			$json[0]->message = $message->getDesc ();			
-		}else{
-			$json[0]->message = html_entity_decode(iconv (  "UTF-8","UTF-8", $json[0]->message));
-		}
-		
+		// A mensagem pode ser JSON ([{"message": ...}]) ou texto puro
+		$desc = (string) $message->getDesc ();
+		$json = json_decode($desc);
+		$log  = (is_array($json) && isset($json[0]->message) && $json[0]->message != "")
+			? html_entity_decode((string) $json[0]->message, ENT_QUOTES, "UTF-8")
+			: $desc;
+
+		// Tudo aqui vem de uma rota pública: só prepared statement e limitado ao tamanho das colunas
+		$cut = function ($v, $len = null) {
+			$v = (string) $v;
+			return ($len === null) ? $v : mb_substr($v, 0, $len);
+		};
+		$params = array(
+			  $cut($request["from"] ?? "", 45)
+			, $cut($request["body"] ?? "", 2000)
+			, $cut($server["HTTP_X_REAL_IP"] ?? $server["REMOTE_ADDR"] ?? "", 45)
+			, $cut($server["SCRIPT_URI"] ?? $server["REQUEST_URI"] ?? "", 2000)
+			, $cut($message->getType (), 45)
+			, $cut($log, 4000)
+		);
+
 		$sql = "INSERT INTO `log_sms`
 					(   `from`
 					  , `body`
@@ -107,31 +121,24 @@ class VehicleTravelingDAO {
 					  , `log`
 					 )
 				VALUES
-					(
-					   '" . $request["from"] . "'
-					 , '" . addslashes($request["body"]) . "'
-					 , '" . $server["HTTP_X_REAL_IP"] . "'
-					 , '" . $server["SCRIPT_URI"]. "'
-					 , '" . Criteria::escapeString($message->getType ()) . "'
-					 , '" . addslashes($json[0]->message) . "'
-					 )";
+					( ?, ?, ?, ?, ?, ? )";
 		if ($dbConfig instanceof DBConfig)
 			$db = DataBase::getInstance ( $dbConfig );
 		else if ($dbConfig instanceof DataBase)
 			$db = $dbConfig;
 		else
 			throw new PDOException ( "Conexão Inválida" );
-			
-		
-		
-		$out = $db->exec ( $sql );
+
+		$stmt = $db->prepare ( $sql );
+		$stmt->execute ( $params );
+		$out = $stmt->rowCount ();
 
 		if ($dbConfig instanceof DBConfig)
 			$db = null;
-		
+
 		if($out == 0)
 			throw new PDOException("Erro ao criar log!");
-		
+
 	}
 	public function setStatus($dbConfig, VehicleTraveling $obj){		
 		$user_ultilized = "";

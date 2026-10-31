@@ -37,7 +37,7 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 				$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
 					
 				$criteria = new Criteria();
-				if ($_POST["type_log"]!="")
+				if (($_POST["type_log"] ?? "") != "")
 					$criteria->eq ( "log.type_log", $_POST["type_log"] );
 					
 				$criteria->between("log.date_hr",$this->getDtHrInit(),$this->getDtHrEnd(),Criteria::FIELD_DATETIME);

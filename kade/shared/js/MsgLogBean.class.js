@@ -22,7 +22,6 @@ var MsgLogBean = function() {
 			}
 		);
 		
-		System.zebra("tbody_query");
 
 		pagination = new Pagination();
 		pagination.init($("#msglog_query_open"));

@@ -42,6 +42,7 @@ class VehicleRegCtrl extends AbstractCtrl {
 	public function onSaveSMS(){
 		$_data		= array();
 		$inTransaction = false;
+		$db = null;
 		
 		
 			
@@ -49,12 +50,15 @@ class VehicleRegCtrl extends AbstractCtrl {
 			
 			$prop = Properties::getGroup("server_sms");		
 			
-			if($_SERVER["HTTP_X_REAL_IP"] !=$prop["http_x_real_ip"])
-				throw new Exception("IP inválido para tratamento de SMS");			
-		
-			$_data["vehicle_phone"] = "(".substr($_GET["from"],1,2).") ".substr($_GET["from"],3,11);
-			
-			list($_data["vehicle_type"],$_data ["vehicle_zipcode"]) = explode("*",$_GET["body"]);			
+			if(($_SERVER["HTTP_X_REAL_IP"] ?? "") != $prop["http_x_real_ip"])
+				throw new Exception("IP inválido para tratamento de SMS");
+
+			// Formato esperado: from=<55DDNNNNNNNNN> e body=<tipo>*<cep>
+			$from = preg_replace('/\D/', "", (string) ($_GET["from"] ?? ""));
+			$body = explode("*", (string) ($_GET["body"] ?? ""), 2);
+			$_data["vehicle_phone"]   = "(".substr($from,1,2).") ".substr($from,3,11);
+			$_data["vehicle_type"]    = $body[0];
+			$_data["vehicle_zipcode"] = $body[1] ?? "";
 			
 			$vehicleTraveling = $this->getRequestBean ($_data);
 			$vehicleTraveling->setSource(VehicleTraveling::SOURCE_SMS);
@@ -122,8 +126,8 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$this->vehicleTravelingDAO->registerLogSMS ( $this->getDbConfig (), $this->message, $_REQUEST,$_SERVER );
 			exit();
 		} catch ( Exception $e ) {
-		
-			echo  $e->getMessage ();
+			error_log("registerLogSMS: " . $e->getMessage ());
+			echo "Erro ao registrar log";
 		}
 	}
 	public function getRequestBean(array $_data) {

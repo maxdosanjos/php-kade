@@ -5,136 +5,105 @@ if ($viewExtCtrl == null){
 }
 require_once(dirname(dirname(__FILE__))."/shared/class/controller/MsgLogQueryCtrl.class.php");
 
-$userSuper 	   	  = User::isUserSuper();
+$userSuper = User::isUserSuper();
 if (!$userSuper){
 	header("HTTP/1.0 404 Not Found");
 	exit ();
 }
-
 $ctrlMsgLogQry->onSearchArray();
-$_msgLogs   	  = $ctrlMsgLogQry->getMsgLogs();
-$length 		  = count($_msgLogs);
+$_msgLogs   = $ctrlMsgLogQry->getMsgLogs() ?? array();
+$length     = count($_msgLogs);
+$pagination = $ctrlMsgLogQry->getPagination();
+$message    = $ctrlMsgLogQry->getMessage();
 
-$pagination 	  = $ctrlMsgLogQry->getPagination();
-$message    	  = $ctrlMsgLogQry->getMessage();
+// Tudo aqui vem de SMS (rota pública): sempre escapar
+$h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
+$typeLog = $_POST["type_log"] ?? "";
+
+$pageTitle = "Log de SMS";
+$pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 ?>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/view_log_msg.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/MsgLogBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();MsgLogBean.getInstance().initQuery();});</script>
-<?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
-<?	} ?>
-<div id="div_body_msg_log" class="div_body">
-	<div id="div_inter_esq">
-		<?php include_once("menu_int.php");?>
-	</div>
-	<div id="div_inter_dir">
-		<div id="div_search">
-			<form id="msglog_query_open" name="msglog_query_open" action="<?=$_SERVER["REQUEST_URI"];?>" method="post">
-				<fieldset id="fieldset_filter" class="ui-widget ui-widget-content ui-corner-all">
-					<legend>Logs de SMS</legend>
-					<div class="div_input">
-						<label for="msglog_dt_init"  class="label_input">Período</label>
-						<input type="text" id="msglog_dt_init" name="msglog_dt_init" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrInit()->format("d.m.Y")?>"/>
-						 até 
-						<input type="text" id="msglog_dt_end" name="msglog_dt_end" size="10" maxlength="10" class="mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrEnd()->format("d.m.Y")?>"/>
-					</div>
-					<div class="div_input">						
-						<label for="type_log" id="type_log_label"  class="label_input" alt="Status" title="Status">Status: </label>
-						<select id="type_log" name="type_log">
-							<option value="">Todos</option>
-							<option value="error" <?=($_POST["type_log"]=="error")?"selected=true":""?>>Erro</option>
-							<option value="sucess" <?=($_POST["type_log"]=="sucess")?"selected=true":""?>>Sucesso</option>					
-						</select>
-					</div>
-					<br style="clear: both"/>
-			    	<div id="buttonBar" class="">
-						<button id="button_search" class="btn_default" title="Salvar">
-							<div class="div_btn_with_image"></div>
-							<span>Buscar</span>
-						</button>
-						<span id="button_reset" class="btn_default" title="Voltar">
-							<div class="div_btn_with_image"></div>
-							<span>Limpar</span>
-						</span>
-					</div>
-				</fieldset>
-				<span id="span_loc_msg"></span>					
-				<input type="hidden" id="reg_per_pag" name="reg_per_pag" value="<?=$pagination->getEndLimit();?>"/>
-				<input type="hidden" id="pag" name="pag" value="<?=$pagination->getPagCurrent();?>"/>
-				<input type="hidden" id="order_column" name="order_column" value="<?=$ctrlMsgLogQry->getOrderColumn();?>"/>
-				<input type="hidden" id="order_type" name="order_type" value="<?=$ctrlMsgLogQry->getOrderType();?>"/>	
-				<input type="hidden" id="msg_type" name="msg_type" value=""/>	
-				<input type="hidden" id="msg_txt" name="msg_txt" value=""/>						
-			</form>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?v=<?=@filemtime(dirname(dirname(__FILE__))."/shared/js/webmask2.min.js")?>"></script>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/MsgLogBean.class.js?v=<?=@filemtime(dirname(dirname(__FILE__))."/shared/js/MsgLogBean.class.js")?>"></script>
+<script type="text/javascript" charset="UTF-8">$(document).ready(function(){MsgLogBean.getInstance().initQuery();});</script>
+<?php if ($message != null && $message->getDesc() != "") { ?>
+	<script type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify(<?=json_encode($message->getDesc())?>, <?=json_encode($message->getType())?>);});</script>
+<?php } ?>
+<?php include(dirname(__FILE__)."/partials/int_open.php"); ?>
+
+	<form id="msglog_query_open" name="msglog_query_open" action="<?=$h($_SERVER["REQUEST_URI"])?>" method="post" class="k:flex k:flex-col k:gap-5 k:rounded-2xl k:border k:border-line k:bg-white k:p-5 k:md:p-6">
+		<div class="k:grid k:grid-cols-1 k:gap-4 k:sm:grid-cols-3">
+			<label class="k-label" for="msglog_dt_init">Período: de
+				<input type="text" id="msglog_dt_init" name="msglog_dt_init" maxlength="10" class="k-field mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrInit()->format("d.m.Y")?>"/>
+			</label>
+			<label class="k-label" for="msglog_dt_end">até
+				<input type="text" id="msglog_dt_end" name="msglog_dt_end" maxlength="10" class="k-field mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrEnd()->format("d.m.Y")?>"/>
+			</label>
+			<label class="k-label" for="type_log" id="type_log_label">Resultado
+				<select id="type_log" name="type_log" class="k-field">
+					<option value="">Todos</option>
+					<option value="sucess" <?=$typeLog == "sucess" ? "selected" : ""?>>Sucesso</option>
+					<option value="error" <?=$typeLog == "error" ? "selected" : ""?>>Erro</option>
+				</select>
+			</label>
 		</div>
-		<div id="div_result">
-			<table id="table_query_open" class="table table-bordered table-condensed">
-				<thead class="table_head">
+		<div id="buttonBar" class="k:flex k:flex-wrap k:items-center k:justify-end k:gap-2.5">
+			<span id="span_loc_msg" class="k:mr-auto"></span>
+			<button type="button" id="button_reset" class="k-btn">Limpar</button>
+			<button type="submit" id="button_search" class="k-btn k-btn-primary">Buscar</button>
+		</div>
+		<input type="hidden" id="reg_per_pag" name="reg_per_pag" value="<?=$pagination->getEndLimit();?>"/>
+		<input type="hidden" id="pag" name="pag" value="<?=$pagination->getPagCurrent();?>"/>
+		<input type="hidden" id="order_column" name="order_column" value="<?=$h($ctrlMsgLogQry->getOrderColumn());?>"/>
+		<input type="hidden" id="order_type" name="order_type" value="<?=$h($ctrlMsgLogQry->getOrderType());?>"/>
+		<input type="hidden" id="msg_type" name="msg_type" value=""/>
+		<input type="hidden" id="msg_txt" name="msg_txt" value=""/>
+	</form>
+
+	<section id="div_result" class="k:overflow-hidden k:rounded-2xl k:border k:border-line k:bg-white" aria-label="Mensagens">
+		<div class="k:border-b k:border-line k:px-5 k:py-4 k:text-[15px]">
+			<strong class="k:font-semibold"><?=(int) $pagination->getTotalReg()?> <?=$pagination->getTotalReg() == 1 ? "mensagem" : "mensagens"?></strong>
+			<?php if ($pagination->getTotalReg() > 0) { ?><span class="k:text-muted"> · exibindo <?=$pagination->showDetailsPag();?></span><?php } ?>
+		</div>
+		<div class="k:overflow-x-auto">
+			<table id="table_query_open" class="k-table">
+				<thead>
 					<tr>
-						<th class="td_dthr">Data/Hora</th>
-						<th class="td_name">Nº telefone</th>
-						<th class="td_name">Mensagem</th>
-						<th class="td_dthr">Tipo</th>
-						<th class="td_name">Log</th>
-						<th class="td_dthr">IP recebedor</th>
+						<th>Recebida em</th>
+						<th>Telefone</th>
+						<th>Mensagem</th>
+						<th>Resultado</th>
+						<th>Detalhe</th>
+						<th>IP</th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">
-					<?
-						$i = 0;
-						while($i < $length){
-							$msgLogList  = $_msgLogs[$i];
-							$dtHr = new DateTimeCustom($msgLogList->date_hr);
-							
-							$json = json_decode($msgLogList->log);
-							if($json[0]->message == ""){
-								$json[0]->message = $msgLogList->log;
-							}else{
-								$json[0]->message = html_entity_decode(iconv (  "UTF-8","UTF-8", $json[0]->message));
-							}
-					?>
-					<tr class="tr_hover">
-						<td class="td_dthr"><?=$dtHr->format("d/m/Y")?></td>
-						<td class="td_name"><?=$msgLogList->from?></td>
-						<td class="td_name"><?=$msgLogList->body?></td>
-						<td class="td_dthr <?=$msgLogList->type_log?>"><?=($msgLogList->type_log == "sucess")?"Sucesso":"Erro"?></td>
-						<td class="td_name"><?=$json[0]->message?></td>
-						<td class="td_dthr" alt="URL requisitada: <?=$msgLogList->url_request?>" title="URL requisitada: <?=$msgLogList->url_request?>"><?=$msgLogList->ip_trat?></td>
+					<?php if ($length == 0) { ?>
+					<tr><td colspan="6" class="k:py-10 k:text-center k:text-muted">Nenhuma mensagem no período.</td></tr>
+					<?php } ?>
+					<?php foreach ($_msgLogs as $msgLogList) {
+						$dtHr = new DateTimeCustom($msgLogList->date_hr ?? "now");
+						// O log pode ser JSON ([{"message": ...}]) ou texto puro
+						$json = json_decode((string) $msgLogList->log);
+						$detail = (is_array($json) && isset($json[0]->message) && $json[0]->message != "")
+							? html_entity_decode($json[0]->message, ENT_QUOTES, "UTF-8")
+							: (string) $msgLogList->log;
+						$ok = ($msgLogList->type_log == "sucess"); ?>
+					<tr>
+						<td class="k:whitespace-nowrap k:text-ink-soft"><?=$dtHr->format("d/m/Y H:i")?></td>
+						<td class="k:whitespace-nowrap"><?=$h($msgLogList->from)?></td>
+						<td class="k:font-mono k:text-[13px]"><?=$h($msgLogList->body)?></td>
+						<td><span class="k-badge <?=$ok ? "UTILIZED" : "CANCEL"?>"><?=$ok ? "Sucesso" : "Erro"?></span></td>
+						<td class="k:text-ink-soft"><?=$h($detail)?></td>
+						<td class="k:whitespace-nowrap k:text-ink-soft" title="URL requisitada: <?=$h($msgLogList->url_request)?>"><?=$h($msgLogList->ip_trat)?></td>
 					</tr>
-					<? $i++; } ?>
+					<?php } ?>
 				</tbody>
 			</table>
-			<div id="table_foot">
-				<div class="details_pag">
-					Registro(s) por Página: <?=$pagination->getEndLimit();?>
-					<input type="hidden" id="param_regpag" class="xtextfield numeric formfield" name="param_regpag" value="<?=$pagination->getEndLimit();?>" size="3" readonly="true" /><br/>
-					Número de Resultados: <span title="De - Até"><?=$pagination->showDetailsPag();?></span> 
-										  <span title="Total de Registros">(<?=$pagination->getTotalReg();?>)</span>
-				</div>
-				<div class="nav_pag"> 
-					<div class="nav_pag_left">
-					<? if($pagination->getPagCurrent()!=1) { ?>		        
-						<a href="#" class="nav_first" title="Ir para primeira página" lang="<?=$pagination->getStartPag();?>"></a> &nbsp;
-						<a href="#" class="nav_prev" title="Ir para página anterior" lang="<?=$pagination->getPreviousPag();?>"></a>
-					<? } ?>
-					</div>
-					<div class="nav_pag_right">
-					<? if($pagination->getPagCurrent()!= $pagination->getTotalPag() && $pagination->getTotalReg() > 0) { ?> 
-						<a href="#" class="nav_next" title="Ir para próxima página" lang="<?=$pagination->getNextPag();?>"></a> &nbsp;
-						<a href="#" class="nav_end" title="Ir para última página"  lang="<?=$pagination->getTotalPag();?>"></a>
-					 <?} ?>
-					</div>
-					 <div class="pags_number">
-						<?=$pagination->getPagByNumber(2);?>
-					</div>
-				</div>
-			</div>
-	</div>
-</div>
+		</div>
+		<?php include(dirname(__FILE__)."/partials/pagination.php"); ?>
+	</section>
+
+<?php include(dirname(__FILE__)."/partials/int_close.php"); ?>
