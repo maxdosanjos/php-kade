@@ -8,130 +8,150 @@ var MainExt = function() {
 	var checkChangesBeforeSave = false;
 	
 	var formatEventsLoadBanner = function(){
-		$("#button_save").click(function(e) {
-			e.preventDefault();
-			$("#banner_form").submit();
+		var previewUrl = null;
+		var timer = null;
+
+		// Mostra a imagem atual do espaço escolhido (ou o aviso de vazio)
+		var showCurrent = function(){
+			var opt = $("#banner_id option:selected");
+			var ver = opt.attr("data-ver");
+			var hasImg = (ver != undefined && ver != "0");
+			$("#banner_hint").text(opt.attr("data-hint"));
+			$("#banner_state").text(hasImg ? "Imagem atual" : "");
+			if(hasImg){
+				$("#banner_img").attr("src", opt.attr("data-src") + "?v=" + ver).show();
+				$("#banner_empty").hide();
+			}else{
+				$("#banner_img").hide().attr("src", "");
+				$("#banner_empty").show();
+			}
+			$("#button_remove").prop("disabled", !hasImg);
+		};
+		var clearPreview = function(){
+			if(previewUrl){
+				URL.revokeObjectURL(previewUrl);
+				previewUrl = null;
+			}
+		};
+		var setVersion = function(ver){
+			var opt = $("#banner_id option:selected");
+			opt.attr("data-ver", ver);
+			opt.text(opt.text().replace(/ \(vazio\)$/, "") + (ver == "0" ? " (vazio)" : ""));
+		};
+		var showResult = function(type, text){
+			System.setImgMessage(type);
+			$("#dialog-result\.messageText").text(text);
+			$("#dialog-result").dialog("open");
+		};
+		var endSaving = function(){
+			saving = false;
+			window.clearTimeout(timer);
+			timer = null;
+			$("#dialog-working").dialog("close");
+		};
+
+		$("#banner_id").change(function(){
+			clearPreview();
+			$("#banner_file").val("");
+			showCurrent();
 		});
-		
-		$("#banner_id").change(function(e){
-			e.preventDefault();
-			d = new Date();
-			$("#banner_img").attr('src',"../shared/images/banner_slider"+$("#banner_id").val()+".jpg");
+
+		// Prévia local, antes de enviar
+		$("#banner_file").change(function(){
+			clearPreview();
+			var file = this.files && this.files[0];
+			if(!file){
+				showCurrent();
+				return;
+			}
+			previewUrl = URL.createObjectURL(file);
+			$("#banner_img").attr("src", previewUrl).show();
+			$("#banner_empty").hide();
+			$("#banner_state").text("Prévia de " + file.name + " (ainda não enviada)");
 		});
-		
-		initialFormHash = $("#banner_form").serialize();
+
 		$("#banner_form").submit(function(){
-			// controle de alteração
-			var formHash = $(this).serialize();
-			if(checkChangesBeforeSave && initialFormHash == formHash){
-				System.showMessageDialog("Você não alterou nenhuma informação para salvar!");
+			if($("#banner_file").val() == ""){
+				showResult("error", "Escolha a imagem que deseja enviar.");
 				return false;
 			}
-			initialFormHash = formHash;
-			
-			if(saving){
+			if(saving)
 				return false;
-			}
 			saving = true;
 			$("#dialog-working").dialog("open");
-			
-			intTimeOut = window.setTimeout(function(){
-				onTimeoutSaving();
-			},timeoutSaving*1000);
-			
+			timer = window.setTimeout(function(){
+				endSaving();
+				showResult("error", "O envio demorou demais. Confira sua conexão e tente novamente.");
+			}, timeoutSaving*1000);
 			return true;
 		});
-		
-		$("#banner_iframe").load(function(){
-			if(saving){
-				saving = false;
-				$("#dialog-working").dialog("close");
-				
-				window.clearInterval(intTimeOut);
-				intTimeOut = null;
-				
-				// resultado
-				var messageText = "";
-				try {
-					var content = $(this).contents().text();
-					var json = $.parseJSON(content);
-					System.setImgMessage(json.result);
 
-					
-					messageText = json.message;
-					// independente se deu certo errado, verifica as mensagens
-					var messageList = new Array();
-					
-					// limpando todos os erros anteriores
-					for(var key in errorFields){
-						var id = errorFields[key];
-						$(id).css("background","#FFFFFF");
-					}
-					errorFields = new Array();
-					
-					if(json.result == 'error'){
-						if(json.validationException.length > 0){
-							messageText += "<br/></br>";
-							for(var key in json.validationException){
-								var obj = json.validationException[key];
-								var isValidId = (obj.id != "");
-								
-								// trocando ponto e adaptando id
-								obj.id = "#"+(obj.id.replace(/\./g,"\\."));
-								if(isValidId){
-									$(obj.id).css("background","#FFC1C1");
-								}
-								errorFields.push(obj.id);
-								messageList.push(obj.message);
-							}
-							
-							messageText += messageList.join("<br/>");
-						}
-					}else{
-						$("#banner_form .input_clear").val("");
-						d = new Date();
-						$("#banner_img").attr('src', $('#banner_img').attr('src') +'?a='+ d.getMilliseconds());
-						
-					}
-				}catch(e){
-					System.setImgMessage('error');
-					messageText = "Erro ao realizar registro<br/><br/>"; 
-					messageText += "O sistema esta indisponível no momento, aguarde e tente novamente mais tarde. <br/><br/>"; 
-					messageText += "Detalhes técnicos: "+e.message; 
-				}
-				$("#dialog-result\\.messageText").html(messageText);
-				$("#dialog-result").dialog("open");
+		$("#banner_iframe").on("load", function(){
+			if(!saving)
+				return;
+			endSaving();
+			var json = null;
+			try {
+				json = $.parseJSON($(this).contents().text());
+			} catch(e) {}
+			if(json == null){
+				showResult("error", "Não foi possível enviar a imagem agora. Tente novamente mais tarde.");
+				return;
 			}
+			if(json.result != "error"){
+				clearPreview();
+				$("#banner_file").val("");
+				setVersion(String(new Date().getTime()));
+				showCurrent();
+			}
+			showResult(json.result, json.message);
 		});
-		
+
+		$("#button_remove").click(function(){
+			var opt = $("#banner_id option:selected");
+			if(!window.confirm('Remover a imagem "' + opt.text() + '" da home?'))
+				return;
+			$.post("../MapsExtCtrl.ctrlExt/removeBanner", {banner_id: opt.val()}, null, "json")
+				.done(function(json){
+					if(json.result != "error"){
+						clearPreview();
+						$("#banner_file").val("");
+						setVersion("0");
+						showCurrent();
+					}
+					showResult(json.result, json.message);
+				})
+				.fail(function(){
+					showResult("error", "Não foi possível remover a imagem agora. Tente novamente mais tarde.");
+				});
+		});
+
 		$("#dialog-result").dialog({
 			autoOpen: false,
-			closeOnEscape: false,
-			width: 640,
-			height: 240,
+			width: 460,
 			modal: true,
-			open: function(event, ui) {
-		    	 $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
-		    },
+			dialogClass: "k-dialog",
 			buttons: {
 				"OK": function(){
 					$(this).dialog("close");
 				}
 			}
 		});
-		
+
 		$("#dialog-working").dialog({
-			width: 420,
-			height: 220,
-		    modal: true,
-		    autoOpen: false,
-		    draggable: false,
-	        resizable: false,
-		    closeOnEscape: false,
-		    open: function(event, ui) {
-		    	 $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
-		    }
+			width: 380,
+			modal: true,
+			autoOpen: false,
+			draggable: false,
+			resizable: false,
+			closeOnEscape: false,
+			dialogClass: "k-dialog",
+			open: function(event, ui) {
+				$(this).parent().find('.ui-dialog-titlebar-close').hide();
+			}
 		});
+
+		showCurrent();
 	};
 
 	var showBoxLoading = function() {

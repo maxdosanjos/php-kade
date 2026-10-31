@@ -1,65 +1,85 @@
-<?php 
-	$message = null;
+<?php
+if ($viewExtCtrl == null){
+	header("HTTP/1.0 404 Not Found");
+	exit ();
+}
+if (!User::isUserSuper()){
+	header("HTTP/1.0 404 Not Found");
+	exit ();
+}
+$h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
+
+// Espaços de imagem da home: a foto do topo e os 3 banners de "Destaques"
+$imgDir = dirname(dirname(__FILE__))."/shared/images/";
+$_slots = array(
+	"hero" => array("Foto do topo da home", "hero.jpg", "Ideal: 1920 × 800 px. A foto fica atrás do texto, escurecida com o azul da marca. Sem foto, o topo fica só azul."),
+	"1"    => array("Destaque 1", "banner_slider1.jpg", "Ideal: 1100 × 300 px."),
+	"2"    => array("Destaque 2", "banner_slider2.jpg", "Ideal: 1100 × 300 px."),
+	"3"    => array("Destaque 3", "banner_slider3.jpg", "Ideal: 1100 × 300 px."),
+);
+$_slotsView = array();
+foreach ($_slots as $id => $slot) {
+	$file = $imgDir.$slot[1];
+	$_slotsView[$id] = array(
+		"name" => $slot[0],
+		"hint" => $slot[2],
+		"src"  => "../shared/images/".$slot[1],
+		"ver"  => file_exists($file) ? filemtime($file) : 0,
+	);
+}
+$first = $_slotsView["1"];
+
+$pageTitle = "Imagens da home";
+$pageDesc  = "Troque a foto do topo e os banners da seção Destaques.";
 ?>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/load_banner.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/MainExt.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();MainExt.getInstance().initLoadBanner();});</script>
-<?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
-<?	} ?>
-<div id="div_body_load_banner" class="div_body">
-	<div id="div_inter_esq">
-		<?php include_once("menu_int.php");?>
-	</div>
-	<div id="div_inter_dir">
-		<fieldset id="fieldset_banner">
-			<legend>Banner Principal</legend>
-			<form id="banner_form" method="post" target="banner_iframe" action="../MapsExtCtrl.ctrlExt/loadBanner" enctype="multipart/form-data">
-				<div class="div_input">						
-					<label for="banner_id" id="banner_id_label"  class="label_input" alt="Banner" title="Banner">Banner: </label>
-					<select id="banner_id" name="banner_id" class="required">
-						<option value="1">Banner 1</option>
-						<option value="2">Banner 2</option>
-						<option value="3">Banner 3</option>					
-					</select>
-				</div>
-				<div class="div_input">			
-					<img id="banner_img" src="../shared/images/banner_slider1.jpg" width="800px" style="border:5px solid #e8e8e8;">
-				</div>
-				<div class="div_input">
-					<label for="banner_file"  class="label_input" alt="Nova imagem" title="Nova imagem">Nova imagem: </label>
-					<input type="file" id="banner_file" name="banner_file" size="12" maxlength="11" class="required " alt="Nova imagem" title="Nova imagem"/>
-				</div>   
-				
-				<div id="div_text_explic" class="div_input">
-					<p>*** Tamanho ideal: Comprimento: 1100 px, Altura: 300 px.<br/></p>
-					<p>*** Para visualizar a alteração, não se esqueça de atualizar o cache de seu navegador( Teclas CTRL + F5 )<br/></p>
-				</div>
-				<br style="clear: both"/>
-				<div id="buttonBar" class="">
-					<button id="button_save" class="btn_default" title="Salvar" alt="Salvar">
-						<div class="div_btn_with_image"></div>
-						<span>&nbsp;Salvar</span>
-					</button>
-				</div>
-			</form>
-		</fieldset>
-		
-		<iframe id="banner_iframe" name="banner_iframe" class="iframe_ctrl" src=""></iframe>
-		<div id="dialog-result" title="Resultado" alt="Resultado" style="display:none;">
-			<div>
-				<div id="span_message_icon" class="" style="float:left; display:block;height:32px;width:32px;margin:7px 7px 0px 0;"></div>
-				<div id="dialog-result.messageText" style="border:1px solid #aaa;padding:10px;margin-top:10px;font-size:14px;"></div>
-			</div> 
-		</div>	
-		<div id="dialog-working" title="Processando" alt="Aguarde, processando ..." style="display:none">
-			<img id="img_dialog" src="../shared/images/dialog-working.gif" />
-			<p id="dialog-working.message">Aguarde, processando ...</p>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/MainExt.class.js?v=<?=@filemtime(dirname(dirname(__FILE__))."/shared/js/MainExt.class.js")?>"></script>
+<script type="text/javascript" charset="UTF-8">$(document).ready(function(){MainExt.getInstance().initLoadBanner();});</script>
+<?php include(dirname(__FILE__)."/partials/int_open.php"); ?>
+
+	<form id="banner_form" method="post" target="banner_iframe" action="../MapsExtCtrl.ctrlExt/loadBanner" enctype="multipart/form-data" class="k:flex k:flex-col k:gap-6 k:rounded-2xl k:border k:border-line k:bg-white k:p-6 k:md:p-8">
+		<div class="k:grid k:grid-cols-1 k:gap-4 k:sm:grid-cols-2">
+			<label class="k-label" for="banner_id">Imagem
+				<select id="banner_id" name="banner_id" class="k-field required">
+					<?php foreach ($_slotsView as $id => $slot) { ?>
+					<option value="<?=$h($id)?>" data-src="<?=$h($slot["src"])?>" data-ver="<?=$h($slot["ver"])?>" data-hint="<?=$h($slot["hint"])?>"<?=(string) $id === "1" ? " selected" : ""?>><?=$h($slot["name"])?><?=$slot["ver"] ? "" : " (vazio)"?></option>
+					<?php } ?>
+				</select>
+			</label>
+			<label class="k-label" for="banner_file">Nova imagem (JPG, até 1 MB)
+				<input type="file" id="banner_file" name="banner_file" accept=".jpg,.jpeg,image/jpeg" class="k-field input_clear required k:py-2"/>
+			</label>
 		</div>
+
+		<figure class="k:m-0 k:flex k:flex-col k:gap-2">
+			<div class="k:relative k:flex k:min-h-40 k:items-center k:justify-center k:overflow-hidden k:rounded-xl k:border k:border-line k:bg-surface">
+				<img id="banner_img" src="<?=$first["ver"] ? $h($first["src"]."?v=".$first["ver"]) : ""?>" alt="Imagem atual" class="k:max-h-[340px] k:w-full k:object-contain"<?=$first["ver"] ? "" : ' style="display:none"'?>>
+				<p id="banner_empty" class="k:m-0 k:p-10 k:text-center k:text-[15px] k:text-muted"<?=$first["ver"] ? ' style="display:none"' : ""?>>Nenhuma imagem enviada para este espaço.</p>
+			</div>
+			<figcaption class="k:flex k:flex-wrap k:items-center k:justify-between k:gap-2 k:text-[13px] k:text-muted">
+				<span id="banner_hint"><?=$h($first["hint"])?></span>
+				<span id="banner_state">Imagem atual</span>
+			</figcaption>
+		</figure>
+
+		<div id="buttonBar" class="k:flex k:flex-wrap k:items-center k:justify-end k:gap-2.5 k:border-t k:border-line k:pt-6">
+			<span id="span_loc_msg" class="k:mr-auto"></span>
+			<button type="button" id="button_remove" class="k-btn k-btn-danger">Remover imagem</button>
+			<button type="submit" id="button_save" class="k-btn k-btn-primary">Enviar imagem</button>
+		</div>
+	</form>
+
+	<p class="k:text-[13px] k:text-muted">Use somente fotos próprias ou com licença de uso. Depois de enviar, a home já mostra a imagem nova (se não aparecer, atualize com Ctrl + F5).</p>
+
+<?php include(dirname(__FILE__)."/partials/int_close.php"); ?>
+
+<iframe id="banner_iframe" name="banner_iframe" class="iframe_ctrl" src="" title="Envio da imagem" hidden></iframe>
+<div id="dialog-result" title="Resultado" style="display:none;">
+	<div>
+		<div id="span_message_icon" class="" style="float:left; display:block;height:32px;width:32px;margin:7px 7px 0px 0;"></div>
+		<div id="dialog-result.messageText"></div>
 	</div>
+</div>
+<div id="dialog-working" title="Processando" style="display:none">
+	<img id="img_dialog" src="../shared/images/dialog-working.gif" alt="" />
+	<p id="dialog-working.message">Aguarde, enviando a imagem ...</p>
 </div>

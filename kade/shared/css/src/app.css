@@ -195,6 +195,11 @@
 	border-color: #e8b4b4;
 	color: #a12a2a;
 }
+.k-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	filter: none;
+}
 .k-btn:focus-visible {
 	outline: 3px solid rgb(255 138 0 / 0.5);
 	outline-offset: 2px;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Menu da área interna (páginas já migradas). As páginas antigas ainda usam view/menu_int.php.
+ * Menu da área interna.
  * No celular vira uma faixa horizontal com rolagem.
  */
 $userSuper = User::isUserSuper();
@@ -9,7 +9,7 @@ $menuGroups = array();
 if ($userSuper) {
 	$menuGroups["Administrador"] = array(
 		ViewExtCtrl::VIEW_CUSTUMERS => "Gerenciar clientes",
-		ViewExtCtrl::LOAD_BANNER    => "Banners da home",
+		ViewExtCtrl::LOAD_BANNER    => "Imagens da home",
 		ViewExtCtrl::GNRT_PARC      => "Contas e parcelas",
 		ViewExtCtrl::VIEW_LOG_MSG   => "Log de SMS",
 	);

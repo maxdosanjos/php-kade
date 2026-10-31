@@ -20,7 +20,7 @@ class MapsExtCtrl extends AbstractCtrl {
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
-		$this->guardAction(array("loadBanner" => AbstractCtrl::ACCESS_ADMIN, "expiredRegisters" => AbstractCtrl::ACCESS_ADMIN), AbstractCtrl::ACCESS_PUBLIC);
+		$this->guardAction(array("loadBanner" => AbstractCtrl::ACCESS_ADMIN, "removeBanner" => AbstractCtrl::ACCESS_ADMIN, "expiredRegisters" => AbstractCtrl::ACCESS_ADMIN), AbstractCtrl::ACCESS_PUBLIC);
 		
 		/* Expirando msgs */
 		$this->onExpiredRegisters ();
@@ -34,6 +34,9 @@ class MapsExtCtrl extends AbstractCtrl {
 				break;
 			case "loadBanner" :
 				$this->loadBanner ();
+				break;
+			case "removeBanner" :
+				$this->removeBanner ();
 				break;
 			/*
 			 * case "expiredRegisters" : $this->expiredRegisters (); break;
@@ -57,10 +60,7 @@ class MapsExtCtrl extends AbstractCtrl {
 			// Só administrador troca banner (antes qualquer visitante podia)
 			if (! User::isUserSuper ())
 				throw new Exception ( "Acesso negado." );
-			// banner_id vai para o nome do arquivo: só 1, 2 ou 3 (antes permitia "../")
-			$bannerId = ( int ) ($_POST ["banner_id"] ?? 0);
-			if ($bannerId < 1 || $bannerId > 3)
-				throw new Exception ( "Banner inválido." );
+			$target = $this->bannerFile ( $_POST ["banner_id"] ?? "" );
 			if ($file == null || $file ["error"] > 0) {
 				throw new Exception ( "Erro no upload: " . ($file ["error"] ?? "arquivo não enviado") );
 			}
@@ -68,8 +68,7 @@ class MapsExtCtrl extends AbstractCtrl {
 			$imageInfo = @getimagesize ( $file ["tmp_name"] );
 			if (preg_match ( '/\.jpe?g$/i', $file ["name"] ) && $file["size"] <= 1024000 && $imageInfo !== false && $imageInfo [2] === IMAGETYPE_JPEG) {
 
-				$dir = dirname ( dirname ( dirname ( __FILE__ ) ) );
-				if (move_uploaded_file ( $file ["tmp_name"], $dir . "/images/banner_slider" . $bannerId . ".jpg" )) {
+				if (move_uploaded_file ( $file ["tmp_name"], $target )) {
 					$this->message->setType ( Message::SUCCESS );
 					$this->message->setDesc ( "Upload realizado com sucesso!" );
 				} else {
@@ -90,6 +89,42 @@ class MapsExtCtrl extends AbstractCtrl {
 		
 		header ( "Content-type: text/plain" );
 		echo json_encode ( $output );
+		exit ();
+	}
+	/**
+	 * Arquivo de cada espaço de imagem da home. O id vai para o caminho do
+	 * arquivo, então só valores fixos (antes permitia "../").
+	 */
+	private function bannerFile($bannerId) {
+		$_files = array (
+				"hero" => "hero.jpg",
+				"1" => "banner_slider1.jpg",
+				"2" => "banner_slider2.jpg",
+				"3" => "banner_slider3.jpg" 
+		);
+		$bannerId = ( string ) $bannerId;
+		if (! isset ( $_files [$bannerId] ))
+			throw new Exception ( "Banner inválido." );
+		return dirname ( dirname ( dirname ( __FILE__ ) ) ) . "/images/" . $_files [$bannerId];
+	}
+	public function removeBanner() {
+		try {
+			if (! User::isUserSuper ())
+				throw new Exception ( "Acesso negado." );
+			$target = $this->bannerFile ( $_POST ["banner_id"] ?? "" );
+			if (file_exists ( $target ) && ! @unlink ( $target ))
+				throw new Exception ( "Não foi possível remover a imagem." );
+			$this->message->setType ( Message::SUCCESS );
+			$this->message->setDesc ( "Imagem removida." );
+		} catch ( Exception $e ) {
+			$this->message->setType ( Message::ERR );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
+		}
+		header ( "Content-type: application/json; charset=UTF-8" );
+		echo json_encode ( array (
+				"result" => $this->message->getType (),
+				"message" => $this->message->getDesc () 
+		) );
 		exit ();
 	}
 	public function onExpiredRegisters() {
