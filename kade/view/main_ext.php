@@ -38,7 +38,7 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<script type="text/javascript" charset="UTF-8">$(document).ready(function(){ ViewExt.getInstance().initQuery();});</script>
 		<? include_once("analyticstracking.php");?>
 	</head>
-	<body<?=$popUp ? "" : ' class="k:flex k:min-h-screen k:flex-col"'?>>
+	<body<?=$popUp ? "" : ' class="k:flex k:min-h-screen k:flex-col k:bg-surface"'?>>
 		<?if($popUp){?>
 		 <style type="text/css">
 		 	body{ overflow-x:hidden;overflow-y:hidden; }

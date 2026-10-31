@@ -106,9 +106,7 @@ var VehicleTravelingBean = function() {
 		});
 	}
 	
-	var formatGUIEventsQuery = function(){		
-		System.zebra("tbody_query"); 
-		
+	var formatGUIEventsQuery = function(){
 		pagination = new Pagination();
 		pagination.init($("#vehicle_query_open"));
 		
@@ -136,8 +134,9 @@ var VehicleTravelingBean = function() {
 		$("#view_details").dialog({
 			autoOpen: false,
 			closeOnEscape: true,
-			width: 640,
-			height: 550,
+			dialogClass: "k-dialog",
+			width: Math.min(640, $(window).width() - 32),
+			height: "auto",
 			modal: true
 		});
 		
@@ -179,18 +178,18 @@ var VehicleTravelingBean = function() {
 				$(this).select();
 		});	*/
 		
-		$("#button_search").button().click(function(e) {
+		$("#button_search").click(function(e) {
 			e.preventDefault();
 			$("#pag").val("1");
 			$("#vehicle_query_open").submit();
 		});
 		
-		$("#button_reset").button().click(function(e) {
+		$("#button_reset").click(function(e) {
 			e.preventDefault();
 			$("#vehicle_query_open .input_clear").val("");
 		});
 		
-		$("#button_csv").button().click(function(e) {
+		$("#button_csv").click(function(e) {
 			$action  = $("#vehicle_query_open").attr("action"); 
 			e.preventDefault();
 			$("#vehicle_query_open").attr("action","../VehicleQueryCtrl.ctrlExt/exportCSV");
@@ -260,24 +259,25 @@ var VehicleTravelingBean = function() {
 					if(json.result == "sucess")
 					{
 						var title_dialog = "Detalhes: Registro "+json.id;
-						$("#div_vehicle_id").html(json.id);
-						
+						// .text(): contato e cidade vêm de cadastros (inclusive por SMS) e não podem ser interpretados como HTML
+						$("#div_vehicle_id").text(json.id);
+
 						$("#trav_hidden_id_sel").val(json.id);
 						$("#trav_hidden_id_sel_add").val(json.addr_id);
-						
-						$("#div_vehicle_dt_proc").html(json.dt_proc);
-						$("#div_vehicle_type").html(json.type_id+" - "+json.type_nm);
-						$("#div_vehicle_cep").html(json.cep);
-						$("#div_vehicle_city").html(json.city);
-						$("#div_vehicle_state").html(json.state);
-						$("#div_vehicle_contact_phone").html(json.contact_phone);
-						$("#div_vehicle_contact_name").html(json.contact_name);
-						$("#div_vehicle_source").html(json.source);
+
+						$("#div_vehicle_dt_proc").text(json.dt_proc);
+						$("#div_vehicle_type").text(json.type_id+" - "+json.type_nm);
+						$("#div_vehicle_cep").text(json.cep);
+						$("#div_vehicle_city").text(json.city);
+						$("#div_vehicle_state").text(json.state);
+						$("#div_vehicle_contact_phone").text(json.contact_phone);
+						$("#div_vehicle_contact_name").text(json.contact_name);
+						$("#div_vehicle_source").text(json.source);
 						if(json.dt_used !="" )
 						{
 							$("#label_vehicle_dt_used").toggle(true);
 							$("#div_vehicle_dt_used").toggle(true);
-							$("#div_vehicle_dt_used").html(json.dt_used);
+							$("#div_vehicle_dt_used").text(json.dt_used);
 						}
 						else
 						{
@@ -286,7 +286,7 @@ var VehicleTravelingBean = function() {
 						}
 						if(veh_sts_dtl_last != json.sts){
 							$("#div_vehicle_sts").removeClass(veh_sts_dtl_last);									
-							$("#div_vehicle_sts").addClass(json.sts).html(json.sts_nm);												
+							$("#div_vehicle_sts").addClass(json.sts).text(json.sts_nm);												
 							veh_sts_dtl_last = json.sts;
 						}
 						
@@ -319,7 +319,7 @@ var VehicleTravelingBean = function() {
 		});
 		
 		
-		$("#button_check_view").button().click(function(e) {
+		$("#button_check_view").click(function(e) {
 			e.preventDefault();
 			var ident 	   = $("#trav_hidden_id_sel").val();
 			var address_id = $("#trav_hidden_id_sel_add").val();
@@ -340,7 +340,7 @@ var VehicleTravelingBean = function() {
 			}
 		});		
 		
-		$("#button_check_cancel").button().click(function(e) {
+		$("#button_check_cancel").click(function(e) {
 			e.preventDefault();
 			var ident 	   = $("#trav_hidden_id_sel").val();
 			var address_id = $("#trav_hidden_id_sel_add").val();
@@ -361,7 +361,7 @@ var VehicleTravelingBean = function() {
 			}
 		});	
 		
-		$("#button_close_detail").button().click(function(e) {
+		$("#button_close_detail").click(function(e) {
 			e.preventDefault();
 			$("#view_details").dialog("close");
 		});

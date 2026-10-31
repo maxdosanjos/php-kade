@@ -178,7 +178,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		try {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			foreach ( MapsExtDAO::getInstance ()->getArrayGrpUf ( $db ) as $mapsExt )
-				$_qty [$mapsExt->getAddress ()->getState ()] = ( int ) $mapsExt->getQtyReal ();
+				$_qty [$mapsExt->getAddress ()->getState ()] = ( int ) $mapsExt->getQtyIllus ();
 			$db = null;
 		} catch ( PDOException $e ) {
 			$db = null;
@@ -213,7 +213,7 @@ class MapsExtCtrl extends AbstractCtrl {
 			$criteria = new Criteria ();
 			$criteria->eq ( "idx.state", $address->getState () );
 			
-			$criteria->addOrder ( "idx.qty_real", Criteria::ORDER_DESC );
+			$criteria->addOrder ( "idx.qty_illus", Criteria::ORDER_DESC );
 			
 			$criteria->setLimit ( 0, $this->limitReg );
 			
@@ -235,8 +235,8 @@ class MapsExtCtrl extends AbstractCtrl {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			
 			$criteria = new Criteria ();
-			// Alias da soma; "idx.qty_real" não é aceito com GROUP BY no MySQL 8 (ONLY_FULL_GROUP_BY)
-			$criteria->addOrder ( "qty_real", Criteria::ORDER_DESC );
+			// Alias da soma; "idx.qty_illus" não é aceito com GROUP BY no MySQL 8 (ONLY_FULL_GROUP_BY)
+			$criteria->addOrder ( "qty_illus", Criteria::ORDER_DESC );
 
 			$criteria->setLimit ( 0, $this->limitReg );
 			$this->_mapsExt = $this->mapsExtDAO->getArrayGrpUf ( $db, $criteria );

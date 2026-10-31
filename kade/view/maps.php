@@ -31,6 +31,12 @@ for ($i = 1; $i <= 3; $i++) {
 		$_banners[] = "../shared/images/banner_slider".$i.".jpg?v=".filemtime($file);
 }
 
+// Foto do hero opcional: coloque uma imagem licenciada em shared/images/hero.jpg
+$heroFile  = dirname(dirname(__FILE__))."/shared/images/hero.jpg";
+$heroStyle = file_exists($heroFile)
+	? ' style="background: linear-gradient(rgba(11,37,69,.8), rgba(11,37,69,.8)), url(\'../shared/images/hero.jpg?v='.filemtime($heroFile).'\') center / cover no-repeat #0b2545"'
+	: "";
+
 $h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
 $fieldClass = "k-focus k:min-h-[46px] k:w-full k:rounded-[10px] k:border k:border-line-strong k:bg-white k:px-3 k:font-sans k:text-[15px] k:text-ink";
 ?>
@@ -40,7 +46,7 @@ $fieldClass = "k-focus k:min-h-[46px] k:w-full k:rounded-[10px] k:border k:borde
 <div class="k-ui k:bg-surface k:text-ink">
 
 	<!-- Hero -->
-	<section class="k:bg-kade-900 k:text-white">
+	<section class="k:bg-kade-900 k:text-white"<?=$heroStyle?>>
 		<div class="k:mx-auto k:flex k:max-w-[1200px] k:flex-wrap k:items-center k:gap-12 k:px-4 k:py-14 k:md:px-6 k:md:py-20">
 			<div class="k:flex k:min-w-0 k:flex-[1_1_460px] k:flex-col k:gap-5">
 				<span class="k:text-[13px] k:font-semibold k:uppercase k:tracking-[1.5px] k:text-[#ffb766]">

@@ -152,6 +152,196 @@
 	border-color: var(--k-color-accent);
 }
 
+/*
+ * Componentes de formulário e lista. São classes comuns (sem !important) para que
+ * o JS legado ainda consiga esconder/mostrar esses elementos com .css("display") e .toggle().
+ */
+.k-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 0 18px;
+	border-radius: 10px;
+	border: 1px solid var(--k-color-line-strong);
+	background: #ffffff;
+	color: var(--k-color-ink-soft);
+	font: 600 15px/1 var(--k-font-sans);
+	cursor: pointer;
+	white-space: nowrap;
+}
+.k-btn:hover {
+	background: var(--k-color-surface);
+}
+.k-btn-primary {
+	border-color: var(--k-color-accent);
+	background: var(--k-color-accent);
+	color: var(--k-color-kade-950);
+}
+.k-btn-primary:hover {
+	background: var(--k-color-accent);
+	filter: brightness(0.95);
+}
+.k-btn-dark {
+	border-color: var(--k-color-kade-900);
+	background: var(--k-color-kade-900);
+	color: #ffffff;
+}
+.k-btn-dark:hover {
+	background: var(--k-color-kade-800);
+}
+.k-btn-danger {
+	border-color: #e8b4b4;
+	color: #a12a2a;
+}
+.k-btn:focus-visible {
+	outline: 3px solid rgb(255 138 0 / 0.5);
+	outline-offset: 2px;
+}
+.k-label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font: 500 14px var(--k-font-sans);
+	color: var(--k-color-ink);
+}
+.k-field {
+	width: 100%;
+	min-height: 44px;
+	padding: 0 12px;
+	border: 1px solid var(--k-color-line-strong);
+	border-radius: 10px;
+	background: #ffffff;
+	color: var(--k-color-ink);
+	font: 400 15px var(--k-font-sans);
+}
+/* O plugin de máscara (webmask) grava largura inline nos campos */
+.k-field {
+	width: 100% !important;
+}
+/* Seta de <details> ("Mais filtros"): gira quando aberto */
+.k-chev {
+	transition: transform 0.15s;
+}
+details[open] > summary .k-chev {
+	transform: rotate(180deg);
+}
+summary::-webkit-details-marker {
+	display: none;
+}
+.k-field:focus {
+	outline: 3px solid rgb(255 138 0 / 0.45);
+	outline-offset: 1px;
+	border-color: var(--k-color-kade-900);
+}
+.k-table {
+	width: 100%;
+	min-width: 720px;
+	border-collapse: collapse;
+	font: 400 14px var(--k-font-sans);
+}
+.k-table th {
+	padding: 12px 16px;
+	background: var(--k-color-surface);
+	color: var(--k-color-muted);
+	font-size: 13px;
+	font-weight: 600;
+	text-align: left;
+	white-space: nowrap;
+}
+.k-table th.column-order {
+	cursor: pointer;
+}
+.k-table th.column-order:hover {
+	color: var(--k-color-kade-900);
+}
+.k-table td {
+	padding: 14px 16px;
+	border-top: 1px solid var(--k-color-line);
+	color: var(--k-color-ink);
+}
+.k-table tbody tr.tr_hover {
+	cursor: pointer;
+}
+.k-table tbody tr.tr_hover:hover td {
+	background: #f3f6fb;
+}
+
+/* Selos de status (a classe é o próprio código do status) */
+.k-badge {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: #eef0f3;
+	color: var(--k-color-ink-soft);
+	font: 600 12px/1.4 var(--k-font-sans);
+	white-space: nowrap;
+}
+.k-badge.ONLY_VIEW {
+	background: var(--k-color-kade-50);
+	color: var(--k-color-kade-900);
+}
+.k-badge.UTILIZED {
+	background: #e7f6ec;
+	color: #1a6b35;
+}
+.k-badge.CANCEL {
+	background: #fdecec;
+	color: #a12a2a;
+}
+.k-badge.EXPIRED {
+	background: var(--k-color-accent-soft);
+	color: #8a4b00;
+}
+
+/* Paginação gerada por Pagination::getPagByNumber (links .pag_number com estilo inline) */
+.k-pager a,
+.k-pager span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	height: 40px;
+	padding: 0 6px !important;
+	margin: 0 !important;
+	border: 1px solid var(--k-color-line);
+	border-radius: 8px;
+	color: var(--k-color-ink) !important;
+	font: 500 14px var(--k-font-sans) !important;
+	text-decoration: none !important;
+}
+.k-pager a:hover {
+	background: var(--k-color-surface);
+}
+.k-pager span {
+	border-color: var(--k-color-kade-900);
+	background: var(--k-color-kade-900);
+	color: #ffffff !important;
+}
+
+/* Diálogos do jQuery UI que recebem dialogClass: "k-dialog" */
+.k-dialog.ui-dialog {
+	padding: 0;
+	border: 1px solid var(--k-color-line);
+	border-radius: 16px;
+	box-shadow: 0 24px 60px rgb(3 15 35 / 0.25);
+	font-family: var(--k-font-sans);
+	overflow: hidden;
+}
+.k-dialog .ui-dialog-titlebar {
+	padding: 16px 20px;
+	border: 0;
+	border-bottom: 1px solid var(--k-color-line);
+	border-radius: 0;
+	background: #ffffff;
+	color: var(--k-color-kade-950);
+	font: 600 18px var(--k-font-display);
+}
+.k-dialog .ui-dialog-content {
+	padding: 20px;
+}
+
 /* Destaques: esconde a barra de rolagem do carrossel (a navegação é pelos botões) */
 .k-banner-track {
 	scrollbar-width: none;
