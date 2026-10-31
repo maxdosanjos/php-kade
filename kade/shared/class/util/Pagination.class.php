@@ -83,7 +83,8 @@
 		 */
 		public function setPagCurrent($currentPag)
 		{
-			$this->currentPag = abs(intval($currentPag));
+			// Valor da requisição: inteiro a partir de 1 (o limite superior é aplicado no loadInfo)
+			$this->currentPag = max(1, intval($currentPag));
 		}
 		/**
 		 * Getter: currentPag
@@ -141,7 +142,8 @@
 		public function setEndLimit($endLimit)
 		{
 			// Entre 1 e 100 registros por página: o valor vem da requisição
-			$this->endLimit = max(1, min(100, abs(intval($endLimit))));
+			$endLimit = intval($endLimit);
+			$this->endLimit = ($endLimit > 0) ? min(100, $endLimit) : 10;
 		}
 		/**
 		 * @method String Método para exibir a paginação por numeros

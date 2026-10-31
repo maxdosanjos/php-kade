@@ -67,17 +67,20 @@ class Validation {
     }
     
     /**
-     * http://stackoverflow.com/questions/3314493/check-for-valid-email-address
+     * O regex antigo recusava maiúsculas e domínios com mais de 3 letras (.info,
+     * .digital) e aceitava espaços antes do @ (não tinha âncora no início).
      */
     public static function isEmail($email){
-    	return preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^", $email); 
+    	$email = trim((string) $email);
+    	return filter_var($email, FILTER_VALIDATE_EMAIL) !== false && strpos(substr($email, strrpos($email, "@")), ".") !== false;
     }
     
     /**
      * http://rafaelcouto.com.br/validar-com-expressoes-regulares-no-php/
      */
     public static function isDate($date){
-    	return preg_match("/^[0-9]{2}/[0-9]{2}/[0-9]{4}$/i", $date);
+    	// dd/mm/aaaa e data que existe (antes o regex era inválido e gerava warning)
+    	return preg_match("#^([0-9]{2})/([0-9]{2})/([0-9]{4})$#", (string) $date, $m) && checkdate((int) $m[2], (int) $m[1], (int) $m[3]);
     }
     
     /**

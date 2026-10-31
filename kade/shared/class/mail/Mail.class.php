@@ -41,6 +41,18 @@
 			return $mail;
 		}
 
+		/**
+		 * Versão texto de um e-mail HTML: sem <head>/<style>, quebras nos <br>/<p>
+		 * e sem a indentação do HTML.
+		 */
+		public static function htmlToText($html){
+			$text = preg_replace ( '/<(head|style|script)\b[^>]*>.*?<\/\1>/is', '', ( string ) $html );
+			$text = preg_replace ( '/<br\s*\/?>|<\/(p|h[1-6]|tr)>/i', "\n", $text );
+			$text = html_entity_decode ( strip_tags ( $text ), ENT_QUOTES, "UTF-8" );
+			$text = preg_replace ( "/[ \t]+/", " ", $text );
+			$text = preg_replace ( "/ *\n */", "\n", $text );
+			return trim ( preg_replace ( "/\n{3,}/", "\n\n", $text ) );
+		}
 		public function sendPHPMail(EmailAddress $from, array $recipients, $subject, $body, $bodyContentType = "text/html",$attachmentFileList = array(),$embeddedImageList=array(), $withCCO = false){
 			$this->setPHPMail($this->createMailer());
 			$mail = $this->getPHPMail();
@@ -113,13 +125,7 @@
 			if ($bodyContentType == "text/html") {
 				$mail->isHTML ( true );
 				$mail->Body    = $body;
-				// Versão texto: sem <head>/<style>, quebras nos <br>/<p> e sem a indentação do HTML
-				$text = preg_replace ( '/<(head|style|script)\b[^>]*>.*?<\/\1>/is', '', $body );
-				$text = preg_replace ( '/<br\s*\/?>|<\/(p|h[1-6]|tr)>/i', "\n", $text );
-				$text = html_entity_decode ( strip_tags ( $text ), ENT_QUOTES, "UTF-8" );
-				$text = preg_replace ( "/[ \t]+/", " ", $text );
-				$text = preg_replace ( "/ *\n */", "\n", $text );
-				$mail->AltBody = trim ( preg_replace ( "/\n{3,}/", "\n\n", $text ) );
+				$mail->AltBody = self::htmlToText ( $body );
 			} else {
 				$mail->isHTML ( false );
 				$mail->Body = $body;
