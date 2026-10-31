@@ -440,7 +440,7 @@ var VehicleTravelingBean = function() {
 		});
 		$("#button_new").click(function(e) {
 			e.preventDefault();
-			window.location = System.CONTEXT + "cad_veiculo.html";
+			window.location = System.CONTEXT + "cad_veiculo/";
 		});
 
 		$("#tabs").tabs();

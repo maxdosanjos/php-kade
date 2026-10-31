@@ -172,8 +172,13 @@ class ViewExtCtrl {
 					$this->pageInc = ViewExtCtrl::getDirView () . "maps.php";
 				}
 				break;
-			default :
+			case "" :
 				$this->pageInc = ViewExtCtrl::getDirView () . "maps.php";
+				break;
+			default :
+				// Endereço desconhecido: 404 em vez de mostrar a home (antes respondia 200 com a home)
+				http_response_code ( 404 );
+				$this->pageInc = ViewExtCtrl::getDirView () . "not_found.php";
 		}
 	}
 	public function includePage() {
