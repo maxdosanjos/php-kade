@@ -9,9 +9,10 @@ Aplicação web legada em PHP para anúncio e busca de caminhões (veículos em 
 
 ## Requisitos
 
-- PHP 7.4+ (o código usa `??`) com `short_open_tag = On`
+- PHP 7.4+ (testado no 8.3) com `short_open_tag = On` e as extensões `pdo_mysql`, `mbstring` e `gd` (captcha)
 - MySQL/MariaDB com suporte a `utf8mb4`
 - Apache com `mod_rewrite` e `mod_headers` (as rotas dependem de [kade/.htaccess](kade/.htaccess))
+- Node.js 18+ apenas para gerar o CSS (`npm run build:css`); o servidor não precisa de Node
 - Recomendado: [Laragon](https://laragon.org/) no Windows
 
 ## Início rápido (Laragon)
@@ -30,13 +31,19 @@ Aplicação web legada em PHP para anúncio e busca de caminhões (veículos em 
    mysql -u root --default-character-set=utf8mb4 < kade\der\kade_full_import.sql
    ```
 
-3. **Configurar credenciais**: copie `.env.example` para `.env` na raiz do repositório e preencha os valores.
+3. **Aplicar as migrações** de [kade/der/migrations](kade/der/migrations), em ordem (veja [Migrações](#migrações)):
+
+   ```cmd
+   for %f in (kade\der\migrations\*.sql) do mysql -u root --default-character-set=utf8mb4 kadecaminh < %f
+   ```
+
+4. **Configurar credenciais**: copie `.env.example` para `.env` na raiz do repositório e preencha os valores.
 
    ```cmd
    copy .env.example .env
    ```
 
-4. **Acessar** `http://kade.test/`.
+5. **Acessar** `http://kade.test/`. Os e-mails locais podem ser vistos no Mailpit do Laragon (veja [E-mails em ambiente local](#e-mails-em-ambiente-local)).
 
 ## Configuração
 
@@ -46,7 +53,9 @@ As credenciais ficam em `.env` (ignorado pelo git), lido por [Properties.class.p
 |---|---|---|
 | `DBKADE_DEV_*` / `DBKADE_PRD_*` | `USER`, `PASSWORD`, `HOST`, `DATABASE`, `PORT` | Banco principal |
 | `DBCEP_DEV_*` / `DBCEP_PRD_*` | idem | Banco de CEP (stored procedure `procurar_cep`) |
-| `SMTP_*` | `HOST`, `PORT`, `USER`, `PASSWORD`, `AUTH` | Envio de e-mails (PHPMailer) |
+| `SMTP_*` | `HOST`, `PORT`, `USER`, `PASSWORD`, `AUTH` | Envio de e-mails (PHPMailer 6) |
+| `SMTP_FROM` | e-mail | Remetente dos e-mails; use um endereço do mesmo domínio do SMTP (SPF/DKIM) |
+| `APP_URL` | URL | Endereço público do site, usado nos links dos e-mails. **Obrigatório em produção** (ex.: `https://www.kadecaminhoes.com.br`) |
 
 ### Ambiente DEV × PRD
 
@@ -54,9 +63,50 @@ O ambiente é escolhido pelo `HTTP_HOST` da requisição: **somente `localhost` 
 
 > **Atenção:** com o servidor embutido (`php -S localhost:8000 -t kade`) o host é `localhost:8000`, então a aplicação usa a configuração **PRD**. Para testar assim, preencha também as variáveis PRD com os dados locais ou use o Laragon. O servidor embutido também não processa o `.htaccess`, portanto as rotas amigáveis não funcionam nele.
 
+### E-mails em ambiente local
+
+O Laragon traz o [Mailpit](https://mailpit.axllent.org/). Com `SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025` e `SMTP_USER` vazio, os e-mails (confirmação de cadastro, nova senha) não saem da máquina e aparecem em `http://localhost:8025`.
+
 ### Busca de CEP
 
 [AddressDAO.class.php](kade/shared/class/dao/AddressDAO.class.php) normaliza o CEP, tenta a procedure `procurar_cep` no banco de CEP e, se a conexão ou a consulta falhar, recorre à API pública [ViaCEP](https://viacep.com.br). O dump incluído não contém o banco de CEP, então em ambiente local o ViaCEP costuma ser o caminho usado.
+
+## Migrações
+
+O dump em `kade/der` é antigo. As migrações em [kade/der/migrations](kade/der/migrations) levam o banco ao estado que o código espera e devem rodar **em ordem, uma única vez**, depois de um backup:
+
+| Arquivo | O que faz |
+|---|---|
+| `001_alinhar_schema_com_codigo.sql` | Ajusta colunas e chaves que o código usa e o dump não tinha |
+| `002_senhas_bcrypt.sql` | Remove os gatilhos que faziam hash MD5 da senha e aumenta a coluna para bcrypt. As senhas antigas continuam valendo e são convertidas no próximo login |
+| `003_collation_unica.sql` | Coloca banco e tabelas em `utf8mb4_unicode_ci` (havia mistura, que quebrava joins e comparações) |
+| `004_indice_mapa.sql` | Recria procedures e gatilhos do índice do mapa (contagem dupla corrigida) e recalcula os totais |
+| `005_parcelas.sql` | Parcelas sem forma de pagamento até serem pagas, status padrão e formas de pagamento iniciais |
+
+```bash
+mysqldump -u USUARIO -p --routines --triggers kadecaminh > backup_antes_migracoes.sql
+for f in kade/der/migrations/*.sql; do mysql -u USUARIO -p --default-character-set=utf8mb4 kadecaminh < "$f"; done
+```
+
+## Visual (Tailwind)
+
+O visual usa [Tailwind CSS v4](https://tailwindcss.com/) com prefixo `k:` (ex.: `k:flex`, `k:md:px-6`), para não colidir com o CSS legado ainda carregado pelos diálogos do jQuery UI.
+
+- Fonte: [kade/shared/css/src/app.css](kade/shared/css/src/app.css) (cores da marca, componentes `.k-btn`, `.k-field`, `.k-table`, `.k-badge`...).
+- Saída: `kade/shared/css/app.css`, **versionada** (o servidor não roda Node). Depois de mudar classes em views ou JS, rode:
+
+  ```bash
+  npm ci            # uma vez
+  npm run build:css
+  ```
+
+- O Tailwind lê `kade/view`, `kade/shared/js`, `error.php` e `manutencao.html`. Classes escritas em controllers não são vistas: use as classes de componente (`.k-badge`, `.k-btn`...).
+- Elementos que o JS mostra/esconde (`.show()`, `.toggle()`) não devem ter utilitários de `display` (`k:flex`, `k:hidden`...), porque os utilitários usam `!important`.
+- Partes comuns das views ficam em [kade/view/partials](kade/view/partials): cabeçalho, rodapé, menu da área interna, abertura/fechamento das páginas públicas e internas, paginação, mensagens e o layout dos e-mails.
+
+### Imagens da home
+
+O administrador troca a foto do topo e os três banners de "Destaques" em **Área do administrador → Imagens da home** (JPG até 1 MB). Use apenas fotos próprias ou licenciadas. Sem foto do topo, o topo fica só azul.
 
 ## Estrutura
 
@@ -64,17 +114,18 @@ O ambiente é escolhido pelo `HTTP_HOST` da requisição: **somente `localhost` 
 kade/                         raiz web
 ├── index.php                 front controller (charset, sessão, roteamento)
 ├── .htaccess                 rotas amigáveis, cache, bloqueio de .env
-├── view/                     páginas (uma por rota)
-├── der/                      dump do banco
+├── view/                     páginas (uma por rota) e partials/
+├── error.php  manutencao.html  páginas de erro (403/404) e de manutenção
+├── der/                      dump do banco e migrations/
 └── shared/
     ├── class/
     │   ├── controller/       *Ctrl  — lógica das ações (JSON/HTML)
     │   ├── dao/              *DAO   — acesso a dados
     │   ├── vo/               *VO    — objetos de valor
     │   ├── util/             Properties, Validation, Message, ...
-    │   └── mail/             PHPMailer
-    ├── view/                 parciais compartilhados (ex.: header_ext.php)
-    ├── js/  css/  images/    assets (jQuery, jQuery UI, Tailwind helpers)
+    │   └── mail/             Mail + PHPMailer 6
+    ├── js/  images/          scripts das telas (jQuery) e imagens
+    ├── css/src/app.css       fonte do Tailwind (gera css/app.css)
     └── cront_exp.txt         controle do job de expiração de mensagens
 ```
 
@@ -84,7 +135,7 @@ O `.htaccess` reescreve as URLs:
 
 | URL | Destino |
 |---|---|
-| `/<pagina>/...` | `index.php?page=<pagina>` → [ViewExtCtrl](kade/shared/class/controller/ViewExtCtrl.class.php) escolhe a view (padrão: `maps.php`) |
+| `/<pagina>/...` | `index.php?page=<pagina>` → [ViewExtCtrl](kade/shared/class/controller/ViewExtCtrl.class.php) escolhe a view (`/` é a home, `maps.php`; página desconhecida responde 404) |
 | `/<Controlador>.ctrlExt/<acao>` | `shared/class/controller/<Controlador>.class.php?action=<acao>` |
 | `/RegisterVehicleSMS.ctrlExt/<from>/<body>` | cadastro de veículo via SMS |
 
@@ -120,5 +171,15 @@ Depois, teste manualmente os fluxos principais: cadastro de assinante, cadastro 
 | 404 em todas as rotas | `mod_rewrite` desativado ou `AllowOverride None` | Ative o módulo e permita `.htaccess` no vhost |
 
 ## Segurança
+
+Regras atuais:
+
+- Cada controller declara quem pode chamar cada ação com `guardAction()` (público, usuário logado ou administrador); sem permissão, a resposta é 401/403 em JSON.
+- Senhas com bcrypt (`password_hash`); links de confirmação e de nova senha usam tokens aleatórios de uso único.
+- Consultas montadas pelo `Criteria` escapam valores e só aceitam nomes de coluna válidos em `ORDER BY`; o restante usa prepared statements.
+- Usuário comum só altera o próprio cadastro e só cancela veículos que cadastrou.
+- Tudo o que vem do usuário ou de SMS é escapado nas views (`htmlspecialchars`); exportações CSV neutralizam fórmulas.
+- **Cadastro por SMS:** a rota é pública e só confere o cabeçalho `X-Real-IP` do gateway (`server_sms.http_x_real_ip` em `Properties`). Esse cabeçalho só é confiável se o proxy na frente do PHP o sobrescrever; se o servidor recebe as requisições direto, qualquer pessoa pode forjá-lo. Se o gateway permitir, configure um segredo na URL ou restrinja o IP no próprio servidor web.
+
 
 As credenciais de banco e SMTP que existiam no código foram removidas, mas continuam no histórico do git. **Rotacione essas senhas** no provedor caso ainda não tenha feito isso.

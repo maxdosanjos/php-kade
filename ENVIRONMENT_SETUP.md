@@ -99,6 +99,14 @@ mysql -u root -p --default-character-set=utf8mb4 kadecaminh_1 < kade/der/kade_fu
 # Or use phpMyAdmin GUI
 ```
 
+##### Apply Migrations
+The dump is older than the code. Run every script in `kade/der/migrations` once, in filename order (001 → 005), after taking a backup. See the "Migrações" section of [README.md](README.md) for what each one changes.
+
+```bash
+mysqldump -u root -p --routines --triggers kadecaminh > backup_before_migrations.sql
+for f in kade/der/migrations/*.sql; do mysql -u root -p --default-character-set=utf8mb4 kadecaminh < "$f"; done
+```
+
 #### 5. Environment Configuration
 
 ##### Copy Environment Template
@@ -138,6 +146,21 @@ SMTP_PORT=587
 SMTP_USER=notifications@kadecaminhoes.com.br
 SMTP_PASSWORD=your_smtp_password
 SMTP_AUTH=true
+# Sender address, on the same domain as the SMTP server (SPF/DKIM)
+SMTP_FROM=contato@kadecaminhoes.com.br
+
+# Public site URL used in e-mail links (sign-up confirmation, password reset). Required in production.
+APP_URL=https://www.kadecaminhoes.com.br
+```
+
+For local e-mail, point SMTP to Laragon's Mailpit (`SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025`, empty `SMTP_USER`) and read the messages at `http://localhost:8025`.
+
+##### CSS Build
+The pages use Tailwind CSS v4. The compiled `kade/shared/css/app.css` is committed, so the server never needs Node. After changing classes in views or JS, rebuild it:
+
+```bash
+npm ci
+npm run build:css
 ```
 
 #### 6. Permissions and Ownership
