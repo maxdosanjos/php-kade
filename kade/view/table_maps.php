@@ -11,60 +11,47 @@ if ($ctrlMapsExt->getIsAjax ()){
 
 require_once(dirname(dirname(__FILE__))."/shared/class/controller/ViewExtCtrl.class.php");
 $_mapsExt = $ctrlMapsExt->getListMapsExt ();
-$length = count ( $_mapsExt );
+$isGrpByUf = $ctrlMapsExt->getIsGrpByUf ();
 
-$stateName = "";
-if (! $ctrlMapsExt->getIsGrpByUf () && $length > 0) {
-	$mapsExt = $_mapsExt [0];
-	if ($mapsExt != null) {
-		$address = $mapsExt->getAddress ();
-		$stateName = " - " . $address->getStateNm ();
-	}
-}
-$mapsExt = null;
-$address = null;
+$title = $isGrpByUf ? "Estados com mais veículos" : $ctrlMapsExt->getSelectedUfName ();
 ?>
-<div id="div_title_maps">Últimos veículos<?=$stateName!=""?$stateName:"";?></div>
-<table id="table_demonstr" class="table table-striped table-bordered table-condensed">
-	<thead>
-		<tr>
-			<th class="td_limit"></th>
-			<th class="td_cid"><?=$ctrlMapsExt->getIsGrpByUf()?"Estados":"Cidades"?></th>
-			<th class="td_qtde">Qtde.Veículos</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		$i = 0;
-		while ( $i < $length ) {
-			$mapsExt = $_mapsExt [$i];
-			if ($mapsExt == null) {
-				$i ++;
-				continue;
-			}
-			$address = $mapsExt->getAddress ();
-			?>
-		<tr>
-			<td class="td_limit"></td>
-			<td class="td_cid">
-				<a class="a_city_uf_maps" href="#" uf="<?=$address->getState()?>" city="<?=$ctrlMapsExt->getIsGrpByUf()?"":$address->getCity()?>">
-					<?=$ctrlMapsExt->getIsGrpByUf()?$address->getStateNm():$address->getCity()?>
-				</a>
-			</td>
-			<td class="td_qtde"><?=$mapsExt->getQtyReal()?></td>
-		</tr>
-		<?php $i++; }?>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td class="td_limit active td_foot_update" colspan="3">
-				<a href="/<?=ViewExtCtrl::BUSCA_VEICULO;?>/">Saiba mais...</a>
-				<span class="timer_update">Atualizado em: <span id="crono">60</span> segundos</span>				
-			</td>
-		</tr>
-	</tfoot>
-</table>
-<form id="form_maps" method="post" action="/busca_veiculo/">
-	<input type="hidden" id="vehicle_region" name="vehicle_region" class="input_clear">
-	<input type="hidden" id="vehicle_city" name="vehicle_city" class="input_clear">
+<div class="k-ui k:overflow-hidden k:rounded-2xl k:border k:border-line k:bg-white">
+	<div class="k:flex k:flex-col k:gap-0.5 k:border-b k:border-line k:px-6 k:py-5">
+		<span class="k:text-[13px] k:text-muted">Últimos veículos</span>
+		<h3 class="k:font-display k:text-lg k:font-semibold k:text-kade-950"><?=htmlspecialchars($title, ENT_QUOTES, "UTF-8")?></h3>
+	</div>
+	<table class="k:w-full k:border-collapse k:text-[15px]">
+		<thead>
+			<tr class="k:bg-surface k:text-left k:text-[13px] k:text-muted">
+				<th class="k:px-6 k:py-2.5 k:font-semibold"><?=$isGrpByUf ? "Estado" : "Cidade"?></th>
+				<th class="k:px-6 k:py-2.5 k:text-right k:font-semibold">Veículos</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if (count ( $_mapsExt ) == 0) { ?>
+			<tr class="k:border-t k:border-line">
+				<td colspan="2" class="k:px-6 k:py-6 k:text-center k:text-muted">Nenhum veículo disponível <?=$isGrpByUf ? "no momento" : "neste estado"?>.</td>
+			</tr>
+			<?php } ?>
+			<?php foreach ( $_mapsExt as $mapsExt ) {
+				if ($mapsExt == null)
+					continue;
+				$address = $mapsExt->getAddress (); ?>
+			<tr class="k:border-t k:border-line">
+				<td class="k:px-6 k:py-3">
+					<a href="/<?=ViewExtCtrl::BUSCA_VEICULO?>/" class="a_city_uf_maps k-focus k:rounded k:font-medium k:text-ink k:hover:text-kade-900" data-uf="<?=htmlspecialchars($address->getState(), ENT_QUOTES, "UTF-8")?>" data-city="<?=$isGrpByUf ? "" : htmlspecialchars($address->getCity(), ENT_QUOTES, "UTF-8")?>"><?=htmlspecialchars($isGrpByUf ? $address->getStateNm() : $address->getCity(), ENT_QUOTES, "UTF-8")?></a>
+				</td>
+				<td class="k:px-6 k:py-3 k:text-right k:font-semibold k:text-kade-900"><?=(int) $mapsExt->getQtyReal()?></td>
+			</tr>
+			<?php } ?>
+		</tbody>
+	</table>
+	<div class="k:flex k:flex-wrap k:items-center k:justify-between k:gap-2 k:border-t k:border-line k:px-6 k:py-4">
+		<a href="/<?=ViewExtCtrl::BUSCA_VEICULO?>/" class="k-focus k:rounded k:text-[15px] k:font-semibold k:text-kade-900 k:hover:text-kade-800">Ver todos os veículos →</a>
+		<span class="k:text-[13px] k:text-muted" aria-live="off">Atualiza em <span id="crono">60</span>s</span>
+	</div>
+</div>
+<form id="form_maps" method="post" action="/<?=ViewExtCtrl::BUSCA_VEICULO?>/">
+	<input type="hidden" id="vehicle_region" name="vehicle_region">
+	<input type="hidden" id="vehicle_city" name="vehicle_city">
 </form>

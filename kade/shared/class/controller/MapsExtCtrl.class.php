@@ -6,6 +6,8 @@ require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/MapsExtVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/VehicleTravelingVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/MapsExtDAO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/VehicleTravelingDAO.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/VehicleTypeDAO.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/AddressDAO.class.php");
 require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 class MapsExtCtrl extends AbstractCtrl {
 	private $mapsExtDAO = null;
@@ -13,6 +15,7 @@ class MapsExtCtrl extends AbstractCtrl {
 	private $isAjax = false;
 	private $_mapsExt = array ();
 	private $limitReg = 14;
+	private $selectedUf = "";
 	public function __construct() {
 		parent::__construct ();
 		$this->setAction ( $_REQUEST ["action"] ?? null );
@@ -166,6 +169,36 @@ class MapsExtCtrl extends AbstractCtrl {
 		}
 		return $total;
 	}
+	/**
+	 * Quantidade de veículos por UF, usada para colorir o mapa da home
+	 * @return array UF => quantidade
+	 */
+	public function getQtyByUf() {
+		$_qty = array ();
+		try {
+			$db = DataBase::getInstance ( $this->getDbConfig () );
+			foreach ( MapsExtDAO::getInstance ()->getArrayGrpUf ( $db ) as $mapsExt )
+				$_qty [$mapsExt->getAddress ()->getState ()] = ( int ) $mapsExt->getQtyReal ();
+			$db = null;
+		} catch ( PDOException $e ) {
+			$db = null;
+		}
+		return $_qty;
+	}
+	public function getListUf() {
+		return AddressDAO::getInstance ()->getListUf ();
+	}
+	public function getTypeVechicles() {
+		$_result = array ();
+		try {
+			$db = DataBase::getInstance ( $this->getDbConfig () );
+			$_result = VehicleTypeDAO::getInstance ()->getArrayCache ( $db );
+			$db = null;
+		} catch ( PDOException $e ) {
+			$db = null;
+		}
+		return $_result;
+	}
 	public function onSearchMapsByUf() {
 		$this->_mapsExt = array ();
 		$this->isGrpByUf = false;
@@ -175,7 +208,8 @@ class MapsExtCtrl extends AbstractCtrl {
 		try {
 			$address = new Address ();
 			$address->setState ( $_POST ["maps_state"] );
-			
+			$this->selectedUf = $address->getState ();
+
 			$criteria = new Criteria ();
 			$criteria->eq ( "idx.state", $address->getState () );
 			
@@ -201,8 +235,9 @@ class MapsExtCtrl extends AbstractCtrl {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			
 			$criteria = new Criteria ();
-			$criteria->addOrder ( "idx.qty_real", Criteria::ORDER_DESC );
-			
+			// Alias da soma; "idx.qty_real" não é aceito com GROUP BY no MySQL 8 (ONLY_FULL_GROUP_BY)
+			$criteria->addOrder ( "qty_real", Criteria::ORDER_DESC );
+
 			$criteria->setLimit ( 0, $this->limitReg );
 			$this->_mapsExt = $this->mapsExtDAO->getArrayGrpUf ( $db, $criteria );
 			
@@ -214,6 +249,10 @@ class MapsExtCtrl extends AbstractCtrl {
 	}
 	public function getListMapsExt() {
 		return $this->_mapsExt;
+	}
+	public function getSelectedUfName() {
+		$_ufs = $this->getListUf ();
+		return $_ufs [$this->selectedUf] ?? $this->selectedUf;
 	}
 	public function getIsGrpByUf() {
 		return $this->isGrpByUf;

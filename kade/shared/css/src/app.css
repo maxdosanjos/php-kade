@@ -68,6 +68,99 @@
 	list-style: none;
 }
 /*
+ * Mapa de estados da home. data-level vai de 0 (sem veículos) a 4 (perto do máximo).
+ */
+.k-map .k-uf {
+	cursor: pointer;
+	outline: none;
+}
+.k-map .k-uf path {
+	stroke: #ffffff;
+	stroke-width: 1.5;
+	stroke-linejoin: round;
+	transition: opacity 0.15s;
+}
+.k-map .k-uf text {
+	pointer-events: none;
+	font-family: var(--k-font-display);
+	font-size: 15px;
+	font-weight: 600;
+	text-anchor: middle;
+	fill: var(--k-color-kade-950);
+}
+.k-map .k-uf:hover path {
+	opacity: 0.82;
+}
+.k-map .k-uf:focus-visible path {
+	stroke: var(--k-color-accent);
+	stroke-width: 4;
+}
+.k-map .k-uf[data-level="0"] path,
+.k-swatch[data-level="0"] {
+	fill: #eef1f5;
+	background: #eef1f5;
+}
+.k-map .k-uf[data-level="1"] path,
+.k-swatch[data-level="1"] {
+	fill: var(--k-color-kade-100);
+	background: var(--k-color-kade-100);
+}
+.k-map .k-uf[data-level="2"] path,
+.k-swatch[data-level="2"] {
+	fill: var(--k-color-kade-200);
+	background: var(--k-color-kade-200);
+}
+.k-map .k-uf[data-level="3"] path,
+.k-swatch[data-level="3"] {
+	fill: var(--k-color-kade-400);
+	background: var(--k-color-kade-400);
+}
+.k-map .k-uf[data-level="4"] path,
+.k-swatch[data-level="4"] {
+	fill: var(--k-color-kade-700);
+	background: var(--k-color-kade-700);
+}
+.k-map .k-uf[data-level="4"] text {
+	fill: #ffffff;
+}
+.k-map .k-uf.is-selected path {
+	fill: var(--k-color-accent);
+}
+.k-map .k-uf.is-selected text {
+	fill: var(--k-color-kade-950);
+}
+.k-swatch {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 4px;
+	border: 1px solid rgb(0 0 0 / 0.06);
+}
+.k-uf-btn {
+	min-width: 44px;
+	min-height: 36px;
+	padding: 0 8px;
+	border-radius: 8px;
+	border: 1px solid var(--k-color-line-strong);
+	background: #ffffff;
+	color: var(--k-color-kade-950);
+	font: 600 13px var(--k-font-sans);
+	cursor: pointer;
+}
+.k-uf-btn.is-selected {
+	background: var(--k-color-accent);
+	border-color: var(--k-color-accent);
+}
+
+/* Destaques: esconde a barra de rolagem do carrossel (a navegação é pelos botões) */
+.k-banner-track {
+	scrollbar-width: none;
+}
+.k-banner-track::-webkit-scrollbar {
+	display: none;
+}
+
+/*
  * Compatibilidade com páginas ainda não migradas. Remover cada regra
  * quando a última página que a usa for migrada.
  */
