@@ -318,9 +318,16 @@
 				$criteria->eq("usr.status",User::CHEK);
 
 				$this->userDAO = UserDAO::getInstance ();
+				// Muitas senhas erradas seguidas para o mesmo login: bloqueia por um tempo
+				if ($this->userDAO->isLoginBlocked($this->getDbConfig (), $this->userParam->getLogin()))
+					throw new Exception ( "Muitas tentativas com este login. Aguarde " . UserDAO::LOGIN_WINDOW_MINUTES . " minutos ou peça uma nova senha." );
+
 				$user = $this->userDAO->getSingle($this->getDbConfig (),$criteria);
-				if($user==null || $user->getLogin()=="" || !UserDAO::verifyPassword($this->userParam->getPassword(), $user->getPassword()))
+				if($user==null || $user->getLogin()=="" || !UserDAO::verifyPassword($this->userParam->getPassword(), $user->getPassword())) {
+					$this->userDAO->registerLoginFailure($this->getDbConfig (), $this->userParam->getLogin(), $_SERVER["REMOTE_ADDR"] ?? "");
 					throw new Exception ( $invalid );
+				}
+				$this->userDAO->clearLoginFailures($this->getDbConfig (), $this->userParam->getLogin());
 
 				// Senha ainda em MD5: regrava em bcrypt agora que temos a senha correta
 				if (UserDAO::needsRehash($user->getPassword())) {

@@ -73,6 +73,21 @@ class RoutesTest extends HttpTestCase
 		);
 	}
 
+	/** @dataProvider headerPaths */
+	public function testSecurityHeaders($path)
+	{
+		$response = $this->anonymous()->get($path);
+		$this->assertSame('SAMEORIGIN', $response->header('x-frame-options'), "{$path}: pode ser embutido em iframe de outro site");
+		$this->assertSame('nosniff', $response->header('x-content-type-options'), $path);
+		$this->assertSame('strict-origin-when-cross-origin', $response->header('referrer-policy'), $path);
+		$this->assertSame('', $response->header('x-powered-by'), "{$path}: anuncia a versão do PHP");
+	}
+
+	public function headerPaths()
+	{
+		return array(array('/login/'), array('/'), array('/MapsExtCtrl.ctrlExt/searchMaps'), array('/nao_existe.php'));
+	}
+
 	public function testStaticAssetsAreServed()
 	{
 		$http = $this->anonymous();

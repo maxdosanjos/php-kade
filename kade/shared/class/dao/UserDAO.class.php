@@ -435,8 +435,40 @@
 		public static function needsRehash($storedHash) {
 			return preg_match ( '/^[a-f0-9]{32}$/i', ( string ) $storedHash ) || password_needs_rehash ( ( string ) $storedHash, PASSWORD_DEFAULT );
 		}
-		
-		
-		
+
+		/*
+		 * Limite de tentativas de login (migração 007). Conta por texto de login,
+		 * exista ou não a conta, para a resposta não revelar quais logins existem.
+		 */
+		const LOGIN_MAX_FAILURES = 10;
+		const LOGIN_WINDOW_MINUTES = 15;
+
+		private static function connection($dbConfig) {
+			if ($dbConfig instanceof DBConfig)
+				return DataBase::getInstance ( $dbConfig );
+			if ($dbConfig instanceof DataBase)
+				return $dbConfig;
+			throw new PDOException ( "Conexão Inválida" );
+		}
+
+		public function isLoginBlocked($dbConfig, $login) {
+			$stmt = self::connection ( $dbConfig )->prepare ( "SELECT COUNT(*) FROM `login_attempt`
+				 WHERE `login` = ? AND `created_at` >= NOW() - INTERVAL " . self::LOGIN_WINDOW_MINUTES . " MINUTE" );
+			$stmt->execute ( array ( mb_substr ( ( string ) $login, 0, 45 ) ) );
+			return ( int ) $stmt->fetchColumn () >= self::LOGIN_MAX_FAILURES;
+		}
+
+		public function registerLoginFailure($dbConfig, $login, $ip) {
+			$db = self::connection ( $dbConfig );
+			// Registros antigos não servem mais para nada
+			$db->exec ( "DELETE FROM `login_attempt` WHERE `created_at` < NOW() - INTERVAL 1 DAY" );
+			$stmt = $db->prepare ( "INSERT INTO `login_attempt` (`login`, `ip`) VALUES (?, ?)" );
+			$stmt->execute ( array ( mb_substr ( ( string ) $login, 0, 45 ), mb_substr ( ( string ) $ip, 0, 45 ) ) );
+		}
+
+		public function clearLoginFailures($dbConfig, $login) {
+			$stmt = self::connection ( $dbConfig )->prepare ( "DELETE FROM `login_attempt` WHERE `login` = ?" );
+			$stmt->execute ( array ( mb_substr ( ( string ) $login, 0, 45 ) ) );
+		}
 	}
 ?>

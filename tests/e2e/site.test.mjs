@@ -79,7 +79,8 @@ describe('fluxos', { skip }, () => {
 	test('login com senha errada mostra o aviso e não entra', async () => {
 		const context = await browser.createBrowserContext();
 		const page = await openPage(context);
-		await assert.rejects(login(page, [USER[0], 'senha-errada']), /Login .* falhou/);
+		// Login inexistente: senhas erradas na conta de teste contariam para o bloqueio
+		await assert.rejects(login(page, ['nao_existe_' + Date.now(), 'senha-errada']), /Login .* falhou/);
 		assert.ok((await page.content()).includes('Usuário ou senha inválidos'));
 		await context.close();
 	});
