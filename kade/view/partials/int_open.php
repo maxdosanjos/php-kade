@@ -2,14 +2,17 @@
 /**
  * Abertura das páginas da área interna: menu lateral + título.
  * Variáveis: $viewExtCtrl, $pageTitle, $pageDesc (opcional), $pageActions (HTML opcional à direita do título).
- * Fechar com partials/int_close.php.
+ * Fechar com partials/int_close.php. Em janela popup (windowPopUp=true) o menu é omitido.
  */
+$intPopUp = $viewExtCtrl->getWindowPopUp();
 ?>
 <div class="k-ui k:text-ink">
 	<div class="k:mx-auto k:flex k:max-w-[1200px] k:flex-wrap k:items-start k:gap-6 k:px-4 k:py-8 k:md:px-6 k:md:py-10">
+		<?php if (!$intPopUp) { ?>
 		<div class="k:w-full k:lg:w-60 k:lg:shrink-0">
 			<?php include(dirname(__FILE__)."/menu_int.php"); ?>
 		</div>
+		<?php } ?>
 		<div class="k:flex k:min-w-0 k:flex-1 k:basis-[640px] k:flex-col k:gap-6">
 			<div class="k:flex k:flex-wrap k:items-end k:justify-between k:gap-4">
 				<div class="k:flex k:flex-col k:gap-1.5">

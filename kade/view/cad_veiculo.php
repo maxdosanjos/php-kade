@@ -13,13 +13,7 @@
 	$isPF = ($user != null && $user->getPerson()->getType() == Person::PF);
 	$isPJ = ($user != null && $user->getPerson()->getType() == Person::PJ);
 	$lockAttr = ' readonly class="k-field required readonly"';
-	// CPF/CNPJ travados não passam pela máscara do JS: formata aqui
-	$fmtDoc = function ($doc) {
-		$d = preg_replace('/\D/', '', (string) $doc);
-		if (strlen($d) == 11) return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $d);
-		if (strlen($d) == 14) return preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $d);
-		return $doc;
-	};
+	require_once(dirname(__FILE__)."/partials/helpers.php");
 	$grid2 = "k:grid k:grid-cols-1 k:gap-4 k:sm:grid-cols-2";
 	$section = "k:flex k:flex-col k:gap-4 k:border-t k:border-line k:pt-6";
 	$sectionTitle = "k:font-display k:text-lg k:font-semibold k:text-kade-950";
@@ -78,7 +72,7 @@
 					<div class="<?=$grid2?>">
 						<label class="k-label" for="vehicle_cpf">CPF
 							<?php if ($isPF) { ?>
-							<input type="text" id="vehicle_cpf" name="vehicle_cpf" maxlength="14" value="<?=$h($fmtDoc($user->getPerson()->getCpf()))?>"<?=$lockAttr?>/>
+							<input type="text" id="vehicle_cpf" name="vehicle_cpf" maxlength="14" value="<?=$h(k_fmt_doc($user->getPerson()->getCpf()))?>"<?=$lockAttr?>/>
 							<?php } else { ?>
 							<input type="text" id="vehicle_cpf" name="vehicle_cpf" maxlength="14" inputmode="numeric" class="k-field mask.cpf required input_clear" value=""/>
 							<?php } ?>
@@ -96,7 +90,7 @@
 					<div class="<?=$grid2?>">
 						<label class="k-label" for="vehicle_cnpj">CNPJ
 							<?php if ($isPJ) { ?>
-							<input type="text" id="vehicle_cnpj" name="vehicle_cnpj" maxlength="18" value="<?=$h($fmtDoc($user->getPerson()->getCnpj()))?>"<?=$lockAttr?>/>
+							<input type="text" id="vehicle_cnpj" name="vehicle_cnpj" maxlength="18" value="<?=$h(k_fmt_doc($user->getPerson()->getCnpj()))?>"<?=$lockAttr?>/>
 							<?php } else { ?>
 							<input type="text" id="vehicle_cnpj" name="vehicle_cnpj" maxlength="18" inputmode="numeric" class="k-field mask.cnpj required input_clear" value=""/>
 							<?php } ?>

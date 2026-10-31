@@ -66,6 +66,27 @@ class CustumerRegCtrl extends AbstractCtrl {
 	public function getClientEdit(){
 		return $this->clientEdit;
 	}
+	/**
+	 * Usuário logado lido do banco ("Meus dados"). A cópia da sessão é de quando o
+	 * usuário entrou: fica desatualizada e não traz endereço/telefone de quem não os tinha.
+	 */
+	public function getLoggedUserFresh(){
+		$logged = User::getLogged ();
+		if ($logged == null)
+			return null;
+		try {
+			$criteria = new Criteria ();
+			$criteria->eq ( "usr.person_id", ( int ) $logged->getPerson ()->getId () );
+			$user = UserDAO::getInstance ()->getSingle ( $this->getDbConfig (), $criteria );
+			if ($user != null) {
+				$user->setPassword ( "" );
+				return $user;
+			}
+		} catch ( PDOException $e ) {
+			error_log ( "getLoggedUserFresh: " . $e->getMessage () );
+		}
+		return $logged;
+	}
 	public function getRequestBean(array $_data) {
 		$client = new Client ();
 		$person = null;

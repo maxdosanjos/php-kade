@@ -38,10 +38,11 @@ header("Content-Type: text/html; charset=UTF-8",true);
 		<script type="text/javascript" charset="UTF-8">$(document).ready(function(){ ViewExt.getInstance().initQuery();});</script>
 		<? include_once("analyticstracking.php");?>
 	</head>
-	<body<?=$popUp ? "" : ' class="k:flex k:min-h-screen k:flex-col k:bg-surface"'?>>
+	<body class="<?=$popUp ? "k:bg-surface" : "k:flex k:min-h-screen k:flex-col k:bg-surface"?>">
 		<?if($popUp){?>
+		 <?php /* Popup: só rolagem vertical (antes não rolava e cortava os formulários longos) */ ?>
 		 <style type="text/css">
-		 	body{ overflow-x:hidden;overflow-y:hidden; }
+		 	body{ overflow-x:hidden; overflow-y:auto; }
 		 </style>
 		<? $viewExtCtrl->includePage();
 		}else{
