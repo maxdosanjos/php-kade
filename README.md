@@ -52,7 +52,7 @@ As credenciais ficam em `.env` (ignorado pelo git), lido por [Properties.class.p
 | Grupo | Variáveis | Uso |
 |---|---|---|
 | `DBKADE_DEV_*` / `DBKADE_PRD_*` | `USER`, `PASSWORD`, `HOST`, `DATABASE`, `PORT` | Banco principal |
-| `DBCEP_DEV_*` / `DBCEP_PRD_*` | idem | Banco de CEP (stored procedure `procurar_cep`) |
+| `DBCEP_DEV_*` / `DBCEP_PRD_*` | idem | **Opcional.** Banco de CEP antigo (procedure `procurar_cep`); deixe vazio se não tiver (veja [Busca de CEP](#busca-de-cep)) |
 | `SMTP_*` | `HOST`, `PORT`, `USER`, `PASSWORD`, `AUTH` | Envio de e-mails (PHPMailer 6) |
 | `SMTP_FROM` | e-mail | Remetente dos e-mails; use um endereço do mesmo domínio do SMTP (SPF/DKIM) |
 | `APP_URL` | URL | Endereço público do site, usado nos links dos e-mails. **Obrigatório em produção** (ex.: `https://www.kadecaminhoes.com.br`) |
@@ -69,7 +69,16 @@ O Laragon traz o [Mailpit](https://mailpit.axllent.org/). Com `SMTP_HOST=127.0.0
 
 ### Busca de CEP
 
-[AddressDAO.class.php](kade/shared/class/dao/AddressDAO.class.php) normaliza o CEP, tenta a procedure `procurar_cep` no banco de CEP e, se a conexão ou a consulta falhar, recorre à API pública [ViaCEP](https://viacep.com.br). O dump incluído não contém o banco de CEP, então em ambiente local o ViaCEP costuma ser o caminho usado.
+O site não depende mais de um banco de CEP próprio. O antigo (`kadecaminh_1`) nunca esteve no repositório, e a base oficial dos Correios é paga e não pode ser redistribuída. [CepService.class.php](kade/shared/class/util/CepService.class.php) procura nesta ordem:
+
+1. **Cache local**, a tabela `cep_cache` do banco principal (migração 008). Ela já nasce com os CEPs dos endereços cadastrados e guarda cada resposta das APIs por 180 dias.
+2. **Banco de CEP antigo**, só se as variáveis `DBCEP_*` estiverem preenchidas.
+3. [ViaCEP](https://viacep.com.br).
+4. [BrasilAPI](https://brasilapi.com.br), que agrega Correios e outras fontes.
+
+Cada API tem 4 segundos para responder. Se todas falharem, um registro vencido do cache ainda é usado. Um CEP em cache responde na hora; um novo leva cerca de 1 segundo.
+
+Cidade e UF do veículo vêm sempre do CEP, no servidor. O cadastro por SMS com CEP que não existe é recusado ("CEP não encontrado") em vez de gravar o veículo sem localização. A coluna `address.cep` é numérica, então CEPs que começam com zero (estado de SP) voltam do banco com 7 dígitos; o código completa o zero.
 
 ## Migrações
 
@@ -84,6 +93,7 @@ O dump em `kade/der` é antigo. As migrações em [kade/der/migrations](kade/der
 | `005_parcelas.sql` | Parcelas sem forma de pagamento até serem pagas, status padrão e formas de pagamento iniciais |
 | `006_validade_links.sql` | Data de criação dos links enviados por e-mail; o link de nova senha vence em 24 horas |
 | `007_tentativas_login.sql` | Tabela `login_attempt`, usada no limite de tentativas de login |
+| `008_cache_cep.sql` | Tabela `cep_cache` (busca de CEP sem banco de CEP próprio), já preenchida com os CEPs dos endereços cadastrados |
 
 O código novo depende das migrações: rode-as **antes** de publicar os arquivos.
 

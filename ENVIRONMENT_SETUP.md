@@ -100,7 +100,7 @@ mysql -u root -p --default-character-set=utf8mb4 kadecaminh_1 < kade/der/kade_fu
 ```
 
 ##### Apply Migrations
-The dump is older than the code. Run every script in `kade/der/migrations` once, in filename order (001 → 007), after taking a backup. See the "Migrações" section of [README.md](README.md) for what each one changes.
+The dump is older than the code. Run every script in `kade/der/migrations` once, in filename order (001 → 008), after taking a backup. See the "Migrações" section of [README.md](README.md) for what each one changes.
 
 ```bash
 mysqldump -u root -p --routines --triggers kadecaminh > backup_before_migrations.sql
@@ -127,10 +127,12 @@ DBKADE_DEV_HOST=localhost
 DBKADE_DEV_DATABASE=kadecaminh
 DBKADE_DEV_PORT=3306
 
-DBCEP_DEV_USER=root
-DBCEP_DEV_PASSWORD=your_password
-DBCEP_DEV_HOST=localhost
-DBCEP_DEV_DATABASE=kadecaminh_1
+# Optional legacy CEP database (procedure procurar_cep). Leave empty if you don't have it:
+# CEP lookups use the cep_cache table (migration 008), ViaCEP and BrasilAPI.
+DBCEP_DEV_USER=
+DBCEP_DEV_PASSWORD=
+DBCEP_DEV_HOST=
+DBCEP_DEV_DATABASE=
 DBCEP_DEV_PORT=3306
 
 # Database Configuration - Production

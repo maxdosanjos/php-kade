@@ -33,9 +33,7 @@ class AddressRegCtrl extends AbstractCtrl {
 		try {
 			
 			$addressDAO = AddressDAO::getInstance ();
-			$dbConfigCep = $addressDAO->loadDBConfigCep ();
-			$db = DataBase::getInstance ( $dbConfigCep );
-			$addressDAO->getAddressByZipCode ( $db, $address );
+			$addressDAO->getAddressByZipCode ( $this->getDbConfig (), $address );
 			
 			$_address ["address"] = iconv ( "UTF-8", "UTF-8", $address->getStreet () );
 			$_address ["addressNumber"] = $address->getNumber ();
@@ -48,11 +46,9 @@ class AddressRegCtrl extends AbstractCtrl {
 			$output ["result"] = 1;
 			$output ["data"] = $_address;
 			// $db->commit ();
-			$db = null;
-			$dbConfigCep = null;
-		} catch ( PDOException $e ) {
+		} catch ( Exception $e ) {
 			$this->message->setType ( Message::WARN );
-			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
 			
 			/*
 			 * if ($db->inTransaction()) $db->rollback ();

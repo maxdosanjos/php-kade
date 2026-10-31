@@ -66,15 +66,6 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$address     = $vehicleTraveling->getPersonContact()->getPerson()->getAddress();
 			$vehicleType = $vehicleTraveling->getVehicleType ();
 			
-			try {
-				$addressDAO = AddressDAO::getInstance ();
-				$db = DataBase::getInstance ( $addressDAO->loadDBConfigCep () );
-				$addressDAO->getAddressByZipCode ( $db, $address );
-				$db = null;
-			} catch ( PDOException $e ) {
-				$db = null;
-			}
-			
 			$vehicleTraveling->getPersonContact()->getPerson()->setAddress($address);
 			
 			$this->validateBean ( $vehicleTraveling );
@@ -179,16 +170,25 @@ class VehicleRegCtrl extends AbstractCtrl {
 		}
 		
 		
-		/*if ($address->getCep () != "" && ($address->getCity () == "" || $address->getState () == "")) {
+		// Cidade e UF vêm do CEP, no servidor (o formulário só exibe e o SMS só traz o CEP).
+		// Se a busca falhar, ficam as do formulário e a validação confere.
+		if ($address->getCep () != "") {
+			$resolved = new Address ();
+			$resolved->setCep ( $address->getCep () );
 			try {
-				$addressDAO = AddressDAO::getInstance ();
-				$db = DataBase::getInstance ( $addressDAO->loadDBConfigCep () );
-				$addressDAO->getAddressByZipCode ( $db, $address );
-				$db = null;
-			} catch ( PDOException $e ) {
-				$db = null;
+				AddressDAO::getInstance ()->getAddressByZipCode ( $this->getDbConfig (), $resolved );
+				$address->setCep ( $resolved->getCep () );
+				$address->setCity ( $resolved->getCity () );
+				$address->setState ( $resolved->getState () );
+				$address->setStateNm ( $resolved->getStateNm () );
+				if ($address->getStreet () == "")
+					$address->setStreet ( $resolved->getStreet () );
+				if ($address->getNeighborhood () == "")
+					$address->setNeighborhood ( $resolved->getNeighborhood () );
+			} catch ( Exception $e ) {
+				error_log ( "VehicleRegCtrl CEP " . $address->getCep () . ": " . $e->getMessage () );
 			}
-		}*/
+		}
 		
 		$person->setAddress ( $address );
 		
@@ -435,16 +435,18 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$address->setCep($cepDigits);
 		}
 		
-		if($obj->getSource() != VehicleTraveling::SOURCE_SMS )
-		{				
-			
+		// Sem cidade e UF o veículo não aparece no mapa: o SMS também é recusado (antes era
+		// gravado sem localização quando o CEP não era encontrado)
+		if ($obj->getSource() == VehicleTraveling::SOURCE_SMS) {
+			if (strlen($cepDigits) == 8 && ($address->getCity () == "" || $address->getState () == ""))
+				$e->add ( "CEP", "vehicle_zipcode", "CEP não encontrado!" );
+		} else {
 			if ($address->getCity () == "") {
 				$e->add ( "Cidade", "vehicle_city", "Cidade inválida!" );
-			} 
-			
+			}
 			if ($address->getState () == "") {
 				$e->add ( "UF", "vehicle_region", "UF inválida!" );
-			}			
+			}
 		}
 		// conclusão
 		if ($e->size () > 0) {

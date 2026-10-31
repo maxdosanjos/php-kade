@@ -1,4 +1,5 @@
 <?php
+require_once (dirname ( dirname ( __FILE__ ) ) . "/util/CepService.class.php");
 require_once (dirname ( __FILE__ ) . "/DBConfig.class.php");
 require_once (dirname ( __FILE__ ) . "/DataBase.class.php");
 require_once (dirname ( __FILE__ ) . "/Criteria.class.php");
@@ -123,66 +124,42 @@ class AddressDAO {
 			$db = null;
 		return $address;
 	}
+	/**
+	 * Preenche rua, bairro, cidade e UF pelo CEP. Fontes: cache local, banco de CEP
+	 * antigo (se configurado), ViaCEP e BrasilAPI (veja CepService). $dbConfig é o
+	 * banco principal, onde fica o cache. Antes os chamadores conectavam primeiro no
+	 * banco de CEP: sem ele, a busca falhava sem nem tentar o ViaCEP.
+	 */
 	public function getAddressByZipCode($dbConfig, Address $address) {
-		// Normalize CEP to digits only
-		$rawCep = (string) $address->getCep();
-		$cepDigits = preg_replace('/\D/', '', $rawCep);
-		if (strlen($cepDigits) != 8) {
-			throw new PDOException("CEP inválido");
-		}
-		// Try local DB lookup first (stored procedure 'procurar_cep')
-		$sql = "CALL procurar_cep('" . Criteria::escapeString($cepDigits) . "');";
-		$db = null;
-		// Attempt DB lookup inside try/catch so connection failures fall back to external API		try {
-			if ($dbConfig instanceof DBConfig)
-				$db = DataBase::getInstance ( $dbConfig );
-			else if ($dbConfig instanceof DataBase)
-				$db = $dbConfig;
-			else
-				throw new PDOException ( "Conexão inválida" );
-		
-			$result = @$db->query ( $sql );
-			if ($result && ($objDAO = $result->fetchObject())) {
-				$address->setCep($cepDigits);
-				$address->setState ( isset($objDAO->uf) ? $objDAO->uf : '' );
-				$address->setStateNm ( isset($objDAO->uf_name) ? $objDAO->uf_name : '' );
-				$address->setCity ( isset($objDAO->cidade) ? $objDAO->cidade : '' );
-				$address->setNeighborhood ( isset($objDAO->bairro) ? $objDAO->bairro : '' );
-				$address->setStreet ( isset($objDAO->logradouro) ? $objDAO->logradouro : '' );
-				if ($dbConfig instanceof DBConfig)
-					$db = null;
-				return;
-			}
-		} catch (Exception $e) {
-			// Log DB lookup failures and continue to fallback (do not propagate exception)
-			error_log("AddressDAO.getAddressByZipCode DB lookup failed: " . $e->getMessage());
-			if ($dbConfig instanceof DBConfig)
-				$db = null;
-		}
-		
-		// Fallback: query ViaCEP public API (https://viacep.com.br)
-		$viacepUrl = "https://viacep.com.br/ws/" . $cepDigits . "/json/";
-		$ctx = stream_context_create(array('http' => array('timeout' => 5)));
-		$json = @file_get_contents($viacepUrl, false, $ctx);
-		if ($json !== false) {
-			$data = json_decode($json);
-			if ($data && !isset($data->erro)) {
-				$address->setCep($cepDigits);
-				$address->setStreet(isset($data->logradouro) ? $data->logradouro : '');
-				$address->setNeighborhood(isset($data->bairro) ? $data->bairro : '');
-				$address->setCity(isset($data->localidade) ? $data->localidade : '');
-				$address->setState(isset($data->uf) ? $data->uf : '');
-				$address->setStateNm('');
-				if ($dbConfig instanceof DBConfig)
-					$db = null;
-				return;
-			}
-		}
-		
+		$cep = CepService::normalize ( $address->getCep () );
+		if ($cep === "")
+			throw new Exception ( "CEP inválido." );
+
 		if ($dbConfig instanceof DBConfig)
-			$db = null;
-		
-		throw new PDOException ( "CEP não encontrado" );
+			$db = DataBase::getInstance ( $dbConfig );
+		else if ($dbConfig instanceof DataBase)
+			$db = $dbConfig;
+		else
+			throw new PDOException ( "Conexão inválida" );
+
+		$legacy = null;
+		try {
+			$legacy = $this->loadDBConfigCep ();
+		} catch ( PDOException $e ) {
+			// Banco de CEP antigo não configurado: só cache e APIs
+		}
+
+		$found = ( new CepService ( $db, $legacy ) )->lookup ( $cep );
+		if ($found == null)
+			throw new Exception ( "CEP não encontrado." );
+
+		$_ufs = $this->getListUf ();
+		$address->setCep ( $found ["cep"] );
+		$address->setStreet ( $found ["street"] );
+		$address->setNeighborhood ( $found ["neighborhood"] );
+		$address->setCity ( $found ["city"] );
+		$address->setState ( $found ["state"] );
+		$address->setStateNm ( $_ufs [$found ["state"]] ?? "" );
 	}
 	public function loadDBConfigCep() {
 		if (Properties::get ( "INSTANCE" ) == "PRD") {

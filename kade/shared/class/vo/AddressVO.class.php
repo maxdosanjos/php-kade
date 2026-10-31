@@ -24,6 +24,9 @@ class Address {
 	public function setCep($cep){
 		$cep = trim((string)$cep);
 		$cep = preg_replace("/[\-\.]/i","",$cep);
+		// A coluna address.cep é numérica: CEPs de SP voltam do banco com 7 dígitos
+		if (ctype_digit($cep) && strlen($cep) == 7)
+			$cep = "0" . $cep;
 		$maxlength = 8;
 		if(mb_strlen($cep) > $maxlength){
 			$cep = mb_substr($cep,0,$maxlength);

@@ -134,6 +134,20 @@ describe('fluxos', { skip }, () => {
 		await page.close();
 	});
 
+	test('cadastro de veículo: o CEP preenche cidade e UF', async () => {
+		// 86010-000 vem do cache local ou do ViaCEP/BrasilAPI (precisa de um dos dois)
+		const context = await browser.createBrowserContext();
+		const page = await openPage(context);
+		await page.goto(BASE + '/cad_veiculo/', { waitUntil: 'networkidle2' });
+		await page.type('#vehicle_zipcode', '86010000');
+		await page.keyboard.press('Tab');
+		await page.waitForFunction(() => document.querySelector('#vehicle_city').value !== '', { timeout: 15000 });
+		assert.equal(await page.$eval('#vehicle_city', (el) => el.value), 'Londrina');
+		assert.equal(await page.$eval('#vehicle_region', (el) => el.value), 'PR');
+		assert.deepEqual(page.problems, []);
+		await context.close();
+	});
+
 	test('cadastro de veículo vazio não é enviado', async () => {
 		const context = await browser.createBrowserContext();
 		const page = await openPage(context);
