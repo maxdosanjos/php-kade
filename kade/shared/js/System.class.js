@@ -930,6 +930,12 @@ System.openDefaultWindow = function(url,title,options,autofocus){
 		param.toolbar = (options.toolbar == undefined)?param.toolbar:options.toolbar;
 		param.scrollbars = (options.scrollbars == undefined)?param.scrollbars:options.scrollbars;
 	}
+	// Telas novas são mais largas: todo popup é redimensionável, rola e tem um tamanho
+	// mínimo confortável (limitado ao tamanho da tela)
+	param.resizable  = 'yes';
+	param.scrollbars = 'yes';
+	param.width  = Math.min(Math.max(param.width, 900), screen.availWidth - 40);
+	param.height = Math.min(Math.max(param.height, 760), screen.availHeight - 80);
 	var win = window.open(url,title,"WIDTH="+param.width+",HEIGHT="+param.height+",fullscreen="+param.fullscreen+"," +
 			"top="+param.top+",left="+param.left+",resizable="+param.resizable+",toolbar="+param.toolbar+"," +
 					"titlebar="+param.titlebar+",scrollbars="+param.scrollbars);

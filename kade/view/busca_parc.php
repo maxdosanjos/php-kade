@@ -1,102 +1,93 @@
-<?php 
-	if ($viewExtCtrl == null){
+<?php
+if ($viewExtCtrl == null){
 	header("HTTP/1.0 404 Not Found");
 	exit ();
 }
 require_once(dirname(dirname(__FILE__))."/shared/class/controller/InstallmentQueryCtrl.class.php");
-
 if (User::getLogged()==null){
 	header("HTTP/1.0 404 Not Found");
 	exit ();
 }
-
 $ctrlInstQry->onSearchArray();
-$_installment	  = $ctrlInstQry->getInstallments();
+$_installment     = $ctrlInstQry->getInstallments() ?? array();
 $installmentParam = $ctrlInstQry->getInstallmentParam();
-$length 		  = count($_installment);
+$length           = count($_installment);
 
+$h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
+$money = function ($v) { return "R$ ".number_format((float) $v, 2, ',', '.'); };
+$total = 0;
+foreach ($_installment as $installmentList)
+	$total += ($installmentList->getStatus() == Installment::PAID) ? $installmentList->getPaymentValue() : $installmentList->getValue();
+$isPaidView = ($installmentParam->getStatus() == Installment::PAID);
 
-$message    	  = $ctrlInstQry->getMessage();
+$pageTitle = "Minhas parcelas";
+$pageDesc  = "Acompanhe as mensalidades da sua assinatura.";
 ?>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/default_int.css?f=1"/>
-<link type="text/css" rel="stylesheet" media="screen" href="../shared/css/busca_parc.css?f=1"/>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/FormFieldException.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/ViewInt.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
-<script type="text/javascript" language="javascript" charset="UTF-8" src="../shared/js/InstallmentBean.class.js?f=1"></script>
-<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){ViewInt.getInstance().initQuery();InstallmentBean.getInstance().initQuery();});</script>
-<?if($message!=null){?>
-	<script language="javascript" type="text/javascript" charset="UTF-8">$(document).ready(function(){$("#span_loc_msg").notify("<?=$message->getDesc();?>", "<?=$message->getType();?>");});</script>
-<?	} ?>
-<div id="div_body_busca_parc" class="div_body">
-	<div id="div_inter_esq">
-		<?php include_once("menu_int.php");?>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/Pagination.class.js?f=1"></script>
+<script type="text/javascript" charset="UTF-8" src="../shared/js/InstallmentBean.class.js?v=<?=@filemtime(dirname(dirname(__FILE__))."/shared/js/InstallmentBean.class.js")?>"></script>
+<script type="text/javascript" charset="UTF-8">$(document).ready(function(){InstallmentBean.getInstance().initQuery();});</script>
+<?php include(dirname(__FILE__)."/partials/int_open.php"); ?>
+
+	<div class="k:flex k:flex-wrap k:items-end k:justify-between k:gap-4">
+		<form id="parc_query_open" name="parc_query_open" action="<?=$h($_SERVER["REQUEST_URI"])?>" method="post">
+			<label class="k-label k:w-56" for="parc_status">Mostrar
+				<select id="parc_status" name="parc_status" class="k-field">
+					<?php foreach (Installment::listStatus() as $status=>$statusNm){
+						if ($status == Installment::CANCEL) continue; ?>
+					<option value="<?=$h($status)?>" <?=($installmentParam->getStatus() == $status) ? "selected" : ""?>><?=$status == Installment::PAID ? "Parcelas pagas" : "Parcelas em aberto"?></option>
+					<?php } ?>
+				</select>
+			</label>
+			<span id="span_loc_msg"></span>
+			<input type="hidden" id="order_column" name="order_column" value="<?=$h($ctrlInstQry->getOrderColumn());?>"/>
+			<input type="hidden" id="order_type" name="order_type" value="<?=$h($ctrlInstQry->getOrderType());?>"/>
+			<input type="hidden" id="msg_type" name="msg_type" value=""/>
+			<input type="hidden" id="msg_txt" name="msg_txt" value=""/>
+		</form>
+		<div class="k:rounded-2xl k:border k:border-line k:bg-white k:px-5 k:py-3 k:text-right">
+			<span class="k:block k:text-[13px] k:text-muted"><?=$isPaidView ? "Total pago" : "Total em aberto"?></span>
+			<span class="k:font-display k:text-xl k:font-semibold k:text-kade-950"><?=$money($total)?></span>
+		</div>
 	</div>
-	<div id="div_inter_dir">
-		<fieldset id="fieldset_filter">
-			<legend>Parcelas</legend>
-			<div id="div_search">
-				<form id="parc_query_open" name="parc_query_open" action="<?=$_SERVER["REQUEST_URI"];?>" method="post">
-					<div class="div_input">
-						<label for="parc_status"  class="label_input" title="Status" alt="Status">Filtrar por Status:</label>
-						<select id="parc_status" name="parc_status" class="">
-							<?php foreach (Installment::listStatus() as $status=>$statuNm){
-								if($status!=Installment::CANCEL){
-							?>
-								<option value="<?=$status?>" <?=($installmentParam->getStatus() == $status)?"selected='true'":""?>><?=$statuNm?></option>
-								<?php } ?>
-							<?php } ?>
-						</select>
-					</div>		
-					<span id="span_loc_msg"></span>
-					<input type="hidden" id="order_column" name="order_column" value="<?=$ctrlInstQry->getOrderColumn();?>"/>
-					<input type="hidden" id="order_type" name="order_type" value="<?=$ctrlInstQry->getOrderType();?>"/>	
-					<input type="hidden" id="msg_type" name="msg_type" value=""/>	
-					<input type="hidden" id="msg_txt" name="msg_txt" value=""/>		
-				</form>
-			</div>
-		</fieldset>		
-		<div id="div_result">
-			<div id="table_foot">
-				<div class="details_pag">Número de Resultados: <span title="Total de Registros">(<?=$length;?>)</span></div>
-			</div>
-			<table id="table_query_open" class="table table-bordered table-condensed">
-				<thead class="table_head">
+
+	<section id="div_result" class="k:overflow-hidden k:rounded-2xl k:border k:border-line k:bg-white" aria-label="Parcelas">
+		<div class="k:border-b k:border-line k:px-5 k:py-4 k:text-[15px]">
+			<strong class="k:font-semibold"><?=$length?> <?=$length == 1 ? "parcela" : "parcelas"?></strong>
+		</div>
+		<div class="k:overflow-x-auto">
+			<table id="table_query_open" class="k-table">
+				<thead>
 					<tr>
-						<th class="column-order td_id" lang="ins.account_id" title="Clique para alternar a ordenação dos registros">Registro <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.account_id');?></span></th>
-						<th class="column-order td_id" lang="ins.id" title="Clique para alternar a ordenação dos registros">Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.id');?></span></th>
-						<th class="column-order td_value" lang="ins.value" title="Clique para alternar a ordenação dos registros">Valor da Parcela <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.value');?></span></th>
-						<th class="column-order td_drhr" lang="ins.due_date" title="Clique para alternar a ordenação dos registros">Data Vencimento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.due_date');?></span></th>
-						<th class="column-order td_drhr" lang="ins.payment_date" title="Clique para alternar a ordenação dos registros">Data Pagamento <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_date');?></span></th>
-						<th class="column-order td_value" lang="ins.payment_value" title="Clique para alternar a ordenação dos registros">Valor Pago <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.payment_value');?></span></th>
-						<th class="td_name">Forma de Pagamento</th>
-						<th class="column-order td_sts" lang="ins.status" title="Clique para alternar a ordenação dos registros">Status <span class="img_order"><?=$ctrlInstQry->getImgOrder('ins.status');?></span></th>
+						<th class="column-order" lang="ins.account_id" title="Ordenar por conta">Conta <?=$ctrlInstQry->getImgOrder('ins.account_id');?></th>
+						<th class="column-order" lang="ins.id" title="Ordenar por parcela">Parcela <?=$ctrlInstQry->getImgOrder('ins.id');?></th>
+						<th class="column-order" lang="ins.due_date" title="Ordenar por vencimento">Vencimento <?=$ctrlInstQry->getImgOrder('ins.due_date');?></th>
+						<th class="column-order" lang="ins.value" title="Ordenar por valor">Valor <?=$ctrlInstQry->getImgOrder('ins.value');?></th>
+						<th class="column-order" lang="ins.payment_date" title="Ordenar por pagamento">Pago em <?=$ctrlInstQry->getImgOrder('ins.payment_date');?></th>
+						<th class="column-order" lang="ins.payment_value" title="Ordenar por valor pago">Valor pago <?=$ctrlInstQry->getImgOrder('ins.payment_value');?></th>
+						<th>Forma</th>
+						<th class="column-order" lang="ins.status" title="Ordenar por status">Status <?=$ctrlInstQry->getImgOrder('ins.status');?></th>
 					</tr>
 				</thead>
 				<tbody class="tbody_query">
-					<?
-						$i = 0;
-						while($i < $length){
-							$installmentList = $_installment[$i];
-							$accountList     = $installmentList->getAccount();
-							$payMethodList   = $installmentList->getPaymentMethod();
-					?>
-					<tr class="tr_hover">
-						<td class="td_id"><?=$accountList->getId()?></td>
-						<td class="td_id"><?=$installmentList->getId ()?></td>
-						<td class="td_value"><?=number_format ( $installmentList->getValue (), 2, ',', '.' )?></td>
-						<td class="td_drhr"><?=$installmentList->getDueDate ()->format ( "d/m/Y" )?></td>
-						<td class="td_drhr"><?=($installmentList->getPaymentDate ()!=null)?$installmentList->getPaymentDate ()->format ( "d/m/Y" ):""?></td>
-						<td class="td_value"><?=number_format ( $installmentList->getPaymentValue (), 2, ',', '.' )?></td>
-						<td class="td_name"><?=($payMethodList!=null)?$payMethodList->getName ():""?></td>
-						<td class="td_sts <?=$installmentList->getStatus ()?>"><?=$installmentList->getDescStatus ()?></td>			
+					<?php if ($length == 0) { ?>
+					<tr><td colspan="8" class="k:py-10 k:text-center k:text-muted"><?=$isPaidView ? "Nenhuma parcela paga ainda." : "Nenhuma parcela em aberto. Tudo em dia!"?></td></tr>
+					<?php } ?>
+					<?php foreach ($_installment as $installmentList) {
+						$payMethodList = $installmentList->getPaymentMethod(); ?>
+					<tr>
+						<td class="k:font-semibold k:text-kade-900">#<?=$h($installmentList->getAccount()->getId())?></td>
+						<td><?=$h($installmentList->getId())?></td>
+						<td class="k:whitespace-nowrap"><?=$installmentList->getDueDate()->format("d/m/Y")?></td>
+						<td class="k:whitespace-nowrap"><?=$money($installmentList->getValue())?></td>
+						<td class="k:whitespace-nowrap k:text-ink-soft"><?=($installmentList->getPaymentDate() != null) ? $installmentList->getPaymentDate()->format("d/m/Y") : "—"?></td>
+						<td class="k:whitespace-nowrap k:text-ink-soft"><?=($installmentList->getPaymentValue() > 0) ? $money($installmentList->getPaymentValue()) : "—"?></td>
+						<td class="k:text-ink-soft"><?=($payMethodList != null) ? $h($payMethodList->getName()) : "—"?></td>
+						<td class="<?=$h($installmentList->getStatus())?>"><span class="k-badge"><?=$h($installmentList->getDescStatus())?></span></td>
 					</tr>
-					<? $i++; } ?>
+					<?php } ?>
 				</tbody>
 			</table>
 		</div>
-		
-	</div>
-</div>
+	</section>
+
+<?php include(dirname(__FILE__)."/partials/int_close.php"); ?>

@@ -4,8 +4,6 @@ var InstallmentBean = function() {
 	};
 	
 	var formatGUIEventsQuery = function(){
-		System.zebra("tbody_query");
-		
 		pagination = new Pagination();
 		pagination.init($("#parc_query_open"));
 		

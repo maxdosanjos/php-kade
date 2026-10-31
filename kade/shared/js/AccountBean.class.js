@@ -38,7 +38,6 @@ var AccountBean = function() {
 		});
 	};
 	var setEventsDefaultTableParc = function(){
-		System.zebra("tbody_query");
 		$("#table_installment tr.tr_hover td").click(function(e){
 			var $trParam = $(this).parent();
 			
@@ -132,11 +131,7 @@ var AccountBean = function() {
 	};
 	
 	var onEventMatchCodeClient = function(){
-		$("#btn_match_client").button({ 
-	        icons: {
-	            primary: "ui-icon ui-icon-search"
-	        },
-	        text: false}).click(function(e){
+		$("#btn_match_client").click(function(e){
 	        	var param = new Object(); 
 				param.width = 540;
 				param.height = 520;
@@ -323,7 +318,6 @@ var AccountBean = function() {
 					}else{
 						if(json.html_inc_installment != undefined){
 							$("#tbody_installment").html(json.html_inc_installment);
-							System.zebra("tbody_query");
 						}else{	
 							$("#button_save").toggle(false);
 							if(window.opener!=undefined){
@@ -394,7 +388,6 @@ var AccountBean = function() {
 		initDialogWorking();
 		onEventMatchCodeClient();
 		
-		System.zebra("tbody_query");
 
 		pagination = new Pagination();
 		pagination.init($("#conta_query_open"));
