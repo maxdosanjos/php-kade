@@ -239,6 +239,12 @@ details[open] > summary .k-chev {
 summary::-webkit-details-marker {
 	display: none;
 }
+/* Campo bloqueado pelo JS (ex.: inscrição estadual "Isento") */
+.k-field.readonly,
+.k-field[readonly] {
+	background: var(--k-color-surface);
+	color: var(--k-color-muted);
+}
 .k-field:focus {
 	outline: 3px solid rgb(255 138 0 / 0.45);
 	outline-offset: 1px;
@@ -360,6 +366,15 @@ body .ui-dialog .ui-dialog-content {
 	padding: 20px;
 	color: var(--k-color-ink);
 	font: 400 15px/1.5 var(--k-font-sans);
+}
+/* Os scripts fixam a altura dos diálogos (ex.: 240px), o que cortava listas de erros */
+body .ui-dialog .ui-dialog-content {
+	height: auto !important;
+	max-height: 70vh;
+	overflow: auto;
+}
+body .ui-dialog {
+	height: auto !important;
 }
 body .ui-dialog .ui-dialog-buttonpane {
 	margin: 0;
