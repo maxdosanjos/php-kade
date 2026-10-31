@@ -113,7 +113,13 @@
 			if ($bodyContentType == "text/html") {
 				$mail->isHTML ( true );
 				$mail->Body    = $body;
-				$mail->AltBody = trim ( html_entity_decode ( strip_tags ( preg_replace ( '/<(style|script)\b[^>]*>.*?<\/\1>/is', '', $body ) ), ENT_QUOTES, "UTF-8" ) );
+				// Versão texto: sem <head>/<style>, quebras nos <br>/<p> e sem a indentação do HTML
+				$text = preg_replace ( '/<(head|style|script)\b[^>]*>.*?<\/\1>/is', '', $body );
+				$text = preg_replace ( '/<br\s*\/?>|<\/(p|h[1-6]|tr)>/i', "\n", $text );
+				$text = html_entity_decode ( strip_tags ( $text ), ENT_QUOTES, "UTF-8" );
+				$text = preg_replace ( "/[ \t]+/", " ", $text );
+				$text = preg_replace ( "/ *\n */", "\n", $text );
+				$mail->AltBody = trim ( preg_replace ( "/\n{3,}/", "\n\n", $text ) );
 			} else {
 				$mail->isHTML ( false );
 				$mail->Body = $body;
