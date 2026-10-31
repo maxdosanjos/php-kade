@@ -13,6 +13,9 @@
 -- que não tem índice único.
 -- =============================================================================
 
+-- Acentos corretos mesmo quando o terminal não é UTF-8 (ex.: cp850 no Windows)
+SET NAMES utf8mb4;
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- client: user_login -> user_person_id ----------------------------------------

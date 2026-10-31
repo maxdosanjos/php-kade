@@ -145,20 +145,19 @@ class AccountRegCtrl extends AbstractCtrl {
 			
 			$date = null;
 			
-			$length = $_POST ["account_validate_month"];
-			if ($length <= 0) {
-				$excp->add ( "Total de parcelas", "account_validate_month", "Total de parcelas: Valor inválido" );
+			// Antes: setDate() com strings (fatal no PHP 8), só aceitava "dd/mm/aaaa" (o campo
+			// vem como "dd.mm.aaaa") e floatval("1.234,56") virava 1.234
+			$length = ( int ) ($_POST ["account_validate_month"] ?? 0);
+			if ($length <= 0 || $length > 120) {
+				$excp->add ( "Total de parcelas", "account_validate_month", "Total de parcelas: informe de 1 a 120" );
 			}
-			$value = floatval ( $_POST ["installment_reg_value"] );
+			$value = Util::parseMoneyBR ( $_POST ["installment_reg_value"] ?? "" );
 			if ($value <= 0) {
 				$excp->add ( "Valor(R$)", "installment_reg_value", "Valor(R$): Valor inválido" );
 			}
-			
-			if ($_POST ["installment_reg_dt"] != "") {
-				$dt = explode ( "/", $_POST ["installment_reg_dt"] );
-				$date = new DateTimeCustom ( "NOW" );
-				$date->setDate ( $dt [2], $dt [1], $dt [0] );
-			} else {
+
+			$date = Util::parseDateBR ( $_POST ["installment_reg_dt"] ?? "" );
+			if ($date == null) {
 				$excp->add ( "Data Inicial", "installment_reg_dt", "Data Inicial: Data inválida" );
 			}
 			
@@ -179,24 +178,25 @@ class AccountRegCtrl extends AbstractCtrl {
 				$installment->setDueDate ( $date );
 				$installment->setValue ( $value );
 				
+				// Mesma marcação da tabela de parcelas em view/alter_conta.php
 				$line .= '<tr class="tr_hover">';
-				
-				$line .= '<td class="td_id">' . $installment->getId ();
+
+				$line .= '<td class="k:font-semibold k:text-kade-900">' . $installment->getId ();
 				$line .= '<input type="hidden" class="acc_hidden_id" name="installment_id[]" id="installment_id_' . $installment->getId () . '" value="' . $installment->getId () . '" />';
 				$line .= '</td>';
-				
-				$line .= '<td class="td_value">' . number_format ( $installment->getValue (), 2, ',', '.' );
+
+				$line .= '<td>' . number_format ( $installment->getValue (), 2, ',', '.' );
 				$line .= '<input type="hidden" name="installment_value[]" id="installment_value_' . $installment->getId () . '" value="' . $installment->getValue () . '" />';
 				$line .= '</td>';
-				
-				$line .= '<td class="td_drhr">' . $installment->getDueDate ()->format ( "d/m/Y" );
+
+				$line .= '<td class="k:whitespace-nowrap">' . $installment->getDueDate ()->format ( "d/m/Y" );
 				$line .= '<input type="hidden" name="installment_due_date[]" id="installment_due_date_' . $installment->getId () . '" value="' . $installment->getDueDate ()->format ( "d/m/Y" ) . '" />';
 				$line .= '</td>';
-				
-				$line .= '<td class="td_sts ' . $installment->getStatus () . '">' . iconv ( "UTF-8", "UTF-8", $installment->getDescStatus () );
+
+				$line .= '<td class="' . $installment->getStatus () . '"><span class="k-badge">' . $installment->getDescStatus () . '</span>';
 				$line .= '<input type="hidden" name="installment_status[]" id="installment_status_' . $installment->getId () . '" value="' . $installment->getStatus () . '" />';
 				$line .= '</td>';
-				
+
 				$line .= '</tr>';
 				
 				if ($dayHist > 0)
@@ -371,32 +371,35 @@ class AccountRegCtrl extends AbstractCtrl {
 				$account->setClient ( $client );
 		}
 		
-		$length = sizeof ( ($_data["installment_id"] ?? "") );
+		// Campos de parcela chegam como arrays (installment_id[] etc.)
+		$col = function ($key, $i) use ($_data) {
+			$arr = $_data [$key] ?? array ();
+			return is_array ( $arr ) ? ($arr [$i] ?? "") : "";
+		};
+		$ids = $_data ["installment_id"] ?? array ();
+		$length = is_array ( $ids ) ? count ( $ids ) : 0;
 		$_installs = array ();
 		while ( $i < $length ) {
 			$installment = new Installment ();
-			$installment->setId ( ($_data["installment_id"] ?? "") [$i] );
-			$installment->setValue ( ($_data["installment_value"] ?? "") [$i] );
-			if (($_data["installment_due_date"] ?? "") [$i] != "") {
-				$installment->setDueDate ( new DateTimeCustom ( "Now" ) );
-				$dt = explode ( "/", ($_data["installment_due_date"] ?? "") [$i] );
-				$installment->getDueDate ()->setDate ( $dt [2], $dt [1], $dt [0] );
-			}
-			
-			if (($_data["installment_payment_date"] ?? "") [$i] != "") {
-				$installment->setPaymentDate ( new DateTimeCustom ( "Now" ) );
-				$dt = explode ( "/", ($_data["installment_payment_date"] ?? "") [$i] );
-				$installment->getPaymentDate ()->setDate ( $dt [2], $dt [1], $dt [0] );
-			}
-			
-			$installment->setPaymentValue ( ($_data["installment_payment_value"] ?? "") [$i] );
-			
+			$installment->setId ( $col ( "installment_id", $i ) );
+			$installment->setValue ( Util::parseMoneyBR ( $col ( "installment_value", $i ) ) );
+			$dueDate = Util::parseDateBR ( $col ( "installment_due_date", $i ) );
+			if ($dueDate != null)
+				$installment->setDueDate ( $dueDate );
+
+			$paymentDate = Util::parseDateBR ( $col ( "installment_payment_date", $i ) );
+			if ($paymentDate != null)
+				$installment->setPaymentDate ( $paymentDate );
+
+			// O diálogo de pagamento envia "70,00"; antes ia assim para o banco
+			$installment->setPaymentValue ( Util::parseMoneyBR ( $col ( "installment_payment_value", $i ) ) );
+
 			$paymentMethod = new PaymentMethod();
-			$paymentMethod->setId(  ($_data["installment_payment_method"] ?? "") [$i] );
+			$paymentMethod->setId ( $col ( "installment_payment_method", $i ) );
 			$installment->setPaymentMethod ( $paymentMethod );
-			
-			$installment->setStatus ( ($_data["installment_status"] ?? "") [$i] );
-			
+
+			$installment->setStatus ( $col ( "installment_status", $i ) );
+
 			$_installs [] = $installment;
 			$i ++;
 		}

@@ -55,27 +55,22 @@ class PaymentMethodDAO {
 		return $_arr;
 	}
 	public function getArrayCache($dbConfig) {
-		//$_SESSION ["list_vehicle_type"] = "";
-		if($_SESSION ["list_payment_method"]!=""){
-			$_result = unserialize ( $_SESSION ["list_payment_method"] );
+		// Sem a chave na sessão $_result ficava null e o sizeof() era fatal no PHP 8
+		$_result = array ();
+		if (! empty ( $_SESSION ["list_payment_method"] )) {
+			$_tmp = @unserialize ( $_SESSION ["list_payment_method"] );
+			if (is_array ( $_tmp ))
+				$_result = $_tmp;
 		}
-	
-		if (sizeof ( $_result ) > 0) {
+		if (count ( $_result ) > 0)
 			return $_result;
-		} else {
+
+		$_result = $this->getArray ( $dbConfig );
+		if (! is_array ( $_result ))
 			$_result = array ();
-				
-			try {
-				$_result = $this->getArray ( $dbConfig );
-				$_SESSION["list_payment_method"] = serialize($_result);
-			} catch ( PDOException $e ) {
-				throw $e;
-			}
-		}
-	
-		if (sizeof ( $_result ) <= 0)
-			$_result = array ();
-	
+		// Lista vazia não vai para o cache, para aparecer assim que houver formas cadastradas
+		if (count ( $_result ) > 0)
+			$_SESSION ["list_payment_method"] = serialize ( $_result );
 		return $_result;
 	}
 }

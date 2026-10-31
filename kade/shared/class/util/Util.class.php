@@ -72,6 +72,30 @@ class Util {
 		return true;
 	}
 	/**
+	 * Data no formato brasileiro (dd/mm/aaaa, dd.mm.aaaa ou dd-mm-aaaa).
+	 * Retorna DateTimeCustom ou null se vazia/inválida.
+	 */
+	public static function parseDateBR($value) {
+		if (! preg_match ( '/^\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})\s*$/', ( string ) $value, $m ))
+			return null;
+		if (! checkdate ( ( int ) $m [2], ( int ) $m [1], ( int ) $m [3] ))
+			return null;
+		$date = new DateTimeCustom ( "now" );
+		$date->setDate ( ( int ) $m [3], ( int ) $m [2], ( int ) $m [1] );
+		return $date;
+	}
+	/**
+	 * Valor monetário: aceita "1.234,56", "70,00", "70" e também "70.5" (vindo do banco).
+	 */
+	public static function parseMoneyBR($value) {
+		$value = trim ( str_replace ( array ( "R$", " " ), "", ( string ) $value ) );
+		if ($value === "")
+			return 0.0;
+		if (strpos ( $value, "," ) !== false)
+			$value = str_replace ( ",", ".", str_replace ( ".", "", $value ) );
+		return is_numeric ( $value ) ? round ( ( float ) $value, 2 ) : 0.0;
+	}
+	/**
 	 * Cabeçalhos de download de CSV e BOM UTF-8 (para o Excel mostrar os acentos).
 	 */
 	public static function csvStart($filename) {

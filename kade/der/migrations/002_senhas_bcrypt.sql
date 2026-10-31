@@ -14,6 +14,9 @@
 --   mysql -u root kadecaminh < kade/der/migrations/002_senhas_bcrypt.sql
 -- =============================================================================
 
+-- Acentos corretos mesmo quando o terminal não é UTF-8 (ex.: cp850 no Windows)
+SET NAMES utf8mb4;
+
 DROP TRIGGER IF EXISTS `ON_BEFORE_INSERT`;
 DROP TRIGGER IF EXISTS `ON_BEFORE_UPDATE`;
 

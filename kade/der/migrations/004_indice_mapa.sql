@@ -16,6 +16,9 @@
 --   mysql -u root kadecaminh < kade/der/migrations/004_indice_mapa.sql
 -- =============================================================================
 
+-- Acentos corretos mesmo quando o terminal não é UTF-8 (ex.: cp850 no Windows)
+SET NAMES utf8mb4;
+
 DROP TRIGGER IF EXISTS `ao_inserir`;
 DROP TRIGGER IF EXISTS `ao_atualizar`;
 DROP PROCEDURE IF EXISTS `add_idx_traveling_city`;
