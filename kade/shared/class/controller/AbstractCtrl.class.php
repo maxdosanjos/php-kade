@@ -2,6 +2,13 @@
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/DBConfig.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Properties.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Message.class.php");
+
+// Rotas *.ctrlExt chamam o controller direto, sem passar pelo index.php; sem isto
+// o $_SESSION gravado no login (e em outras ações) se perde quando o
+// session.auto_start do servidor está desligado.
+if (session_status () === PHP_SESSION_NONE)
+	session_start ();
+
 abstract class AbstractCtrl {
 	private $action;
 	private $dbConfig;
