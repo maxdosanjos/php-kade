@@ -122,6 +122,8 @@ O visual usa [Tailwind CSS v4](https://tailwindcss.com/) com prefixo `k:` (ex.: 
 
 O administrador troca a foto do topo e os três banners de "Destaques" em **Área do administrador → Imagens da home** (JPG até 1 MB). Use apenas fotos próprias ou licenciadas. Sem foto do topo, o topo fica só azul.
 
+A foto do topo que vem com o projeto (`kade/shared/images/hero.jpg`, recortada em 1920 × 800) é [Highway 395, Indio](https://commons.wikimedia.org/wiki/File:Highway_395,_Indio,_United_States_(Unsplash).jpg), de Robson Hatsukami Morgan, em domínio público (CC0): pode ser usada comercialmente sem dar crédito.
+
 ## Estrutura
 
 ```

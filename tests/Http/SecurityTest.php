@@ -131,19 +131,25 @@ class SecurityTest extends HttpTestCase
 
 	public function testBannerUploadAndRemovalRoundTrip()
 	{
+		// A foto do topo atual é guardada e volta no fim, passe o teste ou não
 		$hero = KADE_ROOT . '/shared/images/hero.jpg';
-		if (file_exists($hero))
-			$this->markTestSkipped('Já existe uma foto do topo; o teste não a substitui');
-		$response = $this->admin()->post('/MapsExtCtrl.ctrlExt/loadBanner', array(
-			'banner_id' => 'hero',
-			'banner_file' => new \CURLFile(KADE_ROOT . '/shared/images/banner_ori/banner_slider1.jpg', 'image/jpeg', 'foto.jpg')));
-		$this->assertSame('sucess', $response->json()['result'] ?? null, $response->body);
-		$this->assertFileExists($hero);
-		$this->assertStringContainsString('shared/images/hero.jpg', $this->anonymous()->get('/')->body, 'A home não usou a foto enviada');
+		$saved = file_exists($hero) ? file_get_contents($hero) : null;
+		try {
+			$response = $this->admin()->post('/MapsExtCtrl.ctrlExt/loadBanner', array(
+				'banner_id' => 'hero',
+				'banner_file' => new \CURLFile(KADE_ROOT . '/shared/images/banner_ori/banner_slider1.jpg', 'image/jpeg', 'foto.jpg')));
+			$this->assertSame('sucess', $response->json()['result'] ?? null, $response->body);
+			$this->assertFileEquals(KADE_ROOT . '/shared/images/banner_ori/banner_slider1.jpg', $hero);
+			$this->assertStringContainsString('shared/images/hero.jpg', $this->anonymous()->get('/')->body, 'A home não usou a foto enviada');
 
-		$response = $this->admin()->post('/MapsExtCtrl.ctrlExt/removeBanner', array('banner_id' => 'hero'));
-		$this->assertSame('sucess', $response->json()['result'] ?? null);
-		clearstatcache();
-		$this->assertFileDoesNotExist($hero);
+			$response = $this->admin()->post('/MapsExtCtrl.ctrlExt/removeBanner', array('banner_id' => 'hero'));
+			$this->assertSame('sucess', $response->json()['result'] ?? null);
+			clearstatcache();
+			$this->assertFileDoesNotExist($hero);
+			$this->assertStringNotContainsString('shared/images/hero.jpg', $this->anonymous()->get('/')->body, 'A home ainda usa a foto removida');
+		} finally {
+			if ($saved !== null)
+				file_put_contents($hero, $saved);
+		}
 	}
 }
