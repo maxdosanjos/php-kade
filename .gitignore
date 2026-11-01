@@ -3,6 +3,9 @@
 !.env.example
 node_modules/
 
+# Horário da última expiração automática de anúncios: o site regrava a cada execução
+kade/shared/cront_exp.txt
+
 # Ferramentas de desenvolvimento (Composer e PHPUnit)
 vendor/
 .phpunit.result.cache
