@@ -68,11 +68,12 @@ class MapsExtDAO {
 						, SUM(idx.qty_illus) AS qty_illus
 				  FROM 	idx_traveling_city idx
 				";
+		// O WHERE vem antes do GROUP BY (antes era montado depois e gerava SQL inválido).
 		// MySQL 8 não aceita "GROUP BY ... ASC" e exige state_nm no agrupamento (ONLY_FULL_GROUP_BY)
-		$sql .= " GROUP BY idx.state, idx.state_nm";
-		
-		if ($criteria != null) {
+		if ($criteria != null)
 			$sql .= $criteria->getWHERE ();
+		$sql .= " GROUP BY idx.state, idx.state_nm";
+		if ($criteria != null) {
 			$sql .= $criteria->getORDER ();
 			$sql .= $criteria->getLIMIT ();
 		}

@@ -204,12 +204,22 @@ class MapsExtCtrl extends AbstractCtrl {
 	public static function includeTableMaps(MapsExtCtrl $ctrlMapsExt) {
 		include_once (dirname ( dirname ( dirname ( dirname ( __FILE__ ) ) ) ) . "/view/table_maps.php");
 	}
+	/**
+	 * Coluna do índice que o mapa mostra: qty_real (veículos ativos) ou, com
+	 * MAPA_CONTAGEM=ilustrativa no .env, qty_illus (o número inflado que o site exibia)
+	 */
+	private function qtyColumn() {
+		return Properties::get ( "mapa.contagem" ) === "ilustrativa" ? "qty_illus" : "qty_real";
+	}
+	public function getQty(MapsExt $mapsExt) {
+		return ( int ) ($this->qtyColumn () === "qty_illus" ? $mapsExt->getQtyIllus () : $mapsExt->getQtyReal ());
+	}
 	public function getTotalReg() {
 		$total = 0;
 		$this->mapsExtDAO = MapsExtDAO::getInstance ();
 		try {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
-			$total = $this->mapsExtDAO->getTotalReg ( $db, true );
+			$total = $this->mapsExtDAO->getTotalReg ( $db, $this->qtyColumn () === "qty_illus" );
 			$db = null;
 		} catch ( PDOException $e ) {
 			$db = null;
@@ -225,7 +235,7 @@ class MapsExtCtrl extends AbstractCtrl {
 		try {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			foreach ( MapsExtDAO::getInstance ()->getArrayGrpUf ( $db ) as $mapsExt )
-				$_qty [$mapsExt->getAddress ()->getState ()] = ( int ) $mapsExt->getQtyIllus ();
+				$_qty [$mapsExt->getAddress ()->getState ()] = $this->getQty ( $mapsExt );
 			$db = null;
 		} catch ( PDOException $e ) {
 			$db = null;
@@ -259,8 +269,10 @@ class MapsExtCtrl extends AbstractCtrl {
 
 			$criteria = new Criteria ();
 			$criteria->eq ( "idx.state", $address->getState () );
-			
-			$criteria->addOrder ( "idx.qty_illus", Criteria::ORDER_DESC );
+			// Cidades sem veículo no momento ficam fora da lista
+			$criteria->gt ( "idx." . $this->qtyColumn (), 0 );
+
+			$criteria->addOrder ( "idx." . $this->qtyColumn (), Criteria::ORDER_DESC );
 			
 			$criteria->setLimit ( 0, $this->limitReg );
 			
@@ -282,8 +294,10 @@ class MapsExtCtrl extends AbstractCtrl {
 			$db = DataBase::getInstance ( $this->getDbConfig () );
 			
 			$criteria = new Criteria ();
-			// Alias da soma; "idx.qty_illus" não é aceito com GROUP BY no MySQL 8 (ONLY_FULL_GROUP_BY)
-			$criteria->addOrder ( "qty_illus", Criteria::ORDER_DESC );
+			// Estados sem veículo no momento ficam fora da lista
+			$criteria->gt ( "idx." . $this->qtyColumn (), 0 );
+			// Alias da soma; "idx.qty_real" não é aceito com GROUP BY no MySQL 8 (ONLY_FULL_GROUP_BY)
+			$criteria->addOrder ( $this->qtyColumn (), Criteria::ORDER_DESC );
 
 			$criteria->setLimit ( 0, $this->limitReg );
 			$this->_mapsExt = $this->mapsExtDAO->getArrayGrpUf ( $db, $criteria );

@@ -168,6 +168,11 @@ class Properties {
 		self::$data["smtp_kadecaminhoes.from"] = self::env("SMTP_FROM");
 		// URL pública do site, usada nos links enviados por e-mail (ex.: https://www.kadecaminhoes.com.br)
 		self::$data["app.url"] = self::env("APP_URL");
+		// Gateway de SMS: IP(s) aceitos e segredo opcional na URL (ver VehicleRegCtrl::isSmsGatewayAllowed)
+		self::$data["server_sms.http_x_real_ip"] = self::env("SMS_GATEWAY_IP", self::$data["server_sms.http_x_real_ip"]);
+		self::$data["server_sms.token"] = self::env("SMS_TOKEN", "");
+		// Números do mapa da home: "real" (veículos ativos) ou "ilustrativa" (qty_illus, o número antigo)
+		self::$data["mapa.contagem"] = self::env("MAPA_CONTAGEM", "real");
 		$host = $_SERVER["HTTP_HOST"] ?? "localhost";
 		if ($host === "localhost" || $host === "kade.test") {
 			Properties::set("INSTANCE", self::DEV);

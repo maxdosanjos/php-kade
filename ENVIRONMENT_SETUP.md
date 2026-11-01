@@ -151,8 +151,16 @@ SMTP_AUTH=true
 # Sender address, on the same domain as the SMTP server (SPF/DKIM)
 SMTP_FROM=contato@kadecaminhoes.com.br
 
-# Public site URL used in e-mail links (sign-up confirmation, password reset). Required in production.
+# Public site URL used in e-mail links (sign-up confirmation, password reset) and sitemap.xml. Required in production.
 APP_URL=https://www.kadecaminhoes.com.br
+
+# SMS gateway: allowed IP(s), comma separated, and the secret it puts in the URL
+# (/RegisterVehicleSMS.ctrlExt/<SMS_TOKEN>/<phone>/<message>). Set the token.
+SMS_GATEWAY_IP=200.195.184.186
+SMS_TOKEN=a_long_random_secret
+
+# Home map numbers: real (active vehicles, default) or ilustrativa (the old inflated qty_illus)
+MAPA_CONTAGEM=real
 ```
 
 For local e-mail, point SMTP to Laragon's Mailpit (`SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025`, empty `SMTP_USER`) and read the messages at `http://localhost:8025`.

@@ -28,4 +28,5 @@ require_once KADE_CLASS . '/vo/PersonVO.class.php';
 require_once KADE_CLASS . '/vo/InstallmentVO.class.php';
 require_once KADE_CLASS . '/mail/Mail.class.php';
 require_once KADE_CLASS . '/util/CepService.class.php';
+require_once KADE_CLASS . '/util/SmsGateway.class.php';
 require_once KADE_ROOT . '/view/partials/helpers.php';

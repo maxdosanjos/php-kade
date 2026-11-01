@@ -2,6 +2,7 @@
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/DateTimeCustom.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Util.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Validation.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/util/SmsGateway.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/PhoneVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/AddressVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/PersonVO.class.php");
@@ -48,10 +49,8 @@ class VehicleRegCtrl extends AbstractCtrl {
 			
 		try {
 			
-			$prop = Properties::getGroup("server_sms");		
-			
-			if(($_SERVER["HTTP_X_REAL_IP"] ?? "") != $prop["http_x_real_ip"])
-				throw new Exception("IP inválido para tratamento de SMS");
+			if (!SmsGateway::isAllowed($_SERVER, $_GET["token"] ?? ""))
+				throw new Exception("Chamada de SMS não autorizada (IP do gateway ou SMS_TOKEN)");
 
 			// Formato esperado: from=<55DDNNNNNNNNN> e body=<tipo>*<cep>
 			$from = preg_replace('/\D/', "", (string) ($_GET["from"] ?? ""));

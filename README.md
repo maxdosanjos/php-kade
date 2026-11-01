@@ -55,7 +55,10 @@ As credenciais ficam em `.env` (ignorado pelo git), lido por [Properties.class.p
 | `DBCEP_DEV_*` / `DBCEP_PRD_*` | idem | **Opcional.** Banco de CEP antigo (procedure `procurar_cep`); deixe vazio se não tiver (veja [Busca de CEP](#busca-de-cep)) |
 | `SMTP_*` | `HOST`, `PORT`, `USER`, `PASSWORD`, `AUTH` | Envio de e-mails (PHPMailer 6) |
 | `SMTP_FROM` | e-mail | Remetente dos e-mails; use um endereço do mesmo domínio do SMTP (SPF/DKIM) |
-| `APP_URL` | URL | Endereço público do site, usado nos links dos e-mails. **Obrigatório em produção** (ex.: `https://www.kadecaminhoes.com.br`) |
+| `APP_URL` | URL | Endereço público do site, usado nos links dos e-mails e no `sitemap.xml`. **Obrigatório em produção** (ex.: `https://www.kadecaminhoes.com.br`) |
+| `SMS_GATEWAY_IP` | IP(s) separados por vírgula | IP do gateway de SMS. Sem a variável, vale o IP antigo (`200.195.184.186`); vazia, só o `SMS_TOKEN` é conferido (veja [Segurança](#segurança)) |
+| `SMS_TOKEN` | texto de 16 a 128 caracteres (`A-Z a-z 0-9 _ -`) | **Recomendado.** Segredo que o gateway passa na URL do SMS |
+| `MAPA_CONTAGEM` | `real` (padrão) ou `ilustrativa` | Números do mapa da home: veículos ativos de fato, ou a coluna `qty_illus` (o número inflado que o site antigo mostrava) |
 
 ### Ambiente DEV × PRD
 
@@ -79,6 +82,14 @@ O site não depende mais de um banco de CEP próprio. O antigo (`kadecaminh_1`) 
 Cada API tem 4 segundos para responder. Se todas falharem, um registro vencido do cache ainda é usado. Um CEP em cache responde na hora; um novo leva cerca de 1 segundo.
 
 Cidade e UF do veículo vêm sempre do CEP, no servidor. O cadastro por SMS com CEP que não existe é recusado ("CEP não encontrado") em vez de gravar o veículo sem localização. A coluna `address.cep` é numérica, então CEPs que começam com zero (estado de SP) voltam do banco com 7 dígitos; o código completa o zero.
+
+### Mapa da home
+
+O mapa, a tabela ao lado e o "N veículos ativos agora" leem o índice `idx_traveling_city`, que os gatilhos mantêm (migração 004). Ele tem duas contagens por cidade:
+- `qty_real`: veículos ativos de fato. É o padrão.
+- `qty_illus`: um número ilustrativo, maior que o real, que o site antigo exibia. Com `MAPA_CONTAGEM=ilustrativa` no `.env`, o site volta a mostrá-lo.
+
+Estados e cidades sem veículos não aparecem na tabela.
 
 ## Migrações
 
@@ -142,7 +153,7 @@ kade/                         raiz web
     │   └── mail/             Mail + PHPMailer 6
     ├── js/  images/          scripts das telas (jQuery) e imagens
     ├── css/src/app.css       fonte do Tailwind (gera css/app.css)
-    └── cront_exp.txt         controle do job de expiração de mensagens
+    └── cront_exp.txt         horário da última expiração de anúncios (gerado; fora do git)
 ```
 
 ### Rotas
@@ -153,7 +164,8 @@ O `.htaccess` reescreve as URLs:
 |---|---|
 | `/<pagina>/...` | `index.php?page=<pagina>` → [ViewExtCtrl](kade/shared/class/controller/ViewExtCtrl.class.php) escolhe a view (`/` é a home, `maps.php`; página desconhecida responde 404) |
 | `/<Controlador>.ctrlExt/<acao>` | `shared/class/controller/<Controlador>.class.php?action=<acao>` |
-| `/RegisterVehicleSMS.ctrlExt/<from>/<body>` | cadastro de veículo via SMS |
+| `/RegisterVehicleSMS.ctrlExt/[<token>/]<from>/<body>` | cadastro de veículo via SMS (`<token>` = `SMS_TOKEN`, obrigatório quando definido) |
+| `/sitemap.xml` | `sitemap.php`, com os endereços montados a partir do `APP_URL` |
 
 Páginas principais: `cad_veiculo`, `cad_assinante`, `busca_veiculo`, `login`, `data_user`, `quem_somos`, `terms_use`. Várias exigem login e redirecionam para `login`.
 
@@ -209,7 +221,7 @@ Regras atuais:
 - Consultas montadas pelo `Criteria` escapam valores e só aceitam nomes de coluna válidos em `ORDER BY`; o restante usa prepared statements.
 - Usuário comum só altera o próprio cadastro e só cancela veículos que cadastrou.
 - Tudo o que vem do usuário ou de SMS é escapado nas views (`htmlspecialchars`); exportações CSV neutralizam fórmulas.
-- **Cadastro por SMS:** a rota é pública e só confere o cabeçalho `X-Real-IP` do gateway (`server_sms.http_x_real_ip` em `Properties`). Esse cabeçalho só é confiável se o proxy na frente do PHP o sobrescrever; se o servidor recebe as requisições direto, qualquer pessoa pode forjá-lo. Se o gateway permitir, configure um segredo na URL ou restrinja o IP no próprio servidor web.
+- **Cadastro por SMS:** a rota é pública. Ela confere o IP do gateway (`SMS_GATEWAY_IP`) no cabeçalho `X-Real-IP` ou no IP da conexão. O `X-Real-IP` só é confiável se o proxy na frente do PHP o sobrescrever; se o servidor recebe as requisições direto, qualquer pessoa pode forjá-lo. Por isso, defina `SMS_TOKEN` e cadastre no gateway a URL `https://<site>/RegisterVehicleSMS.ctrlExt/<SMS_TOKEN>/<telefone>/<mensagem>`. Com o segredo definido, chamadas sem ele são recusadas, e o log de SMS mostra `***` no lugar dele. Regras em [SmsGateway.class.php](kade/shared/class/util/SmsGateway.class.php).
 
 
 As credenciais de banco e SMTP que existiam no código foram removidas, mas continuam no histórico do git. **Rotacione essas senhas** no provedor caso ainda não tenha feito isso.

@@ -4,6 +4,7 @@ require_once (dirname ( __FILE__ ) . "/DataBase.class.php");
 require_once (dirname ( __FILE__ ) . "/Criteria.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/DateTimeCustom.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Message.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/util/SmsGateway.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/VehicleTypeVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/AddressVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/VehicleContactVO.class.php");
@@ -107,7 +108,7 @@ class VehicleTravelingDAO {
 			  $cut($request["from"] ?? "", 45)
 			, $cut($request["body"] ?? "", 2000)
 			, $cut($server["HTTP_X_REAL_IP"] ?? $server["REMOTE_ADDR"] ?? "", 45)
-			, $cut($server["SCRIPT_URI"] ?? $server["REQUEST_URI"] ?? "", 2000)
+			, $cut(SmsGateway::maskToken($server["SCRIPT_URI"] ?? $server["REQUEST_URI"] ?? ""), 2000)
 			, $cut($message->getType (), 45)
 			, $cut($log, 4000)
 		);

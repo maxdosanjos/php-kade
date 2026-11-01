@@ -73,10 +73,15 @@ ErrorDocument 404 /error.php
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteRule ^(view|der|shared/class|shared/css/src)(/|$) - [R=404,L,NC]
 
+# sitemap.xml é gerado com a URL pública do .env (APP_URL)
+RewriteRule ^sitemap\.xml$ sitemap.php [L,NC]
+
 # /shared/ só tem arquivos: um arquivo ausente ali vira 404 (antes renderizava a home inteira)
 RewriteCond %{REQUEST_URI} !^/shared/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/\.]+)(\/(.*))?$ index.php?page=$1&$3 [NC]
+# SMS: /RegisterVehicleSMS.ctrlExt/[<token>/]<telefone>/<tipo*cep> (o token é o SMS_TOKEN do .env)
 RewriteRule ^RegisterVehicleSMS.ctrlExt\/([0-9]+)\/([0-9*]+)$ shared/class/controller/VehicleRegCtrl.class.php?action=saveSMS&from=$1&body=$2 [NC]
+RewriteRule ^RegisterVehicleSMS.ctrlExt\/([A-Za-z0-9_-]{16,128})\/([0-9]+)\/([0-9*]+)$ shared/class/controller/VehicleRegCtrl.class.php?action=saveSMS&token=$1&from=$2&body=$3 [NC]
 RewriteRule ^(.+)\.ctrlExt\/(.+)$ shared/class/controller/$1.class.php?action=$2 [NC]

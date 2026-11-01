@@ -95,6 +95,20 @@ class RoutesTest extends HttpTestCase
 			$this->assertSame(200, $http->get($path)->status, $path);
 	}
 
+	public function testSitemapUsesThePublicUrl()
+	{
+		// Antes era um arquivo fixo com http://; agora sai com o APP_URL do .env
+		$response = $this->anonymous()->get('/sitemap.xml');
+		$this->assertSame(200, $response->status);
+		$this->assertStringContainsString('application/xml', $response->header('content-type'));
+		$xml = simplexml_load_string($response->body);
+		$this->assertNotFalse($xml, 'sitemap.xml não é XML válido');
+		$base = rtrim((string) (\Properties::get('app.url') ?: (getenv('KADE_TEST_URL') ?: 'http://kade.test')), '/');
+		$this->assertSame($base . '/', (string) $xml->url[0]->loc);
+		foreach ($xml->url as $url)
+			$this->assertStringStartsWith($base . '/', (string) $url->loc);
+	}
+
 	public function testMaintenancePage()
 	{
 		$response = $this->anonymous()->get('/manutencao.html');

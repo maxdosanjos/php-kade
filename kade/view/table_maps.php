@@ -41,7 +41,7 @@ $title = $isGrpByUf ? "Estados com mais veículos" : $ctrlMapsExt->getSelectedUf
 				<td class="k:px-6 k:py-3">
 					<a href="/<?=ViewExtCtrl::BUSCA_VEICULO?>/" class="a_city_uf_maps k-focus k:rounded k:font-medium k:text-ink k:hover:text-kade-900" data-uf="<?=htmlspecialchars($address->getState(), ENT_QUOTES, "UTF-8")?>" data-city="<?=$isGrpByUf ? "" : htmlspecialchars($address->getCity(), ENT_QUOTES, "UTF-8")?>"><?=htmlspecialchars($isGrpByUf ? $address->getStateNm() : $address->getCity(), ENT_QUOTES, "UTF-8")?></a>
 				</td>
-				<td class="k:px-6 k:py-3 k:text-right k:font-semibold k:text-kade-900"><?=(int) $mapsExt->getQtyIllus()?></td>
+				<td class="k:px-6 k:py-3 k:text-right k:font-semibold k:text-kade-900"><?=$ctrlMapsExt->getQty($mapsExt)?></td>
 			</tr>
 			<?php } ?>
 		</tbody>

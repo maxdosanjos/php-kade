@@ -69,7 +69,7 @@ class SecurityTest extends HttpTestCase
 		$response = $http->get('/RegisterVehicleSMS.ctrlExt/043999990000/3*86010000', array('X-Real-IP: 9.9.9.8'));
 		$this->assertSame(200, $response->status);
 		try {
-			$this->assertSame('IP inválido para tratamento de SMS', Db::value("SELECT log FROM log_sms WHERE ip_trat = '9.9.9.8' ORDER BY id DESC LIMIT 1"));
+			$this->assertSame('Chamada de SMS não autorizada (IP do gateway ou SMS_TOKEN)', Db::value("SELECT log FROM log_sms WHERE ip_trat = '9.9.9.8' ORDER BY id DESC LIMIT 1"));
 		} finally {
 			Db::exec("DELETE FROM log_sms WHERE ip_trat = '9.9.9.8'");
 		}
