@@ -333,8 +333,9 @@ class CustumerRegCtrl extends AbstractCtrl {
 			$custumer = $this->getRequestBean ( $_POST );
 		
 			if(User::isUserSuper() && $custumer->getUser()->getPerson()->getId()!= User::getLogged()->getPerson()->getId()){
-				if($_POST ["custumer_captcha"] == "")
-					$_POST ["custumer_captcha"] = $_SESSION ["custumer_captcha"];
+				// O admin editando outro cliente não vê o captcha: o campo pode nem vir no POST
+				if(($_POST ["custumer_captcha"] ?? "") == "")
+					$_POST ["custumer_captcha"] = $_SESSION ["custumer_captcha"] ?? "";
 			}
 		
 			$this->validateBean ( $custumer, false );
