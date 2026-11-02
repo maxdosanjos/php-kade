@@ -100,7 +100,7 @@ mysql -u root -p --default-character-set=utf8mb4 kadecaminh_1 < kade/der/kade_fu
 ```
 
 ##### Apply Migrations
-The dump is older than the code. Run every script in `kade/der/migrations` once, in filename order (001 → 008), after taking a backup. See the "Migrações" section of [README.md](README.md) for what each one changes.
+The dump is older than the code. Run every script in `kade/der/migrations` once, in filename order (001 → 009), after taking a backup. See the "Migrações" section of [README.md](README.md) for what each one changes.
 
 ```bash
 mysqldump -u root -p --routines --triggers kadecaminh > backup_before_migrations.sql
@@ -161,6 +161,16 @@ SMS_TOKEN=a_long_random_secret
 
 # Home map numbers: real (active vehicles, default) or ilustrativa (the old inflated qty_illus)
 MAPA_CONTAGEM=real
+
+# WhatsApp Cloud API (webhook /webhook/whatsapp) and Telegram bot (webhook /webhook/telegram).
+# Leave the secret empty to keep a channel off. Setup steps: README, "WhatsApp e Telegram".
+WHATSAPP_APP_SECRET=meta_app_secret
+WHATSAPP_VERIFY_TOKEN=any_text_you_choose
+WHATSAPP_TOKEN=permanent_system_user_token
+WHATSAPP_PHONE_NUMBER_ID=123456789012345
+WHATSAPP_NUMBER=5543996761700
+TELEGRAM_WEBHOOK_SECRET=a_long_random_secret
+TELEGRAM_BOT=KadeCaminhoesBot
 ```
 
 For local e-mail, point SMTP to Laragon's Mailpit (`SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025`, empty `SMTP_USER`) and read the messages at `http://localhost:8025`.

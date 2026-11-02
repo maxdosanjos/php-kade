@@ -3,6 +3,7 @@ require_once (dirname ( dirname ( __FILE__ ) ) . "/util/DateTimeCustom.class.php
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Util.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Validation.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Pagination.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Messenger.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/PhoneVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/VehicleTravelingVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/dao/VehicleTravelingDAO.class.php");
@@ -41,7 +42,9 @@ require_once (dirname ( __FILE__ ) . "/AbstractCtrl.class.php");
 				$criteria = new Criteria();
 				if (($_POST["type_log"] ?? "") != "")
 					$criteria->eq ( "log.type_log", $_POST["type_log"] );
-					
+				if (in_array ( $_POST["channel"] ?? "", array_keys ( Messenger::channels () ), true ))
+					$criteria->eq ( "log.channel", $_POST["channel"] );
+
 				$criteria->between("log.date_hr",$this->getDtHrInit(),$this->getDtHrEnd(),Criteria::FIELD_DATETIME);
 			
 				$count = $this->vehicleTravelingDAO->countLogSMS ( $this->getDbConfig (), $criteria);

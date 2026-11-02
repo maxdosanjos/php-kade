@@ -59,6 +59,12 @@ As credenciais ficam em `.env` (ignorado pelo git), lido por [Properties.class.p
 | `SMS_GATEWAY_IP` | IP(s) separados por vírgula | IP do gateway de SMS. Sem a variável, vale o IP antigo (`200.195.184.186`); vazia, só o `SMS_TOKEN` é conferido (veja [Segurança](#segurança)) |
 | `SMS_TOKEN` | texto de 16 a 128 caracteres (`A-Z a-z 0-9 _ -`) | **Recomendado.** Segredo que o gateway passa na URL do SMS |
 | `MAPA_CONTAGEM` | `real` (padrão) ou `ilustrativa` | Números do mapa da home: veículos ativos de fato, ou a coluna `qty_illus` (o número inflado que o site antigo mostrava) |
+| `WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` | textos | Ligam o webhook do WhatsApp: a chave secreta do app na Meta (confere a assinatura de cada mensagem) e um texto que você inventa para a verificação do webhook. Sem o primeiro, `/webhook/whatsapp` responde 404 (veja [WhatsApp e Telegram](#whatsapp-e-telegram)) |
+| `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` | token permanente e id do número na Meta | Envio das respostas. Sem eles, o veículo é cadastrado, mas o motorista não recebe resposta |
+| `WHATSAPP_API_VERSION` | ex.: `v23.0` (padrão) | Versão da Graph API usada no envio |
+| `WHATSAPP_NUMBER` | número com DDI (ex.: `5543996761700`) | Mostra o botão "WhatsApp" no cadastro de veículo e em "Quem somos" |
+| `TELEGRAM_WEBHOOK_SECRET` | 1 a 256 caracteres (`A-Z a-z 0-9 _ -`) | Liga o webhook do Telegram: o mesmo segredo informado no `setWebhook`. Sem ele, `/webhook/telegram` responde 404 |
+| `TELEGRAM_BOT` | nome do robô (ex.: `KadeCaminhoesBot`) | Mostra o botão "Telegram" nas mesmas páginas |
 
 ### Ambiente DEV × PRD
 
@@ -81,7 +87,7 @@ O site não depende mais de um banco de CEP próprio. O antigo (`kadecaminh_1`) 
 
 Cada API tem 4 segundos para responder. Se todas falharem, um registro vencido do cache ainda é usado. Um CEP em cache responde na hora; um novo leva cerca de 1 segundo.
 
-Cidade e UF do veículo vêm sempre do CEP, no servidor. O cadastro por SMS com CEP que não existe é recusado ("CEP não encontrado") em vez de gravar o veículo sem localização. A coluna `address.cep` é numérica, então CEPs que começam com zero (estado de SP) voltam do banco com 7 dígitos; o código completa o zero.
+Cidade e UF do veículo vêm sempre do CEP, no servidor. O cadastro por mensagem (SMS, WhatsApp, Telegram) com CEP que não existe é recusado ("CEP não encontrado") em vez de gravar o veículo sem localização. A coluna `address.cep` é numérica, então CEPs que começam com zero (estado de SP) voltam do banco com 7 dígitos; o código completa o zero.
 
 ### Mapa da home
 
@@ -90,6 +96,36 @@ O mapa, a tabela ao lado e o "N veículos ativos agora" leem o índice `idx_trav
 - `qty_illus`: um número ilustrativo, maior que o real, que o site antigo exibia. Com `MAPA_CONTAGEM=ilustrativa` no `.env`, o site volta a mostrá-lo.
 
 Estados e cidades sem veículos não aparecem na tabela.
+
+### WhatsApp e Telegram
+
+O motorista manda a mesma mensagem do SMS, `TIPO*CEP` (ex.: `6*83203010`), e recebe a resposta na conversa: tipo, cidade e número do registro, ou o motivo da recusa ("CEP não encontrado", "Tipo de Veículo 99 inválido"). `TIPOS` devolve a lista de códigos; qualquer outra mensagem devolve as instruções. Também valem espaço ou vírgula no lugar do `*` e o CEP com ponto e hífen.
+
+- **WhatsApp** (API oficial da Meta, a Cloud API): o telefone do anúncio é o número do WhatsApp de quem escreveu. Alguns celulares antigos chegam sem o 9 da frente, que é recolocado. Só números do Brasil são aceitos.
+- **Telegram**: o Telegram não informa o telefone. Na primeira conversa o robô pede o número com o botão "Compartilhar meu número" e guarda o vínculo (tabela `messenger_contact`). Só vale o contato do próprio usuário, não um contato encaminhado.
+- As mensagens aparecem em **Área do administrador → Log de mensagens**, com o canal. Uma mensagem repetida (a Meta e o Telegram reenviam quando a resposta demora) é ignorada.
+- Custo: a Meta não cobra a resposta enviada em até 24 horas depois da mensagem do motorista, que é o caso aqui (confira a tabela de preços atual da Meta). O Telegram é gratuito.
+
+Código: [MessengerCtrl.class.php](kade/shared/class/controller/MessengerCtrl.class.php) (webhooks), [Messenger](kade/shared/class/util/Messenger.class.php), [WhatsApp](kade/shared/class/util/WhatsApp.class.php) e [Telegram](kade/shared/class/util/Telegram.class.php). O cadastro em si é o mesmo do SMS (`VehicleRegCtrl::registerByMessage`). Os dois serviços só chamam endereços `https` públicos: o teste com mensagem real é feito em produção ou por um túnel (cloudflared, ngrok). Localmente, `composer test:http` simula as duas plataformas com os segredos do `.env`.
+
+**Ligar o WhatsApp** (precisa de uma conta empresarial na Meta e de um número só para o robô):
+1. Em [developers.facebook.com/apps](https://developers.facebook.com/apps), crie um app do tipo Empresa e adicione o produto **WhatsApp**.
+2. Em **WhatsApp → Configuração da API**, cadastre e verifique o número. Copie o **ID do número de telefone** para `WHATSAPP_PHONE_NUMBER_ID`.
+3. Nas configurações do portfólio empresarial, em **Usuários do sistema**, crie um usuário, dê acesso ao app e gere um token permanente com a permissão `whatsapp_business_messaging`. Ele vai em `WHATSAPP_TOKEN` (o token temporário da tela de teste vence em 24 horas).
+4. Em **Configurações do app → Básico**, copie a **Chave secreta do app** para `WHATSAPP_APP_SECRET`.
+5. Invente um texto para `WHATSAPP_VERIFY_TOKEN` e publique o `.env`. Em **WhatsApp → Configuração**, informe a URL de callback `https://<site>/webhook/whatsapp` e esse texto, e assine o campo **messages**.
+6. Para mostrar o botão no site, defina `WHATSAPP_NUMBER`.
+
+**Ligar o Telegram:**
+1. No Telegram, fale com o `@BotFather`, mande `/newbot` e escolha o nome. Ele devolve o token do robô: guarde-o (o site não precisa dele).
+2. Defina no `.env` um texto aleatório em `TELEGRAM_WEBHOOK_SECRET` e o nome do robô em `TELEGRAM_BOT`, e publique.
+3. Registre o webhook uma vez, trocando `<TOKEN>`, `<site>` e `<SEGREDO>`:
+
+   ```bash
+   curl https://api.telegram.org/bot<TOKEN>/setWebhook -d url=https://<site>/webhook/telegram -d secret_token=<SEGREDO> -d 'allowed_updates=["message"]'
+   ```
+
+   `https://api.telegram.org/bot<TOKEN>/getWebhookInfo` mostra se deu certo e o último erro.
 
 ## Migrações
 
@@ -105,6 +141,7 @@ O dump em `kade/der` é antigo. As migrações em [kade/der/migrations](kade/der
 | `006_validade_links.sql` | Data de criação dos links enviados por e-mail; o link de nova senha vence em 24 horas |
 | `007_tentativas_login.sql` | Tabela `login_attempt`, usada no limite de tentativas de login |
 | `008_cache_cep.sql` | Tabela `cep_cache` (busca de CEP sem banco de CEP próprio), já preenchida com os CEPs dos endereços cadastrados |
+| `009_whatsapp_telegram.sql` | Origens `WHATSAPP` e `TELEGRAM` nos veículos, canal e id da mensagem no log, e a tabela `messenger_contact` (telefone de quem usa o Telegram) |
 
 O código novo depende das migrações: rode-as **antes** de publicar os arquivos.
 
@@ -165,6 +202,7 @@ O `.htaccess` reescreve as URLs:
 | `/<pagina>/...` | `index.php?page=<pagina>` → [ViewExtCtrl](kade/shared/class/controller/ViewExtCtrl.class.php) escolhe a view (`/` é a home, `maps.php`; página desconhecida responde 404) |
 | `/<Controlador>.ctrlExt/<acao>` | `shared/class/controller/<Controlador>.class.php?action=<acao>` |
 | `/RegisterVehicleSMS.ctrlExt/[<token>/]<from>/<body>` | cadastro de veículo via SMS (`<token>` = `SMS_TOKEN`, obrigatório quando definido) |
+| `/webhook/whatsapp`, `/webhook/telegram` | [MessengerCtrl](kade/shared/class/controller/MessengerCtrl.class.php): mensagens do WhatsApp e do Telegram (veja [WhatsApp e Telegram](#whatsapp-e-telegram)) |
 | `/sitemap.xml` | `sitemap.php`, com os endereços montados a partir do `APP_URL` |
 
 Páginas principais: `cad_veiculo`, `cad_assinante`, `busca_veiculo`, `login`, `data_user`, `quem_somos`, `terms_use`. Várias exigem login e redirecionam para `login`.
@@ -183,7 +221,7 @@ As ferramentas de teste são só de desenvolvimento (`composer install` e `npm c
 | Comando | O que verifica | Precisa de |
 |---|---|---|
 | `composer test:unit` | Regras isoladas: datas, valores, CSV, escape do `Criteria`, paginação, senhas, CPF/CNPJ/e-mail, formatação | Só PHP |
-| `composer test:http` | O site de verdade: rotas e 404, arquivos internos bloqueados, permissões 401/403, login (bloqueio por tentativas, sessão, cookie), injeção de SQL, XSS, upload, CSV, cabeçalhos de segurança, nova senha pelo e-mail (Mailpit) | Site em `KADE_TEST_URL`, banco DEV do `.env` |
+| `composer test:http` | O site de verdade: rotas e 404, arquivos internos bloqueados, permissões 401/403, login (bloqueio por tentativas, sessão, cookie), injeção de SQL, XSS, upload, CSV, cabeçalhos de segurança, nova senha pelo e-mail (Mailpit), SMS, webhooks do WhatsApp e do Telegram | Site em `KADE_TEST_URL`, banco DEV do `.env`. Os testes dos webhooks precisam de `WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` e `TELEGRAM_WEBHOOK_SECRET` (valores locais quaisquer) no `.env`; sem eles, são pulados |
 | `composer test` | As duas suítes acima | Idem |
 | `npm run test:e2e` | No Chrome: todas as páginas no computador e no celular, sem erro de JavaScript, sem rolagem lateral, acessibilidade (axe-core, WCAG 2 A/AA) e fluxos (mapa, login, nova senha, imagens da home, parcelas, ordenação pelo teclado) | Site em `KADE_TEST_URL` e Chrome instalado (`CHROME_PATH` para outro caminho) |
 | `composer analyse` | Análise estática (PHPStan): classes, métodos e variáveis inexistentes | Só PHP |
@@ -220,8 +258,9 @@ Regras atuais:
 - Cabeçalhos: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e HSTS (só em HTTPS); sem `X-Powered-By`. O cookie de sessão é `HttpOnly`, `SameSite=Lax` e `Secure` em HTTPS, e todas as ações que alteram dados leem só `POST`.
 - Consultas montadas pelo `Criteria` escapam valores e só aceitam nomes de coluna válidos em `ORDER BY`; o restante usa prepared statements.
 - Usuário comum só altera o próprio cadastro e só cancela veículos que cadastrou.
-- Tudo o que vem do usuário ou de SMS é escapado nas views (`htmlspecialchars`); exportações CSV neutralizam fórmulas.
+- Tudo o que vem do usuário, de SMS, do WhatsApp e do Telegram é escapado nas views (`htmlspecialchars`); exportações CSV neutralizam fórmulas.
 - **Cadastro por SMS:** a rota é pública. Ela confere o IP do gateway (`SMS_GATEWAY_IP`) no cabeçalho `X-Real-IP` ou no IP da conexão. O `X-Real-IP` só é confiável se o proxy na frente do PHP o sobrescrever; se o servidor recebe as requisições direto, qualquer pessoa pode forjá-lo. Por isso, defina `SMS_TOKEN` e cadastre no gateway a URL `https://<site>/RegisterVehicleSMS.ctrlExt/<SMS_TOKEN>/<telefone>/<mensagem>`. Com o segredo definido, chamadas sem ele são recusadas, e o log de SMS mostra `***` no lugar dele. Regras em [SmsGateway.class.php](kade/shared/class/util/SmsGateway.class.php).
+- **WhatsApp e Telegram:** as rotas são públicas, mas só tratam mensagens assinadas. No WhatsApp, o cabeçalho `X-Hub-Signature-256` tem de bater com o HMAC-SHA256 do corpo com o `WHATSAPP_APP_SECRET`. No Telegram, o cabeçalho `X-Telegram-Bot-Api-Secret-Token` tem de ser o `TELEGRAM_WEBHOOK_SECRET`. Chamadas sem isso recebem 403 e aparecem no log de mensagens; sem o segredo no `.env`, o canal fica desligado (404). O token do robô do Telegram não fica no servidor.
 
 
 As credenciais de banco e SMTP que existiam no código foram removidas, mas continuam no histórico do git. **Rotacione essas senhas** no provedor caso ainda não tenha feito isso.

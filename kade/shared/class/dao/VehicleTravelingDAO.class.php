@@ -57,6 +57,7 @@ class VehicleTravelingDAO {
 	public function getArrayLogSMSgetArray($dbConfig, Criteria $criteria) {
 		$sql = "
 			    SELECT 	log.id
+					  , log.channel
 					  , log.from
 					  , log.body
 					  , log.ip_trat

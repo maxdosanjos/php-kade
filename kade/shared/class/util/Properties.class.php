@@ -168,9 +168,18 @@ class Properties {
 		self::$data["smtp_kadecaminhoes.from"] = self::env("SMTP_FROM");
 		// URL pública do site, usada nos links enviados por e-mail (ex.: https://www.kadecaminhoes.com.br)
 		self::$data["app.url"] = self::env("APP_URL");
-		// Gateway de SMS: IP(s) aceitos e segredo opcional na URL (ver VehicleRegCtrl::isSmsGatewayAllowed)
+		// Gateway de SMS: IP(s) aceitos e segredo opcional na URL (ver SmsGateway)
 		self::$data["server_sms.http_x_real_ip"] = self::env("SMS_GATEWAY_IP", self::$data["server_sms.http_x_real_ip"]);
 		self::$data["server_sms.token"] = self::env("SMS_TOKEN", "");
+		// WhatsApp (Cloud API da Meta) e Telegram: sem o segredo, o webhook do canal fica desligado (ver MessengerCtrl)
+		self::$data["whatsapp.app_secret"] = self::env("WHATSAPP_APP_SECRET", "");
+		self::$data["whatsapp.verify_token"] = self::env("WHATSAPP_VERIFY_TOKEN", "");
+		self::$data["whatsapp.token"] = self::env("WHATSAPP_TOKEN", "");
+		self::$data["whatsapp.phone_number_id"] = self::env("WHATSAPP_PHONE_NUMBER_ID", "");
+		self::$data["whatsapp.api_version"] = self::env("WHATSAPP_API_VERSION", "v23.0");
+		self::$data["whatsapp.number"] = self::env("WHATSAPP_NUMBER", "");
+		self::$data["telegram.secret"] = self::env("TELEGRAM_WEBHOOK_SECRET", "");
+		self::$data["telegram.bot"] = self::env("TELEGRAM_BOT", "");
 		// Números do mapa da home: "real" (veículos ativos) ou "ilustrativa" (qty_illus, o número antigo)
 		self::$data["mapa.contagem"] = self::env("MAPA_CONTAGEM", "real");
 		$host = $_SERVER["HTTP_HOST"] ?? "localhost";

@@ -8,12 +8,15 @@ $_vechicleTypes = $ctrlVehReg->getTypeVechicles() ?? array();
 
 $h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
 $smsNumber = "(43) 9676-1700";
+// WhatsApp e Telegram só aparecem quando configurados no .env
+$_msgLinks = Messenger::links();
+$howToTitle = $_msgLinks ? "Cadastro por mensagem" : "Cadastro por SMS";
 $_topics = array(
 	"quem_somos"   => "Quem somos",
 	"beneficios"   => "Benefícios",
 	"usuarios"     => "Quem usa",
 	"missao"       => "Missão, visão e valores",
-	"como_funciona"=> "Cadastro por SMS",
+	"como_funciona"=> $howToTitle,
 	"codigos"      => "Códigos dos veículos",
 );
 $check = '<svg class="k:mt-0.5 k:shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a6b35" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -114,7 +117,7 @@ $h2 = "k:font-display k:text-2xl k:font-bold k:text-kade-950 k:md:text-[28px]";
 			</section>
 
 			<section id="como_funciona" class="k:flex k:scroll-mt-6 k:flex-col k:gap-5">
-				<h2 class="<?=$h2?>">Cadastro por SMS</h2>
+				<h2 class="<?=$h2?>"><?=$howToTitle?></h2>
 				<div class="k:flex k:flex-wrap k:gap-6 k:rounded-2xl k:border k:border-line k:bg-white k:p-6 k:md:p-8">
 					<ol class="k:m-0 k:flex k:min-w-0 k:flex-[1_1_380px] k:list-none k:flex-col k:gap-5 k:p-0">
 						<li class="k:flex k:gap-4">
@@ -123,7 +126,16 @@ $h2 = "k:font-display k:text-2xl k:font-bold k:text-kade-950 k:md:text-[28px]";
 						</li>
 						<li class="k:flex k:gap-4">
 							<span class="k:inline-flex k:h-8 k:w-8 k:shrink-0 k:items-center k:justify-center k:rounded-full k:bg-kade-900 k:text-sm k:font-bold k:text-white">2</span>
-							<p class="k:text-[15px] k:leading-relaxed k:text-ink-soft">Envie um SMS para <strong class="k:font-semibold k:text-ink k:whitespace-nowrap"><?=$smsNumber?></strong> com o código e o <strong class="k:font-semibold k:text-ink">CEP da cidade onde você está</strong>, separados por <strong class="k:font-semibold k:text-ink">*</strong> (asterisco).</p>
+							<div class="k:flex k:flex-col k:gap-3">
+								<p class="k:text-[15px] k:leading-relaxed k:text-ink-soft">Envie um SMS para <strong class="k:font-semibold k:text-ink k:whitespace-nowrap"><?=$smsNumber?></strong><?=$_msgLinks ? ", ou uma mensagem pelo " . Messenger::linkNames($_msgLinks) . "," : ""?> com o código e o <strong class="k:font-semibold k:text-ink">CEP da cidade onde você está</strong>, separados por <strong class="k:font-semibold k:text-ink">*</strong> (asterisco).</p>
+								<?php if ($_msgLinks) { ?>
+								<div class="k:flex k:flex-wrap k:gap-2">
+									<?php foreach ($_msgLinks as $channel => $url) { ?>
+									<a href="<?=$h($url)?>" target="_blank" rel="noopener" class="k-btn"><?=Messenger::channels()[$channel]?></a>
+									<?php } ?>
+								</div>
+								<?php } ?>
+							</div>
 						</li>
 						<li class="k:flex k:gap-4">
 							<span class="k:inline-flex k:h-8 k:w-8 k:shrink-0 k:items-center k:justify-center k:rounded-full k:bg-kade-900 k:text-sm k:font-bold k:text-white">3</span>
@@ -141,7 +153,7 @@ $h2 = "k:font-display k:text-2xl k:font-bold k:text-kade-950 k:md:text-[28px]";
 			<section id="codigos" class="k:flex k:scroll-mt-6 k:flex-col k:gap-5">
 				<div class="k:flex k:flex-col k:gap-1">
 					<h2 class="<?=$h2?>">Códigos dos veículos</h2>
-					<p class="k:text-[15px] k:text-muted">Use o código do seu tipo de caminhão no SMS.</p>
+					<p class="k:text-[15px] k:text-muted">Use o código do seu tipo de caminhão na mensagem.</p>
 				</div>
 				<?php if (count($_vechicleTypes) == 0) { ?>
 				<p class="k:rounded-2xl k:border k:border-line k:bg-white k:p-6 k:text-[15px] k:text-muted">A lista de códigos está indisponível no momento. Tente novamente mais tarde.</p>

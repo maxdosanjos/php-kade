@@ -11,7 +11,7 @@ if ($userSuper) {
 		ViewExtCtrl::VIEW_CUSTUMERS => "Gerenciar clientes",
 		ViewExtCtrl::LOAD_BANNER    => "Imagens da home",
 		ViewExtCtrl::GNRT_PARC      => "Contas e parcelas",
-		ViewExtCtrl::VIEW_LOG_MSG   => "Log de SMS",
+		ViewExtCtrl::VIEW_LOG_MSG   => "Log de mensagens",
 	);
 }
 $menuGroups["Minha conta"] = array(

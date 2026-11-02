@@ -76,6 +76,10 @@ RewriteRule ^(view|der|shared/class|shared/css/src)(/|$) - [R=404,L,NC]
 # sitemap.xml é gerado com a URL pública do .env (APP_URL)
 RewriteRule ^sitemap\.xml$ sitemap.php [L,NC]
 
+# WhatsApp e Telegram chamam estes endereços a cada mensagem (webhooks). QSA: a
+# verificação do WhatsApp vem na query string (hub.mode, hub.verify_token, hub.challenge)
+RewriteRule ^webhook/(whatsapp|telegram)/?$ shared/class/controller/MessengerCtrl.class.php?action=$1 [L,NC,QSA]
+
 # /shared/ só tem arquivos: um arquivo ausente ali vira 404 (antes renderizava a home inteira)
 RewriteCond %{REQUEST_URI} !^/shared/
 RewriteCond %{REQUEST_FILENAME} !-f

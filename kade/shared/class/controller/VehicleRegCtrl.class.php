@@ -3,6 +3,7 @@ require_once (dirname ( dirname ( __FILE__ ) ) . "/util/DateTimeCustom.class.php
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Util.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Validation.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/util/SmsGateway.class.php");
+require_once (dirname ( dirname ( __FILE__ ) ) . "/util/Messenger.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/PhoneVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/AddressVO.class.php");
 require_once (dirname ( dirname ( __FILE__ ) ) . "/vo/PersonVO.class.php");
@@ -41,76 +42,16 @@ class VehicleRegCtrl extends AbstractCtrl {
 		}
 	}
 	public function onSaveSMS(){
-		$_data		= array();
-		$inTransaction = false;
-		$db = null;
-		
-		
-			
-		try {
-			
-			if (!SmsGateway::isAllowed($_SERVER, $_GET["token"] ?? ""))
-				throw new Exception("Chamada de SMS não autorizada (IP do gateway ou SMS_TOKEN)");
-
-			// Formato esperado: from=<55DDNNNNNNNNN> e body=<tipo>*<cep>
+		if (SmsGateway::isAllowed($_SERVER, $_GET["token"] ?? "")) {
+			// Formato esperado: from=<0DDNNNNNNNNN> e body=<tipo>*<cep>
 			$from = preg_replace('/\D/', "", (string) ($_GET["from"] ?? ""));
 			$body = explode("*", (string) ($_GET["body"] ?? ""), 2);
-			$_data["vehicle_phone"]   = "(".substr($from,1,2).") ".substr($from,3,11);
-			$_data["vehicle_type"]    = $body[0];
-			$_data["vehicle_zipcode"] = $body[1] ?? "";
-			
-			$vehicleTraveling = $this->getRequestBean ($_data);
-			$vehicleTraveling->setSource(VehicleTraveling::SOURCE_SMS);
-			
-			$address     = $vehicleTraveling->getPersonContact()->getPerson()->getAddress();
-			$vehicleType = $vehicleTraveling->getVehicleType ();
-			
-			$vehicleTraveling->getPersonContact()->getPerson()->setAddress($address);
-			
-			$this->validateBean ( $vehicleTraveling );
-
-
-		
-			$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
-				
-			$db = DataBase::getInstance ( $this->getDbConfig () );
-			$inTransaction = $db->beginTransaction ();
-			
-			
-
-			$this->vehicleTravelingDAO->insert ( $db, $vehicleTraveling );
-			$db->commit ();
-			$db = null;
-				
-			$this->message->setType ( Message::SUCCESS );
-			$this->message->setDesc ( "Registro " . $vehicleTraveling->getId () . " realizado com sucesso" );
-		} catch ( ValidationException $e ) {
-			if ($db!=null && $inTransaction)
-				$db->rollback ();
-			$db = null;
-			
-			$_validationException = $e->toArray ( true );
+			$this->registerByMessage(VehicleTraveling::SOURCE_SMS, "(".substr($from,1,2).") ".substr($from,3,11), $body[0], $body[1] ?? "");
+		} else {
 			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( json_encode($_validationException) );
-			
-		} catch ( PDOException $e ) {
-				
-			if ($db!=null && $inTransaction)
-				$db->rollback ();
-			$db = null;
-				
-			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
-		} catch ( Exception $e ) {
-			if ($db!=null && $inTransaction)
-				$db->rollback ();
-			$db = null;
-			
-			$this->message->setType ( Message::ERR );
-			$this->message->setDesc ( $this->userMessage ( $e ) );
-		}	
+			$this->message->setDesc ( "Chamada de SMS não autorizada (IP do gateway ou SMS_TOKEN)" );
+		}
 
-	
 		try {
 			$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
 			$this->vehicleTravelingDAO->registerLogSMS ( $this->getDbConfig (), $this->message, $_REQUEST,$_SERVER );
@@ -119,6 +60,47 @@ class VehicleRegCtrl extends AbstractCtrl {
 			error_log("registerLogSMS: " . $e->getMessage ());
 			echo "Erro ao registrar log";
 		}
+	}
+	/**
+	 * Veículo anunciado por mensagem (SMS, WhatsApp, Telegram): só o telefone de quem
+	 * enviou ("(DD) NNNNNNNNN"), o código do tipo e o CEP; cidade e UF vêm do CEP.
+	 * O resultado fica em getMessage(); devolve o veículo gravado ou null.
+	 */
+	public function registerByMessage($source, $phone, $type, $cep) {
+		$inTransaction = false;
+		$db = null;
+		try {
+			$vehicleTraveling = $this->getRequestBean ( array (
+					"vehicle_phone" => $phone,
+					"vehicle_type" => $type,
+					"vehicle_zipcode" => $cep
+			) );
+			$vehicleTraveling->setSource ( $source );
+			$this->validateBean ( $vehicleTraveling );
+
+			$this->vehicleTravelingDAO = VehicleTravelingDAO::getInstance ();
+			$db = DataBase::getInstance ( $this->getDbConfig () );
+			$inTransaction = $db->beginTransaction ();
+			$this->vehicleTravelingDAO->insert ( $db, $vehicleTraveling );
+			$db->commit ();
+			$db = null;
+
+			$this->message->setType ( Message::SUCCESS );
+			$this->message->setDesc ( "Registro " . $vehicleTraveling->getId () . " realizado com sucesso" );
+			return $vehicleTraveling;
+		} catch ( ValidationException $e ) {
+			$this->message->setType ( Message::ERR );
+			$this->message->setDesc ( json_encode ( $e->toArray ( true ) ) );
+		} catch ( PDOException $e ) {
+			$this->message->setType ( Message::ERR );
+			$this->message->setDesc ( $this->dbErrorMessage ( $e ) );
+		} catch ( Exception $e ) {
+			$this->message->setType ( Message::ERR );
+			$this->message->setDesc ( $this->userMessage ( $e ) );
+		}
+		if ($db != null && $inTransaction)
+			$db->rollback ();
+		return null;
 	}
 	public function getRequestBean(array $_data) {
 		$person = null;
@@ -434,9 +416,9 @@ class VehicleRegCtrl extends AbstractCtrl {
 			$address->setCep($cepDigits);
 		}
 		
-		// Sem cidade e UF o veículo não aparece no mapa: o SMS também é recusado (antes era
-		// gravado sem localização quando o CEP não era encontrado)
-		if ($obj->getSource() == VehicleTraveling::SOURCE_SMS) {
+		// Sem cidade e UF o veículo não aparece no mapa: a mensagem (SMS, WhatsApp, Telegram)
+		// também é recusada (antes era gravada sem localização quando o CEP não era encontrado)
+		if ($obj->getSource() != VehicleTraveling::SOURCE_WEB) {
 			if (strlen($cepDigits) == 8 && ($address->getCity () == "" || $address->getState () == ""))
 				$e->add ( "CEP", "vehicle_zipcode", "CEP não encontrado!" );
 		} else {

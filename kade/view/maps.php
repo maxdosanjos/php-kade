@@ -4,6 +4,7 @@ if ($viewExtCtrl == null){
 	exit ();
 }
 require_once(dirname(dirname(__FILE__))."/shared/class/controller/MapsExtCtrl.class.php");
+require_once(dirname(dirname(__FILE__))."/shared/class/util/Messenger.class.php");
 $totalReg  = $ctrlMapsExt->getTotalReg();
 $msgPeriod = $viewExtCtrl->getMsgPeriod();
 $user      = User::getLogged();
@@ -14,6 +15,10 @@ $_vehicleTypes = $ctrlMapsExt->getTypeVechicles();
 $_qtyByUf      = $ctrlMapsExt->getQtyByUf();
 $_mapPaths     = include(dirname(__FILE__)."/partials/map_brazil_data.php");
 $_smallUfs     = array("DF", "ES", "RJ", "SE", "AL", "PB", "RN");
+
+// "pelo site ou por SMS", "... por SMS ou WhatsApp", "... por SMS, WhatsApp ou Telegram"
+$_msgNames     = Messenger::linkNames(Messenger::links());
+$howToRegister = $_msgNames === "" ? "pelo site ou por SMS" : "pelo site, por SMS" . (strpos($_msgNames, " ou ") ? ", " : " ou ") . $_msgNames;
 
 // Nível de cor de cada UF (0 = sem veículos, 1 a 4 = quartos do maior valor)
 $maxQty = max(array_merge(array(0), array_values($_qtyByUf)));
@@ -174,7 +179,7 @@ $fieldClass = "k-focus k:min-h-[46px] k:w-full k:rounded-[10px] k:border k:borde
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b35f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
 					</span>
 					<h3 class="k:font-display k:text-[19px] k:font-semibold">1. Cadastre seu veículo</h3>
-					<p class="k:text-[15px] k:leading-relaxed k:text-muted">Motoristas informam onde o caminhão está disponível, pelo site ou por SMS.</p>
+					<p class="k:text-[15px] k:leading-relaxed k:text-muted">Motoristas informam onde o caminhão está disponível, <?=$howToRegister?>.</p>
 				</div>
 				<div class="k:flex k:flex-col k:gap-3 k:rounded-2xl k:border k:border-line k:p-7">
 					<span class="k:inline-flex k:h-12 k:w-12 k:items-center k:justify-center k:rounded-xl k:bg-kade-50">

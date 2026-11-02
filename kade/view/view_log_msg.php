@@ -16,12 +16,20 @@ $length     = count($_msgLogs);
 $pagination = $ctrlMsgLogQry->getPagination();
 $message    = $ctrlMsgLogQry->getMessage();
 
-// Tudo aqui vem de SMS (rota pública): sempre escapar
+// Tudo aqui vem de SMS, WhatsApp e Telegram (rotas públicas): sempre escapar
 $h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
 $typeLog = $_POST["type_log"] ?? "";
+$channel = $_POST["channel"] ?? "";
+$_channels = Messenger::channels();
+// Resultado: sucesso, erro ou "outras" (instruções, lista de códigos, número confirmado no Telegram)
+$_results = array(
+	Message::SUCCESS => array("Sucesso", "UTILIZED"),
+	Message::ERR     => array("Erro", "CANCEL"),
+	Message::INFO    => array("Outras", ""),
+);
 
-$pageTitle = "Log de SMS";
-$pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
+$pageTitle = "Log de mensagens";
+$pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS, WhatsApp e Telegram.";
 ?>
 <script type="text/javascript" charset="UTF-8" src="../shared/js/jquery.mask.min.js?f=1"></script>
 <script type="text/javascript" charset="UTF-8" src="../shared/js/webmask2.min.js?v=<?=@filemtime(dirname(dirname(__FILE__))."/shared/js/webmask2.min.js")?>"></script>
@@ -34,7 +42,7 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 <?php include(dirname(__FILE__)."/partials/int_open.php"); ?>
 
 	<form id="msglog_query_open" name="msglog_query_open" action="<?=$h($_SERVER["REQUEST_URI"])?>" method="post" class="k:flex k:flex-col k:gap-5 k:rounded-2xl k:border k:border-line k:bg-white k:p-5 k:md:p-6">
-		<div class="k:grid k:grid-cols-1 k:gap-4 k:sm:grid-cols-3">
+		<div class="k:grid k:grid-cols-1 k:gap-4 k:sm:grid-cols-2 k:lg:grid-cols-4">
 			<label class="k-label" for="msglog_dt_init">Período: de
 				<input type="text" id="msglog_dt_init" name="msglog_dt_init" maxlength="10" class="k-field mask.date input_clear" value="<?=$ctrlMsgLogQry->getDtHrInit()->format("d.m.Y")?>"/>
 			</label>
@@ -44,8 +52,17 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 			<label class="k-label" for="type_log" id="type_log_label">Resultado
 				<select id="type_log" name="type_log" class="k-field">
 					<option value="">Todos</option>
-					<option value="sucess" <?=$typeLog == "sucess" ? "selected" : ""?>>Sucesso</option>
-					<option value="error" <?=$typeLog == "error" ? "selected" : ""?>>Erro</option>
+					<?php foreach ($_results as $value => $result) { ?>
+					<option value="<?=$value?>" <?=$typeLog === $value ? "selected" : ""?>><?=$result[0]?></option>
+					<?php } ?>
+				</select>
+			</label>
+			<label class="k-label" for="channel">Canal
+				<select id="channel" name="channel" class="k-field">
+					<option value="">Todos</option>
+					<?php foreach ($_channels as $value => $name) { ?>
+					<option value="<?=$value?>" <?=$channel === $value ? "selected" : ""?>><?=$name?></option>
+					<?php } ?>
 				</select>
 			</label>
 		</div>
@@ -72,6 +89,7 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 				<thead>
 					<tr>
 						<th>Recebida em</th>
+						<th>Canal</th>
 						<th>Telefone</th>
 						<th>Mensagem</th>
 						<th>Resultado</th>
@@ -81,7 +99,7 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 				</thead>
 				<tbody class="tbody_query">
 					<?php if ($length == 0) { ?>
-					<tr><td colspan="6" class="k:py-10 k:text-center k:text-muted">Nenhuma mensagem no período.</td></tr>
+					<tr><td colspan="7" class="k:py-10 k:text-center k:text-muted">Nenhuma mensagem no período.</td></tr>
 					<?php } ?>
 					<?php foreach ($_msgLogs as $msgLogList) {
 						$dtHr = new DateTimeCustom($msgLogList->date_hr ?? "now");
@@ -90,12 +108,13 @@ $pageDesc  = "Mensagens recebidas pelo cadastro de veículos via SMS.";
 						$detail = (is_array($json) && isset($json[0]->message) && $json[0]->message != "")
 							? html_entity_decode($json[0]->message, ENT_QUOTES, "UTF-8")
 							: (string) $msgLogList->log;
-						$ok = ($msgLogList->type_log == "sucess"); ?>
+						$result = $_results[(string) $msgLogList->type_log] ?? $_results[Message::ERR]; ?>
 					<tr>
 						<td class="k:whitespace-nowrap k:text-ink-soft"><?=$dtHr->format("d/m/Y H:i")?></td>
+						<td class="k:whitespace-nowrap"><?=$h($_channels[$msgLogList->channel] ?? $msgLogList->channel)?></td>
 						<td class="k:whitespace-nowrap"><?=$h($msgLogList->from)?></td>
 						<td class="k:font-mono k:text-[13px]"><?=$h($msgLogList->body)?></td>
-						<td><span class="k-badge <?=$ok ? "UTILIZED" : "CANCEL"?>"><?=$ok ? "Sucesso" : "Erro"?></span></td>
+						<td><span class="k-badge <?=$result[1]?>"><?=$result[0]?></span></td>
 						<td class="k:text-ink-soft"><?=$h($detail)?></td>
 						<td class="k:whitespace-nowrap k:text-ink-soft" title="URL requisitada: <?=$h($msgLogList->url_request)?>"><?=$h($msgLogList->ip_trat)?></td>
 					</tr>

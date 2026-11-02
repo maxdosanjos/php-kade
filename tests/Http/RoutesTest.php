@@ -122,7 +122,7 @@ class RoutesTest extends HttpTestCase
 		foreach (array('/view_custumers/', '/view_log_sms/', '/load_banner/', '/gnrt_parc/') as $path) {
 			$body = $this->anonymous()->get($path)->body;
 			$this->assertStringNotContainsString('Imagens da home', $body, $path);
-			$this->assertStringNotContainsString('Log de SMS</h1>', $body, $path);
+			$this->assertStringNotContainsString('Log de mensagens</h1>', $body, $path);
 		}
 	}
 }

@@ -18,6 +18,8 @@ class VehicleTraveling {
 	
 	const SOURCE_WEB = "WEB";
 	const SOURCE_SMS = "SMS";
+	const SOURCE_WHATSAPP = "WHATSAPP";
+	const SOURCE_TELEGRAM = "TELEGRAM";
 	const ONLY_VIEW = "ONLY_VIEW";
 	const UTILIZED = "UTILIZED";
 	const NONE = "NONE";
@@ -81,7 +83,9 @@ class VehicleTraveling {
 	public static function listSource() {
 		$_list = array (
 				VehicleTraveling::SOURCE_WEB => "Via WEB",
-				VehicleTraveling::SOURCE_SMS => "Via SMS" 
+				VehicleTraveling::SOURCE_SMS => "Via SMS",
+				VehicleTraveling::SOURCE_WHATSAPP => "Via WhatsApp",
+				VehicleTraveling::SOURCE_TELEGRAM => "Via Telegram"
 		);
 		return $_list;
 	}
