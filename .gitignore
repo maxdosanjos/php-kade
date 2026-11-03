@@ -13,3 +13,6 @@ phpunit.xml
 
 # Tela salva por demo/gravar_video.mjs quando o roteiro falha
 demo/*.erro.png
+
+# Histórico local de ajustes (documento pessoal, fora do repositório)
+HISTORICO_DE_MELHORIAS.md
