@@ -10,3 +10,7 @@ kade/shared/cront_exp.txt
 vendor/
 .phpunit.result.cache
 phpunit.xml
+
+# Vídeo gerado por demo/gravar_video.mjs (pesado; gere de novo quando precisar)
+demo/*.mp4
+demo/*.png
