@@ -7,10 +7,10 @@ require_once(dirname(dirname(__FILE__))."/shared/class/controller/VehicleRegCtrl
 $_vechicleTypes = $ctrlVehReg->getTypeVechicles() ?? array();
 
 $h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); };
-$smsNumber = "(43) 9676-1700";
-// WhatsApp e Telegram só aparecem quando configurados no .env
+$smsNumber = Messenger::SMS_NUMBER;
+// Os botões de WhatsApp e Telegram só aparecem quando configurados no .env
 $_msgLinks = Messenger::links();
-$howToTitle = $_msgLinks ? "Cadastro por mensagem" : "Cadastro por SMS";
+$howToTitle = "Cadastro por mensagem";
 $_topics = array(
 	"quem_somos"   => "Quem somos",
 	"beneficios"   => "Benefícios",
@@ -127,7 +127,7 @@ $h2 = "k:font-display k:text-2xl k:font-bold k:text-kade-950 k:md:text-[28px]";
 						<li class="k:flex k:gap-4">
 							<span class="k:inline-flex k:h-8 k:w-8 k:shrink-0 k:items-center k:justify-center k:rounded-full k:bg-kade-900 k:text-sm k:font-bold k:text-white">2</span>
 							<div class="k:flex k:flex-col k:gap-3">
-								<p class="k:text-[15px] k:leading-relaxed k:text-ink-soft">Envie um SMS para <strong class="k:font-semibold k:text-ink k:whitespace-nowrap"><?=$smsNumber?></strong><?=$_msgLinks ? ", ou uma mensagem pelo " . Messenger::linkNames($_msgLinks) . "," : ""?> com o código e o <strong class="k:font-semibold k:text-ink">CEP da cidade onde você está</strong>, separados por <strong class="k:font-semibold k:text-ink">*</strong> (asterisco).</p>
+								<p class="k:text-[15px] k:leading-relaxed k:text-ink-soft">Envie um SMS para <strong class="k:font-semibold k:text-ink k:whitespace-nowrap"><?=$smsNumber?></strong>, ou uma mensagem pelo WhatsApp ou Telegram, com o código e o <strong class="k:font-semibold k:text-ink">CEP da cidade onde você está</strong>, separados por <strong class="k:font-semibold k:text-ink">*</strong> (asterisco).</p>
 								<?php if ($_msgLinks) { ?>
 								<div class="k:flex k:flex-wrap k:gap-2">
 									<?php foreach ($_msgLinks as $channel => $url) { ?>

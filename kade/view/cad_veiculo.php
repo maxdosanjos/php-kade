@@ -34,13 +34,13 @@
 		</div>
 
 		<div class="k:flex k:flex-wrap k:items-start k:gap-6">
-			<!-- Envio por SMS (e WhatsApp/Telegram, quando configurados no .env) -->
+			<!-- Envio por mensagem: SMS, WhatsApp ou Telegram (os botões só aparecem quando configurados no .env) -->
 			<aside class="k:flex k:min-w-0 k:flex-[1_1_300px] k:flex-col k:gap-4 k:rounded-2xl k:bg-kade-900 k:p-6 k:text-white k:md:p-7 k:lg:sticky k:lg:top-24 k:lg:order-2">
 				<span class="k:inline-flex k:h-11 k:w-11 k:items-center k:justify-center k:rounded-xl k:bg-white/10">
 					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffb766" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 				</span>
-				<h2 class="k:font-display k:text-xl k:font-semibold">Prefere mandar por <?=$_msgLinks ? "mensagem" : "SMS"?>?</h2>
-				<p class="k:text-[15px] k:leading-relaxed k:text-[#d5deeb]">Envie por SMS para <strong class="k:text-white">(43) 9676-1700</strong> uma mensagem com o código do tipo de veículo, um asterisco e o CEP onde ele está:</p>
+				<h2 class="k:font-display k:text-xl k:font-semibold">Prefere mandar por mensagem?</h2>
+				<p class="k:text-[15px] k:leading-relaxed k:text-[#d5deeb]">Envie por SMS para <strong class="k:text-white k:whitespace-nowrap"><?=Messenger::SMS_NUMBER?></strong>, ou pelo WhatsApp ou Telegram, uma mensagem com o código do tipo de veículo, um asterisco e o CEP onde ele está:</p>
 				<div class="k:rounded-xl k:bg-white/10 k:p-4 k:text-[15px]">
 					<span class="k:block k:text-[13px] k:text-[#d5deeb]">Formato</span>
 					<code class="k:font-semibold k:text-white">tipo*CEP</code>
@@ -50,7 +50,7 @@
 				<p class="k:text-[13px] k:text-[#d5deeb]">O código do tipo é o número que aparece antes do nome na lista "Tipo de veículo".</p>
 				<?php if ($_msgLinks) { ?>
 				<div class="k:flex k:flex-col k:gap-3 k:border-t k:border-white/15 k:pt-4">
-					<p class="k:text-[15px] k:leading-relaxed k:text-[#d5deeb]">Também pelo <?=Messenger::linkNames($_msgLinks)?>, com a mesma mensagem e resposta na hora:</p>
+					<p class="k:text-[15px] k:leading-relaxed k:text-[#d5deeb]">Pelo <?=Messenger::linkNames($_msgLinks)?>, você recebe a resposta na hora:</p>
 					<div class="k:flex k:flex-wrap k:gap-2">
 						<?php foreach ($_msgLinks as $channel => $url) { ?>
 						<a href="<?=$h($url)?>" target="_blank" rel="noopener" class="k-btn k-btn-primary"><?=Messenger::channels()[$channel]?></a>

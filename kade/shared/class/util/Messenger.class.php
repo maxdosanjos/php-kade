@@ -13,6 +13,8 @@ class Messenger {
 	const WHATSAPP = "WHATSAPP";
 	const TELEGRAM = "TELEGRAM";
 	const EXAMPLE = "6*83203010";
+	/** Número que recebe os SMS do cadastro (mostrado nas páginas) */
+	const SMS_NUMBER = "(43) 99676-1700";
 
 	public static function channels() {
 		return array ( "SMS" => "SMS", self::WHATSAPP => "WhatsApp", self::TELEGRAM => "Telegram" );

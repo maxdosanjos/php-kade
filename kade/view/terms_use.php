@@ -26,12 +26,12 @@ $term = "k:font-semibold k:text-ink";
 			<section class="k:flex k:flex-col k:gap-4">
 				<h2 class="<?=$h2?>"><span class="<?=$num?>">1.</span>Definições do sistema KADE Caminhões</h2>
 				<p class="<?=$p?>">O Sistema Kade Caminhões é um sistema de divulgação de veículos de cargas vazios, gratuito para os USUÁRIOS que anunciam a disponibilidade dos seus veículos, tanto para pessoas jurídicas quanto para físicas,
-					através do website ou via mensagens de texto - SMS.</p>
+					através do website ou via mensagens de texto (SMS, WhatsApp ou Telegram).</p>
 				<p class="<?=$p?>">A assinatura mensal é necessária apenas para as empresas CLIENTES, que necessitam visualizar os dados dos USUÁRIOS para a contratação dos seus serviços.</p>
 				<dl class="k:m-0 k:flex k:flex-col k:gap-3 k:rounded-xl k:bg-surface k:p-5">
 					<div class="<?=$sub?>">
 						<dt class="<?=$subNum?>">1.1</dt>
-						<dd class="k:m-0"><span class="<?=$term?>">USUÁRIOS:</span> Pessoa Física ou Jurídica que utiliza o sistema via SMS ou WEB para anunciar veículos, informando sua localização e se dispõe a receber ofertas de fretes.</dd>
+						<dd class="k:m-0"><span class="<?=$term?>">USUÁRIOS:</span> Pessoa Física ou Jurídica que utiliza o sistema via WEB, SMS, WhatsApp ou Telegram para anunciar veículos, informando sua localização e se dispõe a receber ofertas de fretes.</dd>
 					</div>
 					<div class="<?=$sub?>">
 						<dt class="<?=$subNum?>">1.2</dt>
@@ -70,8 +70,8 @@ $term = "k:font-semibold k:text-ink";
 				</div>
 				<div class="<?=$sub?>">
 					<span class="<?=$subNum?>">3.4</span>
-					<p>A KADE CAMINHÕES não se responsabiliza por problemas decorrentes de fatores externos que possam impedir ou interromper a prestação do serviço de envio de SMS,
-						relacionados a falhas nos envios devido regiões de sombra das operadoras de telefonia móvel celular, ou por indisponibilidade momentânea ou definitiva dos serviços de telefonia móvel celular em virtude de falhas técnicas,
+					<p>A KADE CAMINHÕES não se responsabiliza por problemas decorrentes de fatores externos que possam impedir ou interromper a prestação do serviço de envio de SMS ou de mensagens pelo WhatsApp e Telegram,
+						relacionados a falhas nos envios devido regiões de sombra das operadoras de telefonia móvel celular, indisponibilidade dos aplicativos de mensagem ou da internet móvel, ou por indisponibilidade momentânea ou definitiva dos serviços de telefonia móvel celular em virtude de falhas técnicas,
 						oscilações, suspensão do sinal de telefonia móvel ou problemas decorrentes de fatores atmosféricos ou geográficos, dentre outros.</p>
 				</div>
 			</section>
