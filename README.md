@@ -7,6 +7,8 @@ Aplicação web legada em PHP para anúncio e busca de caminhões (veículos em 
 > [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) (ambiente, servidor, deploy) ·
 > [QUICK_REFERENCE.md](QUICK_REFERENCE.md) (comandos e referência rápida)
 
+🎬 **[Vídeo de demonstração](demo/kade_demo.mp4)** (3 min): home e mapa, cadastro de veículo pelo site e pelo WhatsApp, cadastro de assinante, busca e uso de um contato e as telas do administrador, com os [dados de demonstração](#dados-de-demonstração).
+
 ## Requisitos
 
 - PHP 7.4+ (testado no 8.3) com `short_open_tag = On` e as extensões `pdo_mysql`, `mbstring` e `gd` (captcha)
@@ -199,7 +201,7 @@ Para não mexer no seu banco, crie outro (`CREATE DATABASE kade_demo DEFAULT CHA
 
 Só as cidades e os CEPs são reais ([demo/cidades.json](demo/cidades.json), conferidos no ViaCEP). Pessoas e empresas são inventadas: CPFs e CNPJs têm dígitos verificadores válidos, mas são aleatórios; os e-mails usam `@example.com`, os celulares começam com 90 e os IPs são de faixas reservadas para documentação. Para mudar os dados, edite [demo/gerar_demo.php](demo/gerar_demo.php) e rode `php demo/gerar_demo.php`. Ele lê a estrutura do banco DEV, que precisa estar com todas as migrações, e gera sempre os mesmos dados (só o hash das senhas muda).
 
-**Vídeo de demonstração.** [demo/gravar_video.mjs](demo/gravar_video.mjs) percorre o site com legendas e um cursor visível, por uns 3 minutos: home e mapa, cadastro de veículo, uma mensagem pelo WhatsApp, cadastro de assinante com o e-mail de confirmação no Mailpit, busca e registros do assinante `rotasul` e as telas do administrador. Ele grava `demo/kade_demo.mp4` (fora do git). Precisa dos dados de demonstração carregados, do Mailpit e do ffmpeg, e cria registros no banco: recarregue a demonstração depois.
+**Vídeo de demonstração.** [demo/gravar_video.mjs](demo/gravar_video.mjs) percorre o site com legendas e um cursor visível, por uns 3 minutos: home e mapa, cadastro de veículo, uma mensagem pelo WhatsApp, cadastro de assinante com o e-mail de confirmação no Mailpit, busca e registros do assinante `rotasul` e as telas do administrador. Ele grava `demo/kade_demo.mp4`, o [vídeo](demo/kade_demo.mp4) linkado no topo deste README. Precisa dos dados de demonstração carregados, do Mailpit e do ffmpeg, e cria registros no banco: recarregue a demonstração depois.
 
 ```bash
 FFMPEG_PATH=caminho/para/ffmpeg node demo/gravar_video.mjs

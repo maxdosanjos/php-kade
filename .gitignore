@@ -11,6 +11,5 @@ vendor/
 .phpunit.result.cache
 phpunit.xml
 
-# Vídeo gerado por demo/gravar_video.mjs (pesado; gere de novo quando precisar)
-demo/*.mp4
-demo/*.png
+# Tela salva por demo/gravar_video.mjs quando o roteiro falha
+demo/*.erro.png
