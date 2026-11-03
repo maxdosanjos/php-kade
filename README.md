@@ -11,6 +11,11 @@ Aplicação web legada em PHP para anúncio e busca de caminhões (veículos em 
 
 [![Demonstração do KADE Caminhões (prévia acelerada)](demo/kade_demo.gif)](demo/kade_demo.mp4?raw=true)
 
+
+https://github.com/user-attachments/assets/21368566-33e2-46b3-8b4c-7ca8c325ff12
+
+
+
 ## Requisitos
 
 - PHP 7.4+ (testado no 8.3) com `short_open_tag = On` e as extensões `pdo_mysql`, `mbstring` e `gd` (captcha)
