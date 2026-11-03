@@ -172,6 +172,33 @@ O administrador troca a foto do topo e os três banners de "Destaques" em **Áre
 
 A foto do topo que vem com o projeto (`kade/shared/images/hero.jpg`, recortada em 1920 × 800) é [Highway 395, Indio](https://commons.wikimedia.org/wiki/File:Highway_395,_Indio,_United_States_(Unsplash).jpg), de Robson Hatsukami Morgan, em domínio público (CC0): pode ser usada comercialmente sem dar crédito.
 
+Os três banners de "Destaques" que vêm com o projeto (atendimento, apoio e como funciona) são gerados a partir de [design/destaques/banners.html](design/destaques/banners.html), em 2200 × 600 px. Para mudar um texto ou o telefone, edite o HTML e rode `node design/destaques/render.mjs`, que grava `kade/shared/images/banner_slider1..3.jpg`. Ele usa o mesmo Chrome dos testes de navegador. Os logos de apoio foram recortados do banner antigo.
+
+## Dados de demonstração
+
+[demo/kade_demo.sql](demo/kade_demo.sql) é um banco completo (estrutura atual + dados fictícios) para apresentar o site:
+- 386 veículos, 152 deles ativos em 82 cidades de 24 estados, vindos do site, de SMS, do WhatsApp e do Telegram, mais o histórico de 40 dias (vencidos, utilizados, cancelados);
+- 23 assinantes (transportadoras, embarcadores e agenciadores), com contas e parcelas pagas, em aberto e em atraso;
+- o log de mensagens dos três canais, com acertos, erros de digitação e pedidos de ajuda.
+
+As datas são relativas ao momento da carga, então os anúncios "de agora" chegam sempre frescos. Depois, eles vencem como qualquer anúncio (cerca de 16 horas): recarregue antes de cada apresentação. A carga **apaga as tabelas** do banco escolhido:
+
+```bash
+mysqldump -u root --routines --triggers kadecaminh > backup_antes_demo.sql
+mysql -u root --default-character-set=utf8mb4 kadecaminh < demo/kade_demo.sql
+```
+
+Para não mexer no seu banco, crie outro (`CREATE DATABASE kade_demo DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`), carregue nele e aponte `DBKADE_DEV_DATABASE` para ele.
+
+| Login | Senha | Quem é |
+|---|---|---|
+| `admin` | `Teste@123` | Administrador |
+| `clienteteste` | `Teste@123` | Cliente usado pelos testes automáticos (que passam com esses dados) |
+| `rotasul` | `Demo@123` | Transportadora com plano anual em andamento, caminhões próprios em "Registros realizados" e fretes em "Registros utilizados". Boa para a demonstração |
+| demais assinantes | `Demo@123` | `bortolini` e `sidneifrete` têm parcelas em atraso; `cargacerta` e `alineagro` aguardam a confirmação do e-mail; `triangulo` está bloqueado e `jairtransp`, cancelado. A lista completa está em "Gerenciar clientes" |
+
+Só as cidades e os CEPs são reais ([demo/cidades.json](demo/cidades.json), conferidos no ViaCEP). Pessoas e empresas são inventadas: CPFs e CNPJs têm dígitos verificadores válidos, mas são aleatórios; os e-mails usam `@example.com`, os celulares começam com 90 e os IPs são de faixas reservadas para documentação. Para mudar os dados, edite [demo/gerar_demo.php](demo/gerar_demo.php) e rode `php demo/gerar_demo.php`. Ele lê a estrutura do banco DEV, que precisa estar com todas as migrações, e gera sempre os mesmos dados (só o hash das senhas muda).
+
 ## Estrutura
 
 ```

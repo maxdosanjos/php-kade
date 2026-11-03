@@ -1,0 +1,740 @@
+[
+    {
+        "cep": "57020000",
+        "street": "Rua do Comércio",
+        "neighborhood": "Centro",
+        "city": "Maceió",
+        "state": "AL",
+        "ddd": "82",
+        "peso": 2
+    },
+    {
+        "cep": "69005000",
+        "street": "Rua Marechal Deodoro",
+        "neighborhood": "Centro",
+        "city": "Manaus",
+        "state": "AM",
+        "ddd": "92",
+        "peso": 2
+    },
+    {
+        "cep": "44001001",
+        "street": "Rua Carlos Valadares",
+        "neighborhood": "Centro",
+        "city": "Feira de Santana",
+        "state": "BA",
+        "ddd": "75",
+        "peso": 4
+    },
+    {
+        "cep": "47850000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Luís Eduardo Magalhães",
+        "state": "BA",
+        "ddd": "77",
+        "peso": 4
+    },
+    {
+        "cep": "40010000",
+        "street": "Avenida da França",
+        "neighborhood": "Comércio",
+        "city": "Salvador",
+        "state": "BA",
+        "ddd": "71",
+        "peso": 4
+    },
+    {
+        "cep": "45010000",
+        "street": "Praça Hercílio Lima",
+        "neighborhood": "Centro",
+        "city": "Vitória da Conquista",
+        "state": "BA",
+        "ddd": "77",
+        "peso": 4
+    },
+    {
+        "cep": "60010000",
+        "street": "Avenida Presidente Castelo Branco",
+        "neighborhood": "Moura Brasil",
+        "city": "Fortaleza",
+        "state": "CE",
+        "ddd": "85",
+        "peso": 2
+    },
+    {
+        "cep": "70040010",
+        "street": "Quadra SBN Quadra 1",
+        "neighborhood": "Asa Norte",
+        "city": "Brasília",
+        "state": "DF",
+        "ddd": "61",
+        "peso": 3
+    },
+    {
+        "cep": "29160001",
+        "street": "",
+        "neighborhood": "",
+        "city": "Serra",
+        "state": "ES",
+        "ddd": "27",
+        "peso": 3
+    },
+    {
+        "cep": "29010001",
+        "street": "Avenida Jerônimo Monteiro",
+        "neighborhood": "Centro",
+        "city": "Vitória",
+        "state": "ES",
+        "ddd": "27",
+        "peso": 3
+    },
+    {
+        "cep": "75020000",
+        "street": "Avenida Brasil",
+        "neighborhood": "Centro",
+        "city": "Anápolis",
+        "state": "GO",
+        "ddd": "62",
+        "peso": 7
+    },
+    {
+        "cep": "74003010",
+        "street": "Praça Doutor Pedro Ludovico Teixeira",
+        "neighborhood": "Setor Central",
+        "city": "Goiânia",
+        "state": "GO",
+        "ddd": "62",
+        "peso": 7
+    },
+    {
+        "cep": "75800001",
+        "street": "Avenida Professor Edvan Assis Melo",
+        "neighborhood": "Setor Central - Parte Baixa",
+        "city": "Jataí",
+        "state": "GO",
+        "ddd": "64",
+        "peso": 7
+    },
+    {
+        "cep": "75901001",
+        "street": "Rua Coronel Vaiano",
+        "neighborhood": "Vila Santa Bárbara",
+        "city": "Rio Verde",
+        "state": "GO",
+        "ddd": "64",
+        "peso": 7
+    },
+    {
+        "cep": "65800000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Balsas",
+        "state": "MA",
+        "ddd": "99",
+        "peso": 3
+    },
+    {
+        "cep": "65900001",
+        "street": "Rua Quinze de Novembro",
+        "neighborhood": "Centro",
+        "city": "Imperatriz",
+        "state": "MA",
+        "ddd": "99",
+        "peso": 3
+    },
+    {
+        "cep": "65010000",
+        "street": "Rua Vinte e Oito de Setembro",
+        "neighborhood": "Centro",
+        "city": "São Luís",
+        "state": "MA",
+        "ddd": "98",
+        "peso": 3
+    },
+    {
+        "cep": "30130000",
+        "street": "Avenida Afonso Pena",
+        "neighborhood": "Centro",
+        "city": "Belo Horizonte",
+        "state": "MG",
+        "ddd": "31",
+        "peso": 6
+    },
+    {
+        "cep": "32600050",
+        "street": "Rua São Pedro",
+        "neighborhood": "Centro",
+        "city": "Betim",
+        "state": "MG",
+        "ddd": "31",
+        "peso": 6
+    },
+    {
+        "cep": "32017000",
+        "street": "Rua Professora Neuza Rocha",
+        "neighborhood": "Central Parque",
+        "city": "Contagem",
+        "state": "MG",
+        "ddd": "31",
+        "peso": 6
+    },
+    {
+        "cep": "36010000",
+        "street": "Rua Halfeld",
+        "neighborhood": "Centro",
+        "city": "Juiz de Fora",
+        "state": "MG",
+        "ddd": "32",
+        "peso": 6
+    },
+    {
+        "cep": "39400000",
+        "street": "Praça Doutor Carlos Versiani",
+        "neighborhood": "Centro",
+        "city": "Montes Claros",
+        "state": "MG",
+        "ddd": "38",
+        "peso": 6
+    },
+    {
+        "cep": "38010000",
+        "street": "Avenida Leopoldino de Oliveira",
+        "neighborhood": "Centro",
+        "city": "Uberaba",
+        "state": "MG",
+        "ddd": "34",
+        "peso": 6
+    },
+    {
+        "cep": "38400001",
+        "street": "",
+        "neighborhood": "",
+        "city": "Uberlândia",
+        "state": "MG",
+        "ddd": "34",
+        "peso": 6
+    },
+    {
+        "cep": "79002000",
+        "street": "Avenida Calógeras",
+        "neighborhood": "Centro",
+        "city": "Campo Grande",
+        "state": "MS",
+        "ddd": "67",
+        "peso": 6
+    },
+    {
+        "cep": "79804000",
+        "street": "Rua João Cândido da Câmara",
+        "neighborhood": "Jardim América",
+        "city": "Dourados",
+        "state": "MS",
+        "ddd": "67",
+        "peso": 6
+    },
+    {
+        "cep": "79600001",
+        "street": "Avenida Filinto Müller",
+        "neighborhood": "Centro",
+        "city": "Três Lagoas",
+        "state": "MS",
+        "ddd": "67",
+        "peso": 6
+    },
+    {
+        "cep": "78005000",
+        "street": "Rua Engenheiro Ricardo Franco",
+        "neighborhood": "Centro-Norte",
+        "city": "Cuiabá",
+        "state": "MT",
+        "ddd": "65",
+        "peso": 8
+    },
+    {
+        "cep": "78455000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Lucas do Rio Verde",
+        "state": "MT",
+        "ddd": "65",
+        "peso": 8
+    },
+    {
+        "cep": "78850000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Primavera do Leste",
+        "state": "MT",
+        "ddd": "66",
+        "peso": 8
+    },
+    {
+        "cep": "78705000",
+        "street": "Avenida Presidente Médici",
+        "neighborhood": "Vila Birigui",
+        "city": "Rondonópolis",
+        "state": "MT",
+        "ddd": "66",
+        "peso": 8
+    },
+    {
+        "cep": "78550001",
+        "street": "Avenida dos Tarumãs",
+        "neighborhood": "Setor Residencial Sul",
+        "city": "Sinop",
+        "state": "MT",
+        "ddd": "66",
+        "peso": 8
+    },
+    {
+        "cep": "78890000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Sorriso",
+        "state": "MT",
+        "ddd": "66",
+        "peso": 8
+    },
+    {
+        "cep": "66010000",
+        "street": "Avenida Presidente Vargas",
+        "neighborhood": "Campina",
+        "city": "Belém",
+        "state": "PA",
+        "ddd": "91",
+        "peso": 3
+    },
+    {
+        "cep": "68501000",
+        "street": "Avenida Itacaiúnas",
+        "neighborhood": "Liberdade",
+        "city": "Marabá",
+        "state": "PA",
+        "ddd": "94",
+        "peso": 3
+    },
+    {
+        "cep": "68625001",
+        "street": "",
+        "neighborhood": "",
+        "city": "Paragominas",
+        "state": "PA",
+        "ddd": "91",
+        "peso": 3
+    },
+    {
+        "cep": "58010000",
+        "street": "Avenida Beaurepaire Rohan",
+        "neighborhood": "Varadouro",
+        "city": "João Pessoa",
+        "state": "PB",
+        "ddd": "83",
+        "peso": 2
+    },
+    {
+        "cep": "55002000",
+        "street": "Rua Doutor José Mariano",
+        "neighborhood": "Nossa Senhora das Dores",
+        "city": "Caruaru",
+        "state": "PE",
+        "ddd": "81",
+        "peso": 3
+    },
+    {
+        "cep": "56302000",
+        "street": "Avenida Guararapes",
+        "neighborhood": "Centro",
+        "city": "Petrolina",
+        "state": "PE",
+        "ddd": "87",
+        "peso": 3
+    },
+    {
+        "cep": "50010000",
+        "street": "Avenida Guararapes",
+        "neighborhood": "Santo Antônio",
+        "city": "Recife",
+        "state": "PE",
+        "ddd": "81",
+        "peso": 3
+    },
+    {
+        "cep": "64000020",
+        "street": "Avenida Frei Serafim",
+        "neighborhood": "Centro",
+        "city": "Teresina",
+        "state": "PI",
+        "ddd": "86",
+        "peso": 2
+    },
+    {
+        "cep": "87301000",
+        "street": "Avenida Capitão Índio Bandeira",
+        "neighborhood": "Centro",
+        "city": "Campo Mourão",
+        "state": "PR",
+        "ddd": "44",
+        "peso": 9
+    },
+    {
+        "cep": "85801000",
+        "street": "Avenida Brasil",
+        "neighborhood": "Centro",
+        "city": "Cascavel",
+        "state": "PR",
+        "ddd": "45",
+        "peso": 9
+    },
+    {
+        "cep": "80010000",
+        "street": "Rua José Loureiro",
+        "neighborhood": "Centro",
+        "city": "Curitiba",
+        "state": "PR",
+        "ddd": "41",
+        "peso": 9
+    },
+    {
+        "cep": "85851000",
+        "street": "Avenida Brasil",
+        "neighborhood": "Centro",
+        "city": "Foz do Iguaçu",
+        "state": "PR",
+        "ddd": "45",
+        "peso": 9
+    },
+    {
+        "cep": "85010000",
+        "street": "Avenida XV de Novembro",
+        "neighborhood": "Centro",
+        "city": "Guarapuava",
+        "state": "PR",
+        "ddd": "42",
+        "peso": 9
+    },
+    {
+        "cep": "86010000",
+        "street": "Rua Professor João Cândido",
+        "neighborhood": "Centro",
+        "city": "Londrina",
+        "state": "PR",
+        "ddd": "43",
+        "peso": 9
+    },
+    {
+        "cep": "87013000",
+        "street": "Avenida Brasil",
+        "neighborhood": "Zona 01",
+        "city": "Maringá",
+        "state": "PR",
+        "ddd": "44",
+        "peso": 9
+    },
+    {
+        "cep": "83203010",
+        "street": "Rua Quinze de Novembro",
+        "neighborhood": "Centro Histórico",
+        "city": "Paranaguá",
+        "state": "PR",
+        "ddd": "41",
+        "peso": 9
+    },
+    {
+        "cep": "84010000",
+        "street": "Avenida Doutor Vicente Machado",
+        "neighborhood": "Centro",
+        "city": "Ponta Grossa",
+        "state": "PR",
+        "ddd": "42",
+        "peso": 9
+    },
+    {
+        "cep": "85900010",
+        "street": "Rua Santos Dumont",
+        "neighborhood": "Centro",
+        "city": "Toledo",
+        "state": "PR",
+        "ddd": "45",
+        "peso": 9
+    },
+    {
+        "cep": "25010000",
+        "street": "Rua Açu",
+        "neighborhood": "Engenho do Porto",
+        "city": "Duque de Caxias",
+        "state": "RJ",
+        "ddd": "21",
+        "peso": 3
+    },
+    {
+        "cep": "20010000",
+        "street": "Rua Primeiro de Março",
+        "neighborhood": "Centro",
+        "city": "Rio de Janeiro",
+        "state": "RJ",
+        "ddd": "21",
+        "peso": 3
+    },
+    {
+        "cep": "27253000",
+        "street": "Rodovia BR 393 - Lúcio Meira",
+        "neighborhood": "Centro",
+        "city": "Volta Redonda",
+        "state": "RJ",
+        "ddd": "24",
+        "peso": 3
+    },
+    {
+        "cep": "59010000",
+        "street": "Avenida Presidente Café Filho",
+        "neighborhood": "Praia do Meio",
+        "city": "Natal",
+        "state": "RN",
+        "ddd": "84",
+        "peso": 2
+    },
+    {
+        "cep": "76801000",
+        "street": "Avenida Pinheiro Machado",
+        "neighborhood": "Centro",
+        "city": "Porto Velho",
+        "state": "RO",
+        "ddd": "69",
+        "peso": 3
+    },
+    {
+        "cep": "76980000",
+        "street": "",
+        "neighborhood": "",
+        "city": "Vilhena",
+        "state": "RO",
+        "ddd": "69",
+        "peso": 3
+    },
+    {
+        "cep": "95020000",
+        "street": "Rua Sinimbu",
+        "neighborhood": "Nossa Senhora de Lourdes",
+        "city": "Caxias do Sul",
+        "state": "RS",
+        "ddd": "54",
+        "peso": 6
+    },
+    {
+        "cep": "99010000",
+        "street": "Avenida Brasil",
+        "neighborhood": "Centro",
+        "city": "Passo Fundo",
+        "state": "RS",
+        "ddd": "54",
+        "peso": 6
+    },
+    {
+        "cep": "96010000",
+        "street": "Rua Félix Xavier da Cunha",
+        "neighborhood": "Centro",
+        "city": "Pelotas",
+        "state": "RS",
+        "ddd": "53",
+        "peso": 6
+    },
+    {
+        "cep": "90010000",
+        "street": "Rua Siqueira Campos",
+        "neighborhood": "Centro Histórico",
+        "city": "Porto Alegre",
+        "state": "RS",
+        "ddd": "51",
+        "peso": 6
+    },
+    {
+        "cep": "96211000",
+        "street": "Avenida Cidade de Pelotas",
+        "neighborhood": "Cidade Nova",
+        "city": "Rio Grande",
+        "state": "RS",
+        "ddd": "53",
+        "peso": 6
+    },
+    {
+        "cep": "97010000",
+        "street": "Rua Venâncio Aires",
+        "neighborhood": "Centro",
+        "city": "Santa Maria",
+        "state": "RS",
+        "ddd": "55",
+        "peso": 6
+    },
+    {
+        "cep": "89010000",
+        "street": "Rua 15 de Novembro",
+        "neighborhood": "Centro",
+        "city": "Blumenau",
+        "state": "SC",
+        "ddd": "47",
+        "peso": 6
+    },
+    {
+        "cep": "89801000",
+        "street": "Avenida Getúlio Dorneles Vargas - N",
+        "neighborhood": "Centro",
+        "city": "Chapecó",
+        "state": "SC",
+        "ddd": "49",
+        "peso": 6
+    },
+    {
+        "cep": "88010000",
+        "street": "Rua Felipe Schmidt",
+        "neighborhood": "Centro",
+        "city": "Florianópolis",
+        "state": "SC",
+        "ddd": "48",
+        "peso": 6
+    },
+    {
+        "cep": "88301000",
+        "street": "Rua Hercílio Luz",
+        "neighborhood": "Centro",
+        "city": "Itajaí",
+        "state": "SC",
+        "ddd": "47",
+        "peso": 6
+    },
+    {
+        "cep": "89201000",
+        "street": "Rua do Príncipe",
+        "neighborhood": "Centro",
+        "city": "Joinville",
+        "state": "SC",
+        "ddd": "47",
+        "peso": 6
+    },
+    {
+        "cep": "88501000",
+        "street": "Rua Marechal Deodoro",
+        "neighborhood": "Centro",
+        "city": "Lages",
+        "state": "SC",
+        "ddd": "49",
+        "peso": 6
+    },
+    {
+        "cep": "49010000",
+        "street": "Rua Laranjeiras",
+        "neighborhood": "Centro",
+        "city": "Aracaju",
+        "state": "SE",
+        "ddd": "79",
+        "peso": 2
+    },
+    {
+        "cep": "17010000",
+        "street": "Rua Batista de Carvalho",
+        "neighborhood": "Centro",
+        "city": "Bauru",
+        "state": "SP",
+        "ddd": "14",
+        "peso": 9
+    },
+    {
+        "cep": "13010000",
+        "street": "Avenida Doutor Moraes Salles",
+        "neighborhood": "Centro",
+        "city": "Campinas",
+        "state": "SP",
+        "ddd": "19",
+        "peso": 9
+    },
+    {
+        "cep": "07010000",
+        "street": "Praça Presidente Getúlio Vargas",
+        "neighborhood": "Centro",
+        "city": "Guarulhos",
+        "state": "SP",
+        "ddd": "11",
+        "peso": 9
+    },
+    {
+        "cep": "13400010",
+        "street": "Avenida Armando de Salles Oliveira",
+        "neighborhood": "Centro",
+        "city": "Piracicaba",
+        "state": "SP",
+        "ddd": "19",
+        "peso": 9
+    },
+    {
+        "cep": "19010000",
+        "street": "Rua Barão do Rio Branco",
+        "neighborhood": "Centro",
+        "city": "Presidente Prudente",
+        "state": "SP",
+        "ddd": "18",
+        "peso": 9
+    },
+    {
+        "cep": "14010000",
+        "street": "Rua General Osório",
+        "neighborhood": "Centro",
+        "city": "Ribeirão Preto",
+        "state": "SP",
+        "ddd": "16",
+        "peso": 9
+    },
+    {
+        "cep": "11010000",
+        "street": "Praça Visconde de Mauá",
+        "neighborhood": "Centro",
+        "city": "Santos",
+        "state": "SP",
+        "ddd": "13",
+        "peso": 9
+    },
+    {
+        "cep": "18035000",
+        "street": "Rua Sete de Setembro",
+        "neighborhood": "Centro",
+        "city": "Sorocaba",
+        "state": "SP",
+        "ddd": "15",
+        "peso": 9
+    },
+    {
+        "cep": "15015000",
+        "street": "Avenida Doutor Alberto Andaló",
+        "neighborhood": "Centro",
+        "city": "São José do Rio Preto",
+        "state": "SP",
+        "ddd": "17",
+        "peso": 9
+    },
+    {
+        "cep": "01001000",
+        "street": "Praça da Sé",
+        "neighborhood": "Sé",
+        "city": "São Paulo",
+        "state": "SP",
+        "ddd": "11",
+        "peso": 9
+    },
+    {
+        "cep": "77803010",
+        "street": "Rua Dom Orione",
+        "neighborhood": "Setor Central",
+        "city": "Araguaína",
+        "state": "TO",
+        "ddd": "63",
+        "peso": 3
+    },
+    {
+        "cep": "77001002",
+        "street": "Praça Girassóis",
+        "neighborhood": "Plano Diretor Norte",
+        "city": "Palmas",
+        "state": "TO",
+        "ddd": "63",
+        "peso": 3
+    }
+]

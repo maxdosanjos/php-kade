@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Banners de Destaques</title>
+<!--
+	Fonte dos três banners de "Destaques" da home (kade/shared/images/banner_slider1..3.jpg).
+	Edite aqui e gere as imagens com: node design/destaques/render.mjs
+	Cada <section> vira um JPG de 2200 x 600 (1100 x 300 com densidade 2).
+	Logos de apoio recortados do banner antigo; foto do topo em domínio público (veja o README).
+-->
+<meta name="viewport" content="width=1200">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=block" rel="stylesheet">
+<style>
+	:root {
+		--kade-950: #0b2545; --kade-900: #0b3b6f; --kade-800: #072a50; --kade-700: #1f4f8f; --kade-100: #dce7f5; --kade-50: #e8f0fb;
+		--accent: #ff8a00; --accent-soft: #fff1e0; --accent-ink: #b35f00;
+		--ink: #0f1b2d; --ink-soft: #3d4757; --muted: #5b6576; --line: #e3e7ee; --surface: #f6f7f9;
+	}
+	* { box-sizing: border-box; margin: 0; padding: 0; }
+	body { background: #ccc; font-family: Inter, sans-serif; color: var(--ink); }
+	.banner { width: 1100px; height: 300px; position: relative; overflow: hidden; margin-bottom: 20px; }
+	.display { font-family: Poppins, sans-serif; font-weight: 700; letter-spacing: -0.5px; }
+	.eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 2.2px; text-transform: uppercase; color: var(--accent); }
+
+	/* 1. Atendimento */
+	#b1 { background: linear-gradient(115deg, var(--kade-950) 0%, var(--kade-900) 55%, var(--kade-700) 100%); color: #fff; display: flex; align-items: center; padding: 0 56px; gap: 48px; }
+	#b1 .glow { position: absolute; border-radius: 50%; }
+	#b1 .g1 { width: 420px; height: 420px; right: -120px; top: -160px; background: radial-gradient(circle, rgba(255,138,0,.22), rgba(255,138,0,0) 70%); }
+	#b1 .g2 { width: 300px; height: 300px; left: 330px; bottom: -210px; background: radial-gradient(circle, rgba(126,163,214,.25), rgba(126,163,214,0) 70%); }
+	#b1 .text { flex: 1 1 auto; position: relative; display: flex; flex-direction: column; gap: 12px; }
+	#b1 h2 { font-size: 40px; line-height: 1.12; }
+	#b1 p { font-size: 18px; line-height: 1.45; color: #d5deeb; max-width: 470px; }
+	#b1 .card { position: relative; flex: 0 0 400px; background: #fff; color: var(--ink); border-radius: 22px; padding: 22px 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 18px 40px rgba(4, 18, 40, .35); }
+	.row { display: flex; align-items: center; gap: 16px; }
+	.icon { flex: 0 0 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+	.icon.orange { background: var(--accent-soft); }
+	.icon.blue { background: var(--kade-50); }
+	.label { font-size: 14px; font-weight: 500; color: var(--muted); }
+	.value { font-family: Poppins, sans-serif; font-weight: 700; font-size: 27px; color: var(--kade-950); line-height: 1.15; }
+	.value.small { font-size: 22px; }
+	.sep { height: 1px; background: var(--line); }
+
+	/* 2. Apoio */
+	#b2 { background: var(--surface); display: flex; align-items: center; padding: 0 56px; gap: 40px; }
+	#b2 .road { position: absolute; left: -60px; top: 0; bottom: 0; width: 520px; background: linear-gradient(115deg, var(--kade-900), var(--kade-950)); clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%); }
+	#b2 .road::after { content: ""; position: absolute; top: 90%; left: 0; right: 0; height: 6px; margin-top: -3px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 40px, transparent 40px 70px); transform: rotate(-6deg); }
+	#b2 .text { position: relative; flex: 0 0 360px; color: #fff; display: flex; flex-direction: column; gap: 12px; }
+	#b2 h2 { font-size: 36px; line-height: 1.15; }
+	#b2 p { font-size: 17px; line-height: 1.45; color: #d5deeb; }
+	#b2 .logos { flex: 1; display: flex; justify-content: center; gap: 28px; margin-left: 30px; }
+	#b2 .logo { width: 250px; height: 170px; background: #fff; border: 1px solid var(--line); border-radius: 22px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 28px rgba(11, 37, 69, .08); }
+	#b2 .logo img { height: 112px; }
+
+	/* 3. Como funciona */
+	#b3 { background: #fff; display: flex; }
+	#b3 .photo { flex: 0 0 330px; position: relative; background: url("../../kade/shared/images/hero.jpg") 62% 55% / 1150px auto no-repeat; }
+	#b3 .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,37,69,.92) 0%, rgba(11,37,69,.8) 55%, rgba(11,59,111,.45) 100%); }
+	#b3 .photo .text { position: absolute; z-index: 1; left: 44px; right: 40px; top: 50%; transform: translateY(-50%); color: #fff; display: flex; flex-direction: column; gap: 10px; }
+	#b3 .photo h2 { font-size: 34px; line-height: 1.12; }
+	#b3 .steps { flex: 1; display: flex; align-items: flex-start; padding: 54px 34px 0 40px; gap: 14px; }
+	#b3 .step { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+	#b3 .num { width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: var(--kade-950); font-family: Poppins, sans-serif; font-weight: 700; font-size: 24px; display: flex; align-items: center; justify-content: center; }
+	#b3 h3 { font-family: Poppins, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; color: var(--kade-950); }
+	#b3 .step p { font-size: 16px; line-height: 1.45; color: var(--ink-soft); }
+	#b3 .arrow { flex: 0 0 28px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<section class="banner" id="b1">
+	<div class="glow g1"></div><div class="glow g2"></div>
+	<div class="text">
+		<span class="eyebrow">Atendimento</span>
+		<h2 class="display">Nossa equipe está pronta<br>para atender você</h2>
+		<p>Dúvidas sobre cadastro, assinatura ou anúncios? Fale com a gente.</p>
+	</div>
+	<div class="card">
+		<div class="row">
+			<span class="icon orange"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b35f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+			<div><div class="label">Telefone e WhatsApp</div><div class="value">(43) 99601-0765</div></div>
+		</div>
+		<div class="sep"></div>
+		<div class="row">
+			<span class="icon blue"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0b3b6f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+			<div><div class="label">Segunda a sexta</div><div class="value small">das 8h às 18h</div></div>
+		</div>
+	</div>
+</section>
+
+<section class="banner" id="b2">
+	<div class="road"></div>
+	<div class="text">
+		<span class="eyebrow">Apoio</span>
+		<h2 class="display">Quem apoia a<br>KADE Caminhões</h2>
+		<p>Entidades e empresas do transporte que caminham com a gente.</p>
+	</div>
+	<div class="logos">
+		<div class="logo"><img src="setcepar.png" alt=""></div>
+		<div class="logo"><img src="flintem.png" alt=""></div>
+	</div>
+</section>
+
+<section class="banner" id="b3">
+	<div class="photo"><div class="text">
+		<span class="eyebrow">Como funciona</span>
+		<h2 class="display">Do caminhão vazio ao frete fechado</h2>
+	</div></div>
+	<div class="steps">
+		<div class="step">
+			<span class="num">1</span>
+			<h3>O motorista avisa</h3>
+			<p>Informa o caminhão e onde está vazio, pelo site ou por mensagem.</p>
+		</div>
+		<svg class="arrow" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cfd6e1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+		<div class="step">
+			<span class="num">2</span>
+			<h3>O anúncio entra no ar</h3>
+			<p>Na hora, para transportadoras e embarcadores de todo o Brasil.</p>
+		</div>
+		<svg class="arrow" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cfd6e1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+		<div class="step">
+			<span class="num">3</span>
+			<h3>O frete é fechado</h3>
+			<p>A empresa liga direto para o motorista e combina o frete.</p>
+		</div>
+	</div>
+</section>
+
+</body>
+</html>

@@ -13,9 +13,9 @@ $h = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, "UTF-8"); 
 $imgDir = dirname(dirname(__FILE__))."/shared/images/";
 $_slots = array(
 	"hero" => array("Foto do topo da home", "hero.jpg", "Ideal: 1920 × 800 px. A foto fica atrás do texto, escurecida com o azul da marca. Sem foto, o topo fica só azul."),
-	"1"    => array("Destaque 1", "banner_slider1.jpg", "Ideal: 1100 × 300 px."),
-	"2"    => array("Destaque 2", "banner_slider2.jpg", "Ideal: 1100 × 300 px."),
-	"3"    => array("Destaque 3", "banner_slider3.jpg", "Ideal: 1100 × 300 px."),
+	"1"    => array("Destaque 1", "banner_slider1.jpg", "Ideal: 2200 × 600 px (proporção 11:3; nítido em telas de alta resolução)."),
+	"2"    => array("Destaque 2", "banner_slider2.jpg", "Ideal: 2200 × 600 px (proporção 11:3; nítido em telas de alta resolução)."),
+	"3"    => array("Destaque 3", "banner_slider3.jpg", "Ideal: 2200 × 600 px (proporção 11:3; nítido em telas de alta resolução)."),
 );
 $_slotsView = array();
 foreach ($_slots as $id => $slot) {
